@@ -45,6 +45,7 @@ export ASR_MODEL_DIR="$SPEECH_DIR/sherpa-onnx-nemo-parakeet-tdt-0.6b-v2-int8"
   - `uploadType` 是 `video/webm` → 存成 `<id>.webm`；`video/mp4` → `<id>.m4a`。
   - `uploadType` 是 `text/plain`（base64 包装的原始文件）→ 存成 `<id>.txt`，脚本会自动解码。
   - 下载结果文件名是 assetId 加扩展名，必要时重命名成上面的样子。
+  - `recMime` 是 `audio/amr` 的录音来自系统录音机（8 kHz 电话音质）：识别对词尾（-s、-ed）更不可靠，解读低置信度词和 PLUR/AGR 时更要标 `asr_suspect`。
 - 把所有文件一次性传给脚本，模型只加载一次：
 
 ```bash

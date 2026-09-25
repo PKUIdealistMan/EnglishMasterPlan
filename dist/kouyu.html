@@ -2430,6 +2430,7 @@ const Record = (() => {
       h('div', { class: 'file-btns' },
         h('button', { class: 'btn', type: 'button', onclick: () => els.fileCap.click() }, '用系统录音机录'),
         h('button', { class: 'btn ghost', type: 'button', onclick: () => els.filePick.click() }, '选择录音文件')),
+      h('p', { class: 'small muted', style: 'text-align:center' }, '"用系统录音机录"拿回来的通常是 AMR（电话音质），能分析，但词尾听得不准，页面也做不了粗测。想要更准：先在手机录音机 App 里录，再点"选择录音文件"。固定题最好一直用同一种方式录，趋势才可比。'),
       canPage ? h('button', { class: 'link-btn', type: 'button', onclick: () => { ls.del('micBlocked'); ls.set('recRoute', 'page'); renderStage(); } }, '再试页面里录音') : null);
   }
 
