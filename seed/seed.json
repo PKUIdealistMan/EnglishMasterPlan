@@ -1,0 +1,338 @@
+{
+  "nodes": {
+    "A1": {
+      "id": "A1", "track": "social", "order": 1, "priority": 1,
+      "title_zh": "打招呼和开场",
+      "main_q": "Buen Camino! How's it going?",
+      "variants": ["How are you doing?", "You alright?", "How's your Camino going?", "Mind if I walk with you for a bit?", "Is this seat taken?"],
+      "followups": ["How are you finding it so far?", "Did you sleep OK last night?", "Is this your first Camino?"],
+      "say": [],
+      "listen": [
+        { "en": "You alright?", "zh": "英式的\"你好\"", "note": "不是问你有没有事" },
+        { "en": "Cheers!", "zh": "谢谢，或者再见", "note": "" },
+        { "en": "Not bad, you? / Can't complain.", "zh": "还行，你呢？", "note": "" },
+        { "en": "I'm knackered.", "zh": "我累坏了", "note": "英式说法" }
+      ],
+      "tips_zh": ["回答寒暄不用讲细节，比如 \"Good, thanks! A bit tired. You?\""],
+      "status": "todo"
+    },
+    "A2": {
+      "id": "A2", "track": "social", "order": 2, "priority": 1,
+      "title_zh": "你从哪来",
+      "main_q": "Where are you from?",
+      "variants": ["Where's home for you?", "Where are you based?", "Which part of China?", "Where did you grow up?"],
+      "followups": ["What's it like living in Beijing?", "Have you been to Europe before?", "How long was the flight?"],
+      "say": [],
+      "listen": [
+        { "en": "I'm Dutch.", "zh": "我是荷兰人", "note": "Dutch 不是 German" },
+        { "en": "Swiss / Swedish", "zh": "瑞士人 / 瑞典人", "note": "" },
+        { "en": "Austria / Australia", "zh": "奥地利 / 澳大利亚", "note": "对方说快了容易混" },
+        { "en": "Aussie / Kiwi", "zh": "澳大利亚人 / 新西兰人", "note": "" },
+        { "en": "Czech", "zh": "捷克", "note": "读音和 check 一样" },
+        { "en": "I'm from the States. / I'm from Ohio.", "zh": "我是美国人", "note": "美国人常直接报州名或城市名" },
+        { "en": "England / Scotland / Wales", "zh": "英格兰 / 苏格兰 / 威尔士", "note": "都属于英国" },
+        { "en": "I'm Catalan / Basque / Galician.", "zh": "加泰罗尼亚人 / 巴斯克人 / 加利西亚人", "note": "西班牙的地区身份" },
+        { "en": "I'm originally from X, but I live in Y.", "zh": "老家在 X，现在住在 Y", "note": "" }
+      ],
+      "tips_zh": ["答完一定要反问 \"What about you?\""],
+      "status": "todo"
+    },
+    "A3": {
+      "id": "A3", "track": "social", "order": 3, "priority": 1,
+      "title_zh": "你做什么",
+      "main_q": "What do you do?",
+      "variants": ["What do you do for work?", "Are you a student?", "What line of work are you in?", "What did you study?"],
+      "followups": ["What does that involve?", "So what do those sensors actually do?", "When do you start the new job?", "How did you get so much time off?"],
+      "say": [],
+      "listen": [
+        { "en": "What do you do?", "zh": "问职业", "note": "不是问\"你在干什么\"" },
+        { "en": "I'm retired.", "zh": "我退休了", "note": "" },
+        { "en": "I'm between jobs.", "zh": "我正在换工作", "note": "" },
+        { "en": "I work in tech / finance / healthcare.", "zh": "我在科技 / 金融 / 医疗行业", "note": "" },
+        { "en": "I'm self-employed.", "zh": "我是自由职业", "note": "" },
+        { "en": "I'm on a gap year.", "zh": "我在休学或空档年", "note": "" }
+      ],
+      "tips_zh": ["准备一句大白话，讲清楚芯片和传感器是干什么用的，别用术语"],
+      "status": "todo"
+    },
+    "A4": {
+      "id": "A4", "track": "social", "order": 4, "priority": 1,
+      "title_zh": "为什么走 Camino / 行程",
+      "main_q": "Why are you walking the Camino?",
+      "variants": ["What brings you to the Camino?", "Where did you start?", "How long are you walking for?", "Are you walking alone?"],
+      "followups": ["Is it a religious thing for you?", "How did you hear about the Camino?", "What's next after Santiago?", "How long is your whole trip?", "Where are you going in Italy?"],
+      "say": [],
+      "listen": [
+        { "en": "I started in St Jean.", "zh": "我从 St Jean 出发", "note": "法国起点 Saint-Jean-Pied-de-Port" },
+        { "en": "I'm doing the Francés / the Portuguese / the Norte.", "zh": "我走的是法国之路 / 葡萄牙之路 / 北方之路", "note": "" },
+        { "en": "I'm carrying on to Finisterre.", "zh": "走到 Santiago 后继续去菲尼斯特雷", "note": "" },
+        { "en": "stage", "zh": "一段、一天的路程", "note": "" },
+        { "en": "rest day", "zh": "休息日", "note": "" }
+      ],
+      "tips_zh": ["把\"为什么来\"准备成两三句话的小故事"],
+      "status": "todo"
+    },
+    "A5": {
+      "id": "A5", "track": "social", "order": 5, "priority": 2,
+      "title_zh": "路上的事",
+      "main_q": "How far are you going today?",
+      "variants": ["Where are you staying tonight?", "Have you booked your albergue?", "How are your feet?", "Any blisters?"],
+      "followups": ["What time did you set off this morning?", "Did you see the sunrise?", "Are you stopping in Portomarín?"],
+      "say": [],
+      "listen": [
+        { "en": "about twenty k's", "zh": "大约 20 公里", "note": "" },
+        { "en": "municipal albergue / Xunta albergue", "zh": "公立的朝圣者旅舍", "note": "" },
+        { "en": "It's pouring.", "zh": "下大雨了", "note": "" },
+        { "en": "My knees are killing me.", "zh": "我膝盖疼死了", "note": "" },
+        { "en": "Compeed", "zh": "一种水泡贴", "note": "" },
+        { "en": "I'm taking it easy today.", "zh": "今天走慢点", "note": "" }
+      ],
+      "tips_zh": [],
+      "status": "todo"
+    },
+    "A6": {
+      "id": "A6", "track": "social", "order": 6, "priority": 2,
+      "title_zh": "兴趣和经历",
+      "main_q": "What do you do for fun?",
+      "variants": ["Do you hike a lot?", "Have you done anything like this before?", "What are you into?"],
+      "followups": ["What's the highest mountain you've climbed?", "Where did you travel before this?", "What do you do on weekends in Beijing?"],
+      "say": [],
+      "listen": [
+        { "en": "I'm really into…", "zh": "我很喜欢……", "note": "" },
+        { "en": "I used to…", "zh": "我以前常……", "note": "" },
+        { "en": "a keen hiker", "zh": "爱徒步的人", "note": "" }
+      ],
+      "tips_zh": ["准备两三个能展开聊的话题，比如登山、新疆自驾"],
+      "status": "todo"
+    },
+    "A7": {
+      "id": "A7", "track": "social", "order": 7, "priority": 2,
+      "title_zh": "关于中国的常见问题",
+      "main_q": "Can you use Google in China?",
+      "variants": ["Was it hard to get your visa?", "What's the food like back home?", "Is Beijing really that crowded?", "Do many Chinese people walk the Camino?"],
+      "followups": ["What surprised you most about Spain?", "What do you miss from home?"],
+      "say": [],
+      "listen": [
+        { "en": "VPN", "zh": "虚拟专用网络", "note": "" },
+        { "en": "the Great Firewall", "zh": "防火长城", "note": "" },
+        { "en": "WeChat", "zh": "微信", "note": "" }
+      ],
+      "tips_zh": ["简短、中性地回答，然后把话题转回对方，比如 \"It's a bit complicated. Have you ever been to Asia?\""],
+      "status": "todo"
+    },
+    "A8": {
+      "id": "A8", "track": "social", "order": 8, "priority": 2,
+      "title_zh": "告别和留联系方式",
+      "main_q": "Are you on WhatsApp?",
+      "variants": ["Do you have Instagram?", "Let's keep in touch!", "Maybe see you in Santiago!"],
+      "followups": [],
+      "say": [],
+      "listen": [
+        { "en": "Catch you later.", "zh": "回头见", "note": "" },
+        { "en": "Take care. / Safe travels.", "zh": "保重 / 一路平安", "note": "" },
+        { "en": "Buen Camino!", "zh": "也可以用来道别", "note": "" },
+        { "en": "See you down the road.", "zh": "路上再见", "note": "" }
+      ],
+      "tips_zh": ["欧洲人最常用 WhatsApp，出发前装好"],
+      "status": "todo"
+    },
+    "B1": {
+      "id": "B1", "track": "service", "order": 1, "priority": 1,
+      "title_zh": "入住 albergue / 酒店",
+      "main_q": "Hi there! Do you have a reservation?",
+      "variants": [],
+      "followups": ["Can I see your passport and credencial?", "That's fifteen euros. Top or bottom bunk?", "Checkout is at eight."],
+      "say": ["Do you have a bed for tonight?", "I have a booking under the name …", "Could I get a stamp, please?", "What time do you lock the door?", "Is there a kitchen or a washing machine?", "Can I leave my bag here?"],
+      "listen": [
+        { "en": "We're full. / Completo.", "zh": "满了", "note": "" },
+        { "en": "Lights out at ten.", "zh": "十点熄灯", "note": "" },
+        { "en": "The dryer takes coins.", "zh": "烘干机要投硬币", "note": "" },
+        { "en": "Blankets are extra.", "zh": "毯子另外收费", "note": "" }
+      ],
+      "tips_zh": [],
+      "status": "todo"
+    },
+    "B2": {
+      "id": "B2", "track": "service", "order": 2, "priority": 1,
+      "title_zh": "吃饭",
+      "main_q": "Are you ready to order?",
+      "variants": [],
+      "followups": ["Still or sparkling?", "Anything else?", "For here or to take away?"],
+      "say": ["A table for one, please.", "Could I see the menu?", "What do you recommend?", "I'll have the …", "Could I get the bill, please?", "Can I pay by card?"],
+      "listen": [
+        { "en": "menu of the day / menú del día", "zh": "当日套餐", "note": "通常含面包和饮料" },
+        { "en": "coperto", "zh": "意大利餐厅的座位费", "note": "正常收费" },
+        { "en": "un caffè", "zh": "在意大利就是一杯浓缩咖啡", "note": "" },
+        { "en": "It comes with bread and wine.", "zh": "配面包和酒", "note": "" }
+      ],
+      "tips_zh": ["在意大利，站在吧台喝咖啡通常比坐下便宜"],
+      "status": "todo"
+    },
+    "B3": {
+      "id": "B3", "track": "service", "order": 3, "priority": 1,
+      "title_zh": "火车和交通",
+      "main_q": "Where are you traveling to?",
+      "variants": [],
+      "followups": ["Single or return?", "Window or aisle?", "That train's cancelled today because of the strike."],
+      "say": ["One ticket to Florence, please.", "Which platform does it leave from?", "Is this seat free?", "My train was cancelled. Can I change my ticket?", "Is there a later train?"],
+      "listen": [
+        { "en": "platform / binario", "zh": "站台", "note": "" },
+        { "en": "delayed / cancelled", "zh": "晚点 / 取消", "note": "" },
+        { "en": "change at Bologna", "zh": "在博洛尼亚换车", "note": "" },
+        { "en": "sciopero", "zh": "罢工", "note": "意大利语" },
+        { "en": "validate your ticket", "zh": "上车前打票", "note": "纸质的区域火车票" }
+      ],
+      "tips_zh": [],
+      "status": "todo"
+    },
+    "B4": {
+      "id": "B4", "track": "service", "order": 4, "priority": 2,
+      "title_zh": "景点门票",
+      "main_q": "Do you have a booking?",
+      "variants": [],
+      "followups": ["What time is your slot?", "Bags go in the cloakroom.", "Would you like an audio guide?"],
+      "say": ["I have a booking for 10:30.", "Are there any tickets left for today?", "Where's the entrance?", "Can I take photos?"],
+      "listen": [
+        { "en": "timed entry", "zh": "分时段入场", "note": "" },
+        { "en": "sold out", "zh": "售罄", "note": "" },
+        { "en": "cloakroom", "zh": "寄存处", "note": "" },
+        { "en": "skip-the-line", "zh": "免排队票", "note": "" }
+      ],
+      "tips_zh": [],
+      "status": "todo"
+    },
+    "B5": {
+      "id": "B5", "track": "service", "order": 5, "priority": 2,
+      "title_zh": "问路、药店、报失",
+      "main_q": "Can I help you?",
+      "variants": [],
+      "followups": ["Go straight on, then take the second left.", "It's about ten minutes on foot.", "Do you have a prescription?"],
+      "say": ["Excuse me, how do I get to …?", "Is it walking distance?", "I have blisters. What do you recommend?", "My phone was stolen. Where's the police station?", "I'd like to report a theft."],
+      "listen": [
+        { "en": "on foot", "zh": "步行", "note": "" },
+        { "en": "You can't miss it.", "zh": "很好找", "note": "" },
+        { "en": "over the counter", "zh": "不用处方", "note": "" }
+      ],
+      "tips_zh": [],
+      "status": "todo"
+    },
+    "C1": {
+      "id": "C1", "track": "listening", "order": 1, "priority": 2,
+      "title_zh": "国家与国籍",
+      "main_q": null, "variants": [], "followups": [], "say": [],
+      "listen": [
+        { "en": "I'm Dutch.", "zh": "我是荷兰人", "note": "Dutch 不是 German" },
+        { "en": "Swiss / Swedish", "zh": "瑞士人 / 瑞典人", "note": "" },
+        { "en": "Austria / Australia", "zh": "奥地利 / 澳大利亚", "note": "对方说快了容易混" },
+        { "en": "Aussie / Kiwi", "zh": "澳大利亚人 / 新西兰人", "note": "" },
+        { "en": "Czech", "zh": "捷克", "note": "读音和 check 一样" },
+        { "en": "I'm from the States. / I'm from Ohio.", "zh": "我是美国人", "note": "美国人常直接报州名或城市名" },
+        { "en": "England / Scotland / Wales", "zh": "英格兰 / 苏格兰 / 威尔士", "note": "都属于英国" },
+        { "en": "I'm Catalan / Basque / Galician.", "zh": "加泰罗尼亚人 / 巴斯克人 / 加利西亚人", "note": "西班牙的地区身份" },
+        { "en": "I'm originally from X, but I live in Y.", "zh": "老家在 X，现在住在 Y", "note": "" },
+        { "en": "Polish", "zh": "波兰人", "note": "不是 polish（擦亮）" },
+        { "en": "Slovenia / Slovakia", "zh": "斯洛文尼亚 / 斯洛伐克", "note": "" },
+        { "en": "Iceland / Ireland", "zh": "冰岛 / 爱尔兰", "note": "" },
+        { "en": "Danish / Norwegian / Finnish", "zh": "丹麦人 / 挪威人 / 芬兰人", "note": "" },
+        { "en": "the UK / Britain / England", "zh": "英国", "note": "England 只是英国的一部分" }
+      ],
+      "tips_zh": [],
+      "status": "todo"
+    },
+    "C2": {
+      "id": "C2", "track": "listening", "order": 2, "priority": 2,
+      "title_zh": "数字、价格、时间",
+      "main_q": null, "variants": [], "followups": [], "say": [],
+      "listen": [
+        { "en": "twelve fifty", "zh": "€12.50", "note": "" },
+        { "en": "quarter past / quarter to / half past", "zh": "几点一刻 / 差一刻 / 几点半", "note": "" },
+        { "en": "the 14:05", "zh": "14:05 那班车", "note": "" },
+        { "en": "twenty-five euros each", "zh": "每人 25 欧元", "note": "" },
+        { "en": "k's", "zh": "公里", "note": "" }
+      ],
+      "tips_zh": [],
+      "status": "todo"
+    },
+    "C3": {
+      "id": "C3", "track": "listening", "order": 3, "priority": 2,
+      "title_zh": "非母语口音",
+      "main_q": null, "variants": [], "followups": [], "say": [],
+      "listen": [
+        { "en": "Spain → \"Espain\", school → \"eschool\"", "zh": "西班牙语母语者：常在 s 开头的词前面加一个 e 音", "note": "b 和 v 不分：very 听起来像 berry", "tts": false },
+        { "en": "big → \"bigga\", hotel → \"otel\"", "zh": "意大利语母语者：常在词尾加元音，h 不发音", "note": "", "tts": false },
+        { "en": "we → \"ve\", water → \"vater\"", "zh": "德语母语者：w 常发成 v", "note": "", "tts": false }
+      ],
+      "tips_zh": [],
+      "status": "todo"
+    }
+  },
+  "personas": {
+    "linda": {
+      "id": "linda", "order": 1, "name": "Linda", "native": true, "fluent": true,
+      "bio": "a 62-year-old retired schoolteacher from Ohio, USA, walking the Camino from Sarria with her sister. Chatty and warm, and likes asking personal questions",
+      "setting": "on the trail from Sarria to Portomarín, walking side by side",
+      "bio_zh": "62 岁，美国俄亥俄州退休教师，和姐姐一起从 Sarria 出发，爱聊天，爱问私人问题",
+      "setting_zh": "从 Sarria 走往 Portomarín 的路上"
+    },
+    "jonas": {
+      "id": "jonas", "order": 2, "name": "Jonas", "native": false, "fluent": false,
+      "bio": "a 24-year-old German student on a gap year who has walked all the way from León",
+      "setting": "cooking pasta in the albergue kitchen in the evening",
+      "bio_zh": "24 岁，德国学生，正在空档年，从 León 走过来",
+      "setting_zh": "晚上在 albergue 厨房煮意面"
+    },
+    "siobhan": {
+      "id": "siobhan", "order": 3, "name": "Siobhán", "native": true, "fluent": true,
+      "bio": "a 45-year-old nurse from Cork, Ireland. She talks fast and uses Irish expressions like \"grand\", \"cheers\" and \"you alright?\"",
+      "setting": "taking a morning break at a café on the Camino",
+      "bio_zh": "45 岁，爱尔兰 Cork 的护士，语速快，爱用 grand、cheers、you alright?",
+      "setting_zh": "早上在咖啡馆歇脚"
+    },
+    "carmen": {
+      "id": "carmen", "order": 4, "name": "Carmen", "native": false, "fluent": false,
+      "bio": "the warden of a public (Xunta) albergue in Galicia. Her English is limited: very short sentences mixed with Spanish words",
+      "setting": "at the albergue check-in desk; there are only a few beds left",
+      "bio_zh": "加利西亚一家公立 albergue 的管理员，英语有限，句子很短，夹杂西班牙语单词",
+      "setting_zh": "登记处，床位快满了"
+    },
+    "marco": {
+      "id": "marco", "order": 5, "name": "Marco", "native": false, "fluent": true,
+      "bio": "the receptionist at a hostel in Florence; efficient and polite",
+      "setting": "checking the learner in, but there is a problem with the booking dates",
+      "bio_zh": "佛罗伦萨一家青旅的前台，高效、礼貌",
+      "setting_zh": "办入住，预订日期出了问题"
+    },
+    "jiwoo": {
+      "id": "jiwoo", "order": 6, "name": "Ji-woo", "native": false, "fluent": false,
+      "bio": "a 29-year-old Korean pilgrim, friendly and curious about China",
+      "setting": "at the communal dinner table in an albergue",
+      "bio_zh": "29 岁，韩国朝圣者，友好，对中国好奇",
+      "setting_zh": "albergue 的晚餐桌上"
+    },
+    "clerk": {
+      "id": "clerk", "order": 7, "name": "Paolo", "native": false, "fluent": true,
+      "bio": "a ticket clerk at Roma Termini station who speaks briskly",
+      "setting": "at the ticket counter; the learner's train to Naples has been cancelled because of a strike",
+      "bio_zh": "罗马 Termini 火车站售票员，说话干脆",
+      "setting_zh": "你去那不勒斯的火车因为罢工取消了"
+    }
+  },
+  "config": {
+    "app": {
+      "pauseSec": 0.5, "longPauseSec": 1.0, "lowConf": 0.6, "maxRecSec": 180,
+      "artifactUrl": "https://claude.ai/artifact/84cSQjgc69s1EM4Epd65Qv",
+      "tripStart": "2026-10-17", "tripEnd": "2026-11-20"
+    },
+    "profileDraft": {
+      "note": "根据已知信息预填，本人确认或修改后才会写入 me/profile",
+      "facts": [
+        "住在北京；老家：（待填）",
+        "北京大学软件与微电子学院研究生毕业，方向是集成电路（MEMS 压力传感器封装）",
+        "已经拿到工作 offer，还没入职",
+        "北大山鹰社（登山社团）骨干，当过装备长",
+        "做过中小学数学家教",
+        "去欧洲之前，和朋友在新疆自驾看秋色"
+      ]
+    }
+  }
+}

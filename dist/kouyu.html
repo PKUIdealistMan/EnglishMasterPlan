@@ -1,0 +1,3373 @@
+<title>口语特训</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<style>
+:root {
+  --bg: #F1F3F7;
+  --surface: #FFFFFF;
+  --surface-2: #E7EBF2;
+  --ink: #14203A;
+  --ink-2: #4A5772;
+  --ink-3: #6F7B92;
+  --line: #D4DAE4;
+  --accent: #1E4D8C;
+  --accent-2: #DDE7F5;
+  --on-accent: #FFFFFF;
+  --arrow: #F0B40A;
+  --arrow-ink: #3A2B00;
+  --high: #B0382A;
+  --high-bg: #FBE7E3;
+  --low: #4A5772;
+  --low-bg: #E9EDF3;
+  --ok: #21704A;
+  --ok-bg: #E0F1E7;
+  --warn: #875800;
+  --warn-bg: #FCEFD2;
+  --mid-pause: #C2410C;
+  --shadow: 0 1px 2px rgba(20, 32, 58, .06), 0 6px 18px rgba(20, 32, 58, .06);
+  --font-ui: system-ui, -apple-system, "HarmonyOS Sans SC", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --font-en: "Literata", Georgia, "Noto Serif", "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --r: 12px;
+  --r-s: 8px;
+  --tabbar: 64px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0E1420;
+    --surface: #161F31;
+    --surface-2: #1F2A40;
+    --ink: #E6EAF2;
+    --ink-2: #A8B3C7;
+    --ink-3: #8390A6;
+    --line: #2B3751;
+    --accent: #8FB3EC;
+    --accent-2: #1F3150;
+    --on-accent: #0E1420;
+    --arrow: #F5C542;
+    --arrow-ink: #2A1F00;
+    --high: #F2978B;
+    --high-bg: #3A201D;
+    --low: #A8B3C7;
+    --low-bg: #222D44;
+    --ok: #76CA9C;
+    --ok-bg: #173220;
+    --warn: #F0C36B;
+    --warn-bg: #33280F;
+    --mid-pause: #FB9A5F;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E1420;
+  --surface: #161F31;
+  --surface-2: #1F2A40;
+  --ink: #E6EAF2;
+  --ink-2: #A8B3C7;
+  --ink-3: #8390A6;
+  --line: #2B3751;
+  --accent: #8FB3EC;
+  --accent-2: #1F3150;
+  --on-accent: #0E1420;
+  --arrow: #F5C542;
+  --arrow-ink: #2A1F00;
+  --high: #F2978B;
+  --high-bg: #3A201D;
+  --low: #A8B3C7;
+  --low-bg: #222D44;
+  --ok: #76CA9C;
+  --ok-bg: #173220;
+  --warn: #F0C36B;
+  --warn-bg: #33280F;
+  --mid-pause: #FB9A5F;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); }
+body {
+  color: var(--ink);
+  font: 15px/1.55 var(--font-ui);
+  -webkit-text-size-adjust: 100%;
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3, h4 { text-wrap: balance; margin: 0; line-height: 1.3; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+.en { font-family: var(--font-en); font-size: 18px; line-height: 1.5; letter-spacing: .005em; }
+.en-s { font-family: var(--font-en); font-size: 17px; line-height: 1.45; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-3); }
+.small { font-size: 13px; }
+.label {
+  font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600;
+}
+
+/* ---------- shell ---------- */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.top-in {
+  max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.brand { display: flex; align-items: baseline; gap: 8px; min-width: 0; flex: 1; }
+.brand h1 { font-size: 18px; font-weight: 700; letter-spacing: .02em; white-space: nowrap; }
+.countdown { font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.session-pill {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
+  padding: 4px 10px; font-size: 13px; white-space: nowrap; cursor: pointer;
+}
+.session-pill b { color: var(--accent); font-weight: 600; }
+.icon-btn {
+  width: 38px; height: 38px; display: grid; place-items: center; flex: none;
+  border: 1px solid var(--line); background: var(--surface); border-radius: 10px; cursor: pointer;
+}
+.icon-btn svg { width: 20px; height: 20px; stroke: var(--ink-2); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.wrap { max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: 14px calc(var(--tabbar) + 28px); }
+.view { display: flex; flex-direction: column; gap: 16px; }
+
+.tabs {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tabs-in { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tab {
+  position: relative; height: var(--tabbar); border: 0; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  color: var(--ink-3); font-size: 12px; font-weight: 600;
+}
+.tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tab[aria-selected="true"] { color: var(--accent); }
+/* the yellow Camino arrow marks where you are */
+.tab[aria-selected="true"]::before {
+  content: ""; position: absolute; top: 0; left: 50%; width: 22px; height: 7px; transform: translateX(-50%);
+  background: var(--arrow); clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.tab .badge {
+  position: absolute; top: 8px; left: calc(50% + 8px); min-width: 17px; height: 17px; padding: 0 4px;
+  border-radius: 9px; background: var(--arrow); color: var(--arrow-ink); font-size: 11px; line-height: 17px; text-align: center;
+}
+
+/* ---------- common ---------- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.stack-s { display: flex; flex-direction: column; gap: 6px; }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.section-title { font-size: 16px; font-weight: 700; }
+.section-title .muted { font-weight: 400; font-size: 13px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--accent);
+  background: var(--accent); color: var(--on-accent); font-weight: 600; cursor: pointer;
+}
+.btn:disabled { opacity: .5; cursor: default; }
+.btn.ghost { background: var(--surface); color: var(--accent); border-color: var(--line); }
+.btn.quiet { background: transparent; color: var(--ink-2); border-color: transparent; padding: 0 8px; }
+.btn.danger { background: var(--surface); color: var(--high); border-color: var(--line); }
+.btn.small { min-height: 32px; padding: 0 10px; font-size: 13px; border-radius: 8px; }
+.btn.block { width: 100%; }
+.link-btn { border: 0; background: none; color: var(--accent); padding: 0; cursor: pointer; font-size: 13px; font-weight: 600; }
+
+.say-btn {
+  flex: none; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--surface); color: var(--accent); display: inline-grid; place-items: center; cursor: pointer; vertical-align: middle;
+}
+.say-btn svg { width: 17px; height: 17px; }
+.no-tts .say-btn, .no-tts .tts-only { display: none !important; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; background: var(--surface-2); color: var(--ink-2); white-space: nowrap;
+}
+.chip.ok { background: var(--ok-bg); color: var(--ok); }
+.chip.warn { background: var(--warn-bg); color: var(--warn); }
+.chip.high { background: var(--high-bg); color: var(--high); }
+.chip.accent { background: var(--accent-2); color: var(--accent); }
+
+.notice { border-radius: var(--r); padding: 12px 14px; background: var(--warn-bg); color: var(--warn); font-size: 14px; }
+.notice.info { background: var(--accent-2); color: var(--ink); }
+.notice.bad { background: var(--high-bg); color: var(--high); }
+.notice b { font-weight: 700; }
+
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface-2); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button {
+  border: 0; border-radius: 8px; min-height: 36px; padding: 4px 6px; line-height: 1.25; background: transparent; color: var(--ink-2);
+  font-weight: 600; cursor: pointer; font-size: 14px;
+}
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+
+textarea, input[type="text"], select {
+  width: 100%; border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+  padding: 10px 12px; color: var(--ink);
+}
+textarea { resize: vertical; min-height: 96px; }
+textarea.en { font-size: 18px; }
+label.check { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+
+details > summary { cursor: pointer; list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(var(--tabbar) + env(safe-area-inset-bottom, 0px) + 16px);
+  transform: translateX(-50%); z-index: 60; max-width: calc(100% - 32px);
+  background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px;
+  box-shadow: var(--shadow);
+}
+
+.sheet-back { position: fixed; inset: 0; z-index: 50; background: rgba(8, 12, 20, .45); display: flex; align-items: flex-end; justify-content: center; }
+.sheet {
+  width: 100%; max-width: 720px; max-height: 88%; overflow: auto;
+  background: var(--bg); border-radius: 16px 16px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.spin { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } }
+
+/* ---------- practice: node list ---------- */
+.track { display: flex; flex-direction: column; gap: 8px; }
+.track-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.track-head h3 { font-size: 15px; }
+.node-list { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.node-row {
+  width: 100%; text-align: left; border: 0; background: none; cursor: pointer;
+  display: grid; grid-template-columns: 34px 1fr auto; gap: 2px 10px; align-items: center;
+  padding: 12px 14px; border-top: 1px solid var(--line);
+}
+.node-list li:first-child .node-row { border-top: 0; }
+.node-row .nid { grid-row: span 2; font-family: var(--font-mono); font-weight: 600; color: var(--ink-3); font-size: 14px; }
+.node-row .nt { font-weight: 600; }
+.node-row .nq { grid-column: 2; color: var(--ink-2); font-family: var(--font-en); font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.node-row .nr { grid-row: 1 / span 2; grid-column: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.node-row.is-current { background: var(--accent-2); }
+
+/* status stamps: 已盖章 echoes the credencial stamp */
+.stamp { font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; white-space: nowrap; }
+.stamp.todo { color: var(--ink-3); border-style: dashed; }
+.stamp.doing { color: var(--accent); }
+.stamp.done { color: var(--ok); transform: rotate(-4deg); }
+
+/* ---------- practice: node page ---------- */
+.node-head { display: flex; flex-direction: column; gap: 6px; }
+.node-head .link-btn { align-self: flex-start; }
+.node-head h2 { font-size: 20px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.node-head .nid { font-family: var(--font-mono); color: var(--ink-3); font-size: 15px; }
+.listen { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.listen > summary { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 700; }
+.listen > summary::after { content: "展开"; font-size: 13px; color: var(--accent); font-weight: 600; }
+.listen[open] > summary::after { content: "收起"; }
+.listen-body { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 14px; }
+.phrase-list { display: flex; flex-direction: column; gap: 8px; }
+.phrase { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; }
+.phrase .zh { grid-column: 1; color: var(--ink-2); font-size: 14px; }
+.phrase .note { color: var(--ink-3); }
+.phrase .say-btn { grid-row: 1 / span 2; grid-column: 2; }
+.tips { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--ink-2); }
+.tips li { padding-left: 14px; position: relative; }
+.tips li::before { content: ""; position: absolute; left: 0; top: .6em; width: 6px; height: 6px; background: var(--arrow); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+
+.thread { display: flex; flex-direction: column; gap: 14px; }
+.bubble { max-width: 92%; border-radius: 14px; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+.bubble.them { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+.bubble.me { align-self: flex-end; background: var(--accent-2); border-bottom-right-radius: 4px; }
+.bubble .who { font-size: 12px; font-weight: 600; color: var(--ink-3); }
+.bubble .q-line { display: flex; gap: 10px; align-items: flex-start; }
+.bubble .q-line .en { flex: 1; }
+.hidden-text { filter: blur(7px); user-select: none; }
+.q-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+.turn { display: flex; flex-direction: column; gap: 8px; }
+.fb { display: flex; flex-direction: column; gap: 10px; }
+.fb-row { display: grid; grid-template-columns: 52px 1fr auto; gap: 8px; align-items: start; }
+.fb-row .lbl { font-size: 12px; font-weight: 700; color: var(--ink-3); padding-top: 4px; }
+.fb-row.corrected .en { color: var(--ink); }
+.fb-extra { font-size: 14px; color: var(--ink-2); }
+.askback { font-size: 14px; color: var(--warn); background: var(--warn-bg); border-radius: 8px; padding: 6px 10px; }
+.askback .en-s { font-size: 15px; }
+
+.errs { display: flex; flex-direction: column; gap: 6px; }
+.err {
+  text-align: left; border: 1px solid var(--line); border-left: 4px solid var(--low); background: var(--surface);
+  border-radius: 8px; padding: 6px 10px; cursor: pointer; display: flex; flex-direction: column; gap: 2px;
+}
+.err.sev-high { border-left-color: var(--high); }
+.err .err-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 13px; }
+.err .code { font-family: var(--font-mono); font-weight: 600; font-size: 12px; color: var(--ink-2); }
+.err .name { font-weight: 600; }
+.err .fix { font-family: var(--font-en); font-size: 16px; }
+.err .fix s { color: var(--high); text-decoration-thickness: 1.5px; }
+.err .note { display: block; font-size: 14px; color: var(--ink-2); }
+.err .asr { font-size: 11px; font-weight: 700; color: var(--warn); background: var(--warn-bg); border-radius: 4px; padding: 0 5px; }
+
+.composer { display: flex; flex-direction: column; gap: 8px; }
+.composer-row { display: flex; align-items: center; gap: 8px; }
+.composer-row .status { flex: 1; font-size: 14px; color: var(--ink-2); display: flex; align-items: center; gap: 8px; min-width: 0; }
+.mic-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; cursor: pointer; flex: none; }
+.mic-btn svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 1.8; }
+.mic-btn.live { background: var(--high); border-color: var(--high); }
+.mic-btn.live svg { stroke: #fff; }
+.raw-reply { white-space: pre-wrap; font-family: var(--font-mono); font-size: 12px; max-height: 160px; overflow: auto; background: var(--surface-2); border-radius: 8px; padding: 8px; }
+
+.node-foot { display: flex; gap: 8px; flex-wrap: wrap; }
+.node-foot .btn { flex: 1 1 160px; }
+
+.persona-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.persona {
+  text-align: left; cursor: pointer; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;
+}
+.persona .pn { font-weight: 700; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.persona .pb { font-size: 13px; color: var(--ink-2); }
+.persona .ps { font-size: 13px; color: var(--ink-3); }
+.debrief-turn { display: flex; flex-direction: column; gap: 6px; }
+
+/* ---------- record ---------- */
+.rec-stage { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-block: 8px; }
+.rec-btn {
+  width: 112px; height: 112px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 16px;
+  box-shadow: 0 0 0 6px var(--accent-2);
+}
+.rec-btn.live { background: var(--high); color: #fff; box-shadow: 0 0 0 6px var(--high-bg); }
+.timer { font-family: var(--font-mono); font-size: 22px; font-variant-numeric: tabular-nums; }
+.meter { width: 100%; max-width: 320px; height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
+.meter span { display: block; height: 100%; width: 0; background: var(--ok); border-radius: 4px; transition: width .08s linear; }
+.file-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+.stat { background: var(--surface-2); border-radius: 10px; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; }
+.stat .v { font-size: 20px; font-weight: 700; }
+.stat .k { font-size: 12px; color: var(--ink-3); }
+.banner { display: flex; flex-direction: column; gap: 8px; }
+.copy-line { display: flex; gap: 8px; align-items: stretch; }
+.copy-line code { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px; overflow-wrap: anywhere; color: var(--ink); }
+
+.rec-list { display: flex; flex-direction: column; gap: 8px; }
+.rec-item { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.rec-head { width: 100%; text-align: left; border: 0; background: none; cursor: pointer; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; }
+.rec-head .rp { font-family: var(--font-en); font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rec-head .rm { font-size: 12px; color: var(--ink-3); }
+.rec-head .chip { grid-row: 1 / span 2; grid-column: 2; }
+.rec-body { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 12px; }
+.rec-body audio, .rec-body video { width: 100%; max-width: 100%; }
+.rec-body video { max-height: 56px; }
+.transcript { font-family: var(--font-en); font-size: 18px; line-height: 1.9; }
+.transcript .w.low { text-decoration: underline wavy var(--warn); text-underline-offset: 4px; cursor: pointer; }
+.transcript .w.low:focus-visible { outline: 2px solid var(--accent); }
+.pz { font-family: var(--font-mono); font-size: 12px; padding: 1px 4px; margin-inline: 2px; border-radius: 4px; color: var(--ink-3); background: var(--surface-2); white-space: nowrap; }
+.pz.mid { color: #fff; background: var(--mid-pause); font-weight: 600; }
+.lc-note { font-size: 14px; background: var(--warn-bg); color: var(--ink); border-radius: 8px; padding: 8px 10px; }
+.legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--ink-3); align-items: center; }
+
+/* ---------- dashboard ---------- */
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.kpi .v { font-size: 24px; font-weight: 700; }
+.kpi .k { font-size: 12px; color: var(--ink-3); }
+.top-errs { display: flex; flex-direction: column; gap: 10px; }
+.top-err { display: grid; grid-template-columns: 28px 1fr auto; gap: 4px 10px; align-items: start; }
+.top-err .rank { font-family: var(--font-mono); font-weight: 700; color: var(--ink-3); font-size: 18px; }
+.top-err .t { font-weight: 700; }
+.top-err .ex { grid-column: 2 / span 2; font-family: var(--font-en); font-size: 16px; }
+.top-err .ex s { color: var(--high); }
+.top-err .rate { text-align: right; font-size: 13px; color: var(--ink-2); }
+.trend-up { color: var(--high); font-weight: 700; }
+.trend-down { color: var(--ok); font-weight: 700; }
+.tbl-wrap { overflow-x: auto; }
+table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tbl th, .tbl td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.tbl td:first-child { white-space: normal; min-width: 7em; }
+.tbl th { font-size: 12px; color: var(--ink-3); font-weight: 600; }
+.tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.tbl tr.zero td { color: var(--ink-3); }
+.meter-bar { height: 8px; border-radius: 4px; background: var(--accent-2); overflow: hidden; }
+.meter-bar span { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
+.spark-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+.spark { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; position: relative; }
+.spark .v { font-size: 22px; font-weight: 700; }
+.spark .k { font-size: 12px; color: var(--ink-3); }
+.spark svg { width: 100%; height: 48px; display: block; overflow: visible; }
+.sp-grid { stroke: var(--line); stroke-width: 1; }
+.sp-area { fill: var(--accent); opacity: .12; }
+.sp-line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.sp-dot { fill: var(--accent); stroke: var(--surface-2); stroke-width: 2; }
+.sp-hover { fill: var(--surface); stroke: var(--accent); stroke-width: 2; pointer-events: none; }
+.sp-hit { fill: transparent; cursor: crosshair; }
+.spark .tip { position: absolute; top: 6px; right: 10px; font-size: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; pointer-events: none; }
+
+/* ---------- pocket ---------- */
+.bank-item { display: flex; flex-direction: column; gap: 8px; }
+.bank-item + .bank-item { border-top: 1px solid var(--line); padding-top: 14px; }
+.chunks { display: flex; flex-direction: column; gap: 4px; }
+.chunk { display: grid; grid-template-columns: 1fr auto; gap: 0 10px; align-items: center; }
+.chunk .zh { font-size: 13px; color: var(--ink-3); }
+.chunk .say-btn { grid-row: 1 / span 2; grid-column: 2; }
+
+/* ---------- settings / probe ---------- */
+.probe-list { display: flex; flex-direction: column; gap: 8px; }
+.probe-item { display: grid; grid-template-columns: 26px 1fr auto; gap: 2px 10px; align-items: start; padding: 10px 0; border-top: 1px solid var(--line); }
+.probe-item:first-child { border-top: 0; }
+.probe-item .pi-n { font-family: var(--font-mono); font-weight: 700; color: var(--ink-3); }
+.probe-item .pi-t { font-weight: 600; }
+.probe-item .pi-d { grid-column: 2 / span 2; font-size: 13px; color: var(--ink-2); overflow-wrap: anywhere; }
+.probe-item .pi-a { grid-column: 2 / span 2; display: flex; gap: 8px; flex-wrap: wrap; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 13px; }
+.kv dt { color: var(--ink-3); }
+.kv dd { margin: 0; overflow-wrap: anywhere; }
+
+</style>
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><h1>口语特训</h1><span class="countdown" id="countdown"></span></div>
+    <button class="session-pill" id="session-pill" type="button" hidden></button>
+    <button class="icon-btn" id="settings-btn" type="button" aria-label="设置" title="设置">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9M15 5a2 2 0 1 0 0 4a2 2 0 1 0 0-4zM9 15a2 2 0 1 0 0 4a2 2 0 1 0 0-4z"/></svg>
+    </button>
+  </div>
+</header>
+<main class="wrap">
+  <section class="view" id="view-practice" aria-label="练习"></section>
+  <section class="view" id="view-record" aria-label="录音" hidden></section>
+  <section class="view" id="view-dash" aria-label="看板" hidden></section>
+  <section class="view" id="view-pocket" aria-label="口袋本" hidden></section>
+  <section class="view" id="view-settings" aria-label="设置" hidden></section>
+</main>
+<nav class="tabs" aria-label="主导航"><div class="tabs-in" role="tablist" id="tabs"></div></nav>
+<script>
+'use strict';
+/* ---- consts.js ---- */
+/* =====================================================================
+ * 常量：错误分类、提示词模板、固定题。页面内 Claude 和分析会话共用同一套错误代码。
+ * 模板变量写成 {{name}}，fill() 只替换这种写法；单花括号的 JSON 结构原样保留。
+ * ===================================================================== */
+
+const APP_VERSION = '1.0.0';
+
+const ERROR_TYPES = [
+  { code: 'T-PAST',  name: '该用过去时',              sev: 'high', ex: ['I go there yesterday', 'I went there yesterday'] },
+  { code: 'T-PERF',  name: '该用现在完成（进行）时',   sev: 'high', ex: ['I walk for five days', "I've been walking for five days"] },
+  { code: 'T-FUT',   name: '计划和将来的说法',         sev: 'high', ex: ['Tomorrow I go to Santiago', "Tomorrow I'm going to Santiago"] },
+  { code: 'T-OTHER', name: '其他时态问题',             sev: 'high', ex: null },
+  { code: 'BE-V',    name: 'be 动词多余或缺失',        sev: 'low',  ex: ['I am live in Beijing', 'I live in Beijing'] },
+  { code: 'AGR',     name: '主谓一致、第三人称单数',   sev: 'low',  ex: ['He walk fast', 'He walks fast'] },
+  { code: 'PLUR',    name: '单复数',                   sev: 'low',  ex: ['two ticket', 'two tickets'] },
+  { code: 'ART',     name: '冠词',                     sev: 'low',  ex: ['I booked bed', 'I booked a bed'] },
+  { code: 'PREP',    name: '介词',                     sev: 'low',  ex: ['arrive to Rome', 'arrive in Rome'] },
+  { code: 'QWO',     name: '疑问句语序',               sev: 'high', ex: ['Where I can buy tickets?', 'Where can I buy tickets?'] },
+  { code: 'PRON',    name: 'he/she 等代词混用',        sev: 'high', ex: ['My sister, he…', 'My sister, she…'] },
+  { code: 'YESNO',   name: '否定疑问句 yes/no 用反',   sev: 'high', ex: ['"You\'re not Japanese?" "Yes."', '"No, I\'m Chinese."'] },
+  { code: 'WORD',    name: '用词不当或中式直译',       sev: null,   ex: ['open the light', 'turn on the light'] },
+  { code: 'STRUCT',  name: '句子不完整或结构混乱',     sev: null,   ex: null },
+];
+const ERROR_MAP = Object.fromEntries(ERROR_TYPES.map(t => [t.code, t]));
+const ERROR_CODES = ERROR_TYPES.map(t => t.code);
+/* asr_suspect 只用于词尾类问题 */
+const ASR_SUSPECT_TYPES = ['PLUR', 'AGR', 'T-PAST', 'T-PERF'];
+const MAX_SHOWN_ERRORS = 3;
+
+const TRACKS = [
+  { id: 'social',    name: '社交',   sub: '路上聊天' },
+  { id: 'service',   name: '办事',   sub: '住宿、吃饭、交通' },
+  { id: 'listening', name: '听力',   sub: '专项清单' },
+];
+
+const STATUS_ZH = { todo: '未开始', doing: '练习中', done: '已盖章' };
+
+const FIXED_PROMPTS = {
+  intro: { zh: '一分钟自我介绍', en: 'Introduce yourself to a fellow pilgrim.' },
+};
+
+/* 实战对话里非母语角色固定用这句 style；母语者留空 */
+const NON_NATIVE_STYLE = 'Use simple words and short sentences, like a non-native speaker, but keep your grammar correct.';
+
+/* drill 模板第 6 条里 Claude 扮演的角色：社交节点是路上的旅伴，办事节点是工作人员 */
+const DRILL_ROLE = {
+  social: 'a friendly fellow traveler',
+  service: 'the staff member in this scenario (stay in that role)',
+};
+
+/* §8.1 任务 1–3，drill 和 debrief 共用 */
+const RULES_1_TO_3 = `1. corrected: the minimal-edit correct version. Keep the learner's own words and meaning;
+   fix only real errors. Ignore capitalization and punctuation.
+2. errors: every error, each {type, orig, fix, sev, asr_suspect, note_zh}.
+   type is one of: T-PAST, T-PERF, T-FUT, T-OTHER, BE-V, AGR, PLUR, ART, PREP, QWO, PRON,
+   YESNO, WORD, STRUCT. sev is "high" if it could cause a misunderstanding, else "low".
+   asr_suspect is true only for a missing or extra -s/-ed ending that speech-to-text could
+   have produced. note_zh is one short Chinese sentence stating the rule.
+   Casual spoken forms (gonna, yeah, dropped subjects in replies) are not errors.
+3. natural: a more natural spoken version ONLY if clearly better than corrected; else null.
+   Simple, friendly, everyday spoken English. Not fancy.`;
+
+const PROMPTS = {
+  /* §8.1 逐句反馈 */
+  drill: `You are an English speaking coach for a Chinese native speaker preparing for a trip
+(Camino de Santiago from Sarria, then Barcelona, Milan, Venice, Florence, Rome, Naples;
+Oct 17 – Nov 20). The learner answered by phone speech-to-text; the text is raw.
+
+Scenario: {{title_zh}} — main question: "{{main_q}}"
+Facts the learner has confirmed about themself (keep follow-ups consistent with them):
+{{profile_facts}}
+Conversation so far in this scenario (oldest first, at most 6 exchanges):
+{{history}}
+
+Question asked: "{{q}}"
+Learner's raw answer: "{{raw}}"
+
+Tasks:
+{{rules}}
+4. asked_back: true if the answer ends by asking the other person something.
+5. vocab: Chinese words the learner used because they lacked the English,
+   each {zh, en, example}.
+6. followup: your next line as {{role}}. React briefly to what they
+   said, then ask ONE natural follow-up question (max 20 words). Draw on these if they
+   fit: {{followups}}
+
+Reply with only JSON:
+{"corrected":"…","errors":[],"natural":null,"asked_back":false,"vocab":[],"followup":"…"}`,
+
+  /* §8.2 实战对话（第一条 user 消息） */
+  convo: `Role-play for speaking practice. You are {{name}}: {{bio}}. Setting: {{setting}}.
+Talk the way this person would in real life: 1–3 short spoken sentences per turn,
+everyday English. {{style}}
+React to what the learner says and keep the conversation going; ask a question most turns.
+Never correct the learner and never mention that this is practice. If you can't understand
+them, ask for clarification like a real person would.
+Start with a natural opening line.`,
+
+  /* §8.3 对话讲评 */
+  debrief: `Below is a role-play transcript between a learner (L) and {{name}} (P).
+For EACH learner turn i, return {i, corrected, errors, natural} using these rules:
+{{rules}}
+Then a summary: {top:[{type,count,example_orig,example_fix}], strengths_zh, rule_zh,
+next_focus_zh}. rule_zh is one short, memorable Chinese rule for the most frequent
+high-severity error.
+Reply with only JSON: {"turns":[…],"summary":{…}}
+
+Transcript:
+{{transcript_lines}}`,
+
+  /* §8.4 本次练习小结：次数由页面统计 */
+  summary: `A learner's most frequent spoken-English errors this session (type, count, examples):
+{{top3}}
+Reply with only JSON: {"rule_zh":"…","next_focus_zh":["…","…"]}
+rule_zh: one short, memorable Chinese rule for the top error. next_focus_zh: at most two
+concrete things to practice next time, in Chinese.`,
+
+  /* §8.5 口袋本条目 */
+  bank: `Scenario: {{title_zh}} — "{{main_q}}". Learner facts: {{profile_facts}}.
+The learner's corrected answers in this scenario: {{corrected_answers}}
+Write the learner's best answer to keep for the trip.
+Reply with only JSON: {"best_en":"…","chunks":[{"en":"…","zh":"…"}]}
+best_en: 2–4 short spoken sentences in first person, using the learner's own facts and
+words where possible, ending with a question back. chunks: 4–8 reusable sentence pieces
+from it, each with a Chinese gloss.`,
+};
+
+/* sample 错误码 → 给用户看的话 */
+const SAMPLE_ERR_ZH = {
+  cancelled: '已停止。',
+  not_granted: '你没有允许这个页面使用 Claude。依赖 Claude 的功能已隐藏；重新打开页面可以再选一次。',
+  sampling_disabled: '这个账号或组织不能在页面里使用 Claude。',
+  not_declared: '页面没有声明 Claude 能力，需要重新发布。',
+  capability_disabled: '当前环境里页面内 Claude 不可用。',
+  capability_removed: '当前 App 版本不支持页面内 Claude，请更新 App 或改用浏览器。',
+  unavailable: '页面内 Claude 不可用（需要在 Claude 的 artifact 查看器里打开）。',
+  rate_limited: '调用太频繁或用量到上限了，稍后再试。',
+  session_expired: '登录已过期，请重新登录 claude.ai。',
+  refused: 'Claude 拒绝了这次请求。换个说法再试。',
+  empty_completion: 'Claude 没有返回内容。',
+  invalid_json: 'Claude 的回复不是有效的 JSON。',
+  bad_shape: 'Claude 的回复缺少必要字段。',
+  prompt_too_large: '内容太长了。',
+  upstream_error: '网络或服务出错了。',
+};
+function sampleErrZh(code) { return SAMPLE_ERR_ZH[code] || SAMPLE_ERR_ZH.upstream_error; }
+
+/* ---- platform.js ---- */
+/* =====================================================================
+ * 适配层。所有 claude.use() 调用都在这里；业务代码只用 store / blobs / llm。
+ * 以后转成独立 App 时，只替换这个文件（见 spec §14）。
+ * ===================================================================== */
+
+const Platform = (() => {
+  const caps = { db: null, assets: null, sample: null, downloads: null };
+  const hasClaude = !!(window.claude && typeof window.claude.use === 'function');
+
+  const ready = (async () => {
+    if (!hasClaude) return caps;
+    const names = Object.keys(caps);
+    const got = await Promise.all(names.map(n => window.claude.use(n).catch(() => null)));
+    names.forEach((n, i) => { caps[n] = got[i] || null; });
+    return caps;
+  })();
+
+  function norm(e, fallback) {
+    if (e && typeof e === 'object' && typeof e.code === 'string') return e;
+    return { code: fallback || 'upstream_error', message: String((e && e.message) || e) };
+  }
+  const unavailable = what => Promise.reject({ code: 'unavailable', message: what + ' not available in this view' });
+
+  /* 同一个文档一次只写一个 */
+  const chains = new Map();
+  function serial(path, fn) {
+    const prev = chains.get(path) || Promise.resolve();
+    const next = prev.then(fn, fn);
+    const tail = next.then(() => {}, () => {});
+    chains.set(path, tail);
+    tail.then(() => { if (chains.get(path) === tail) chains.delete(path); });
+    return next.catch(e => { throw norm(e); });
+  }
+
+  const docOut = s => (s && s.exists ? Object.assign({ id: s.id }, s.data()) : null);
+
+  function buildQuery(coll, o) {
+    let q = caps.db.collection(coll);
+    for (const w of (o && o.where) || []) q = q.where(w[0], w[1], w[2]);
+    if (o && o.orderBy) q = q.orderBy(o.orderBy, o.dir || 'asc');
+    if (o && o.limit) q = q.limit(o.limit);
+    return q;
+  }
+
+  /* ---------- store：文档数据 ---------- */
+  const store = {
+    get available() { return !!caps.db; },
+    async get(path) {
+      if (!caps.db) return unavailable('db');
+      try { return docOut(await caps.db.doc(path).get()); } catch (e) { throw norm(e); }
+    },
+    set(path, data) { return caps.db ? serial(path, () => caps.db.doc(path).set(data)) : unavailable('db'); },
+    update(path, data) { return caps.db ? serial(path, () => caps.db.doc(path).update(data)) : unavailable('db'); },
+    remove(path) { return caps.db ? serial(path, () => caps.db.doc(path).delete()) : unavailable('db'); },
+    async query(coll, o) {
+      if (!caps.db) return unavailable('db');
+      try { return (await buildQuery(coll, o).get()).docs.map(docOut); } catch (e) { throw norm(e); }
+    },
+    /* 按某个字段倒序分页取全部（导出用） */
+    async queryAll(coll, field) {
+      const out = [];
+      const seen = new Set();
+      let before = null;
+      for (let i = 0; i < 20; i++) {
+        const page = await store.query(coll, { where: before ? [[field, '<=', before]] : [], orderBy: field, dir: 'desc', limit: 1000 });
+        let added = 0;
+        for (const d of page) if (!seen.has(d.id)) { seen.add(d.id); out.push(d); added++; }
+        if (page.length < 1000 || !added) break;
+        before = page[page.length - 1][field];
+      }
+      if (field) {
+        /* 没有这个字段的文档不会出现在排序查询里，单独补上 */
+        const rest = await store.query(coll, { limit: 1000 }).catch(() => []);
+        for (const d of rest) if (!seen.has(d.id)) { seen.add(d.id); out.push(d); }
+      }
+      return out;
+    },
+    watch(coll, o, next, onErr) {
+      if (!caps.db) return () => {};
+      return buildQuery(coll, o).onSnapshot(s => next(s.docs.map(docOut)), e => onErr && onErr(norm(e)));
+    },
+    watchDoc(path, next, onErr) {
+      if (!caps.db) return () => {};
+      return caps.db.doc(path).onSnapshot(s => next(docOut(s)), e => onErr && onErr(norm(e)));
+    },
+  };
+
+  /* ---------- blobs：录音文件，以及导出文件 ---------- */
+  const blobs = {
+    get available() { return !!caps.assets; },
+    get canSave() { return !!caps.downloads; },
+    async upload(blob, type) {
+      if (!caps.assets) return unavailable('assets');
+      try { return await caps.assets.upload(blob, type ? { type } : undefined); } catch (e) { throw norm(e); }
+    },
+    url(id) { return '/_blob/' + id; },
+    async fetchText(id) {
+      const r = await fetch('/_blob/' + id);
+      if (!r.ok) throw { code: r.status === 404 ? 'not_found' : 'upstream_error', message: 'HTTP ' + r.status };
+      return r.text();
+    },
+    async remove(id) {
+      if (!caps.assets) return unavailable('assets');
+      try { return await caps.assets.delete(id); } catch (e) { throw norm(e); }
+    },
+    async usage() {
+      if (!caps.assets) return unavailable('assets');
+      try { return (await caps.assets.list()).usage; } catch (e) { throw norm(e); }
+    },
+    async saveFile(filename, data) {
+      if (!caps.downloads) return unavailable('downloads');
+      try { return await caps.downloads.save({ filename, data }); } catch (e) { throw norm(e, 'unavailable'); }
+    },
+  };
+
+  /* ---------- llm：页面内 Claude ---------- */
+  const PERMANENT = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'];
+  let blocked = null;
+  const blockSubs = [];
+  async function call(kind, input, o) {
+    if (!caps.sample) throw { code: 'unavailable', message: 'sample not available' };
+    if (blocked) throw { code: blocked, message: 'blocked for this view' };
+    const opts = {};
+    if (o.tier) opts.modelTier = o.tier;
+    if (o.signal) opts.signal = o.signal;
+    if (o.onText) opts.onText = o.onText;
+    if (o.cache !== undefined) opts.cache = o.cache;
+    try {
+      return kind === 'json' ? await caps.sample.json(input, opts) : await caps.sample(input, opts);
+    } catch (e) {
+      const x = norm(e);
+      if (PERMANENT.includes(x.code) && !blocked) {
+        blocked = x.code;
+        blockSubs.forEach(f => { try { f(x.code); } catch (_) {} });
+      }
+      throw x;
+    }
+  }
+  const llm = {
+    get available() { return !!caps.sample && !blocked; },
+    get reason() { return blocked || (caps.sample ? null : 'unavailable'); },
+    json(input, o = {}) { return call('json', input, o); },
+    text(input, o = {}) { return call('text', input, o); },
+    onBlocked(fn) { blockSubs.push(fn); },
+  };
+
+  return { ready, hasClaude, store, blobs, llm };
+})();
+
+/* ---- util.js ---- */
+/* ===================== 通用小工具 ===================== */
+
+const $ = (sel, root = document) => root.querySelector(sel);
+
+/* 建元素。字符串一律作为文本插入，数据库和 Claude 返回的内容不会被当成 HTML。 */
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  setAttrs(el, attrs);
+  appendKids(el, kids);
+  return el;
+}
+function setAttrs(el, attrs) {
+  if (!attrs) return;
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.setAttribute('class', v);
+    else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
+    else if (k === 'hidden' || k === 'disabled' || k === 'checked' || k === 'value' || k === 'open') el[k] = v;
+    else el.setAttribute(k, v === true ? '' : String(v));
+  }
+}
+function appendKids(el, kids) {
+  for (const k of kids.flat(Infinity)) {
+    if (k == null || k === false) continue;
+    el.append(k instanceof Node ? k : document.createTextNode(String(k)));
+  }
+}
+function svgEl(tag, attrs, ...kids) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  if (attrs) for (const [k, v] of Object.entries(attrs)) if (v != null) el.setAttribute(k, String(v));
+  appendKids(el, kids);
+  return el;
+}
+function clear(el) { while (el && el.firstChild) el.removeChild(el.firstChild); return el; }
+/* 追加子节点；和原生 append 不同，null/false 会被跳过，数组会被展开 */
+function put(el, ...kids) { appendKids(el, kids); return el; }
+
+const ICON_PATHS = {
+  talk: 'M4 5h16v10H9l-5 4z',
+  mic: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3',
+  chart: 'M4 20V10M10 20V4M16 20v-7M22 20H2',
+  book: 'M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11',
+};
+function icon(name) {
+  return svgEl('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' }, svgEl('path', { d: ICON_PATHS[name] }));
+}
+
+/* localStorage：读写都包 try/catch，失败时页面照常工作 */
+const ls = {
+  get(key, dflt = null) {
+    try { const v = localStorage.getItem('kx:' + key); return v == null ? dflt : JSON.parse(v); } catch (_) { return dflt; }
+  },
+  set(key, val) { try { localStorage.setItem('kx:' + key, JSON.stringify(val)); } catch (_) {} },
+  del(key) { try { localStorage.removeItem('kx:' + key); } catch (_) {} },
+};
+
+function fill(tpl, vars) {
+  return tpl.replace(/\{\{(\w+)\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(vars, k) ? String(vars[k]) : m));
+}
+function uid(prefix) {
+  return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
+}
+const nowIso = () => new Date().toISOString();
+function localDate(d = new Date()) {
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+}
+function countWords(s) { return ((s || '').match(/[A-Za-z]+(?:['’][A-Za-z]+)*/g) || []).length; }
+const str = v => (typeof v === 'string' ? v.trim() : v == null ? '' : String(v).trim());
+const arr = v => (Array.isArray(v) ? v : []);
+function fmtBytes(n) {
+  if (n == null) return '–';
+  if (n < 1024) return n + ' B';
+  if (n < 1024 * 1024) return (n / 1024).toFixed(0) + ' KB';
+  return (n / 1024 / 1024).toFixed(1) + ' MB';
+}
+function fmtDur(sec) {
+  if (sec == null || !isFinite(sec)) return '–';
+  const s = Math.round(sec);
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+function fmtWhen(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const p = n => String(n).padStart(2, '0');
+  return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function daysUntil(ymd) {
+  if (!ymd) return null;
+  const [y, m, d] = ymd.split('-').map(Number);
+  const target = new Date(y, m - 1, d);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  return Math.round((target - today) / 86400000);
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+let toastTimer = null;
+function toast(msg, ms = 2600) {
+  let el = $('#toast');
+  if (!el) { el = h('div', { id: 'toast', class: 'toast', role: 'status' }); document.body.append(el); }
+  el.textContent = msg; el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, ms);
+}
+
+/* 底部弹出层。返回关闭函数。 */
+function openSheet(build) {
+  const back = h('div', { class: 'sheet-back' });
+  const sheet = h('div', { class: 'sheet', role: 'dialog', 'aria-modal': 'true' });
+  const close = () => back.remove();
+  back.addEventListener('click', e => { if (e.target === back) close(); });
+  back.append(sheet);
+  document.body.append(back);
+  build(sheet, close);
+  return close;
+}
+
+async function copyText(text, fallbackEl) {
+  try { await navigator.clipboard.writeText(text); toast('已复制'); return true; } catch (_) {
+    if (fallbackEl) {
+      const r = document.createRange(); r.selectNodeContents(fallbackEl);
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      toast('复制不了，已选中文字，请长按复制');
+    }
+    return false;
+  }
+}
+
+/* ---------- 朗读：speechSynthesis 的英文语音；没有就隐藏朗读按钮 ---------- */
+const TTS = (() => {
+  let voices = [], voice = null, checked = false;
+  const subs = [];
+  const synth = window.speechSynthesis;
+  function load() {
+    if (!synth) return;
+    const all = synth.getVoices() || [];
+    voices = all.filter(v => /^en([-_]|$)/i.test(v.lang));
+    const want = ls.get('ttsVoice');
+    voice = voices.find(v => v.voiceURI === want) || voices.find(v => /en[-_]US/i.test(v.lang)) || voices.find(v => /en[-_]GB/i.test(v.lang)) || voices[0] || null;
+    if (voices.length) { checked = true; notify(); }
+  }
+  function notify() {
+    document.documentElement.classList.toggle('no-tts', !voice);
+    subs.forEach(f => f());
+  }
+  if (synth) {
+    load();
+    try { synth.addEventListener('voiceschanged', load); } catch (_) { synth.onvoiceschanged = load; }
+    setTimeout(() => { if (!checked) { load(); checked = true; notify(); } }, 3000);
+  } else {
+    checked = true;
+  }
+  document.documentElement.classList.toggle('no-tts', !voice);
+  return {
+    get available() { return !!voice; },
+    get voices() { return voices; },
+    get voice() { return voice; },
+    setVoice(uri) { ls.set('ttsVoice', uri); load(); notify(); },
+    speak(text, rate) {
+      if (!voice || !text) return;
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.voice = voice; u.lang = voice.lang;
+      u.rate = rate || ls.get('ttsRate', 0.95);
+      synth.speak(u);
+    },
+    onChange(f) { subs.push(f); },
+  };
+})();
+
+function sayBtn(text) {
+  return h('button', {
+    class: 'say-btn', type: 'button', 'aria-label': '朗读', title: '朗读',
+    onclick: e => { e.stopPropagation(); TTS.speak(typeof text === 'function' ? text() : text); },
+  }, svgEl('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' }, svgEl('path', { d: 'M4 9h4l5-4v14l-5-4H4zM16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round' })));
+}
+
+/* 简单事件总线：数据更新时通知各个视图 */
+const Bus = (() => {
+  const m = {};
+  return {
+    on(evt, fn) { (m[evt] = m[evt] || []).push(fn); },
+    emit(evt, arg) { (m[evt] || []).forEach(fn => { try { fn(arg); } catch (e) { console.error(e); } }); },
+  };
+})();
+
+/* ---- audio.js ---- */
+/* ===================== 音频工具：解码、粗测停顿、上传类型 ===================== */
+
+const AudioTools = (() => {
+  const REC_TYPES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4'];
+  const MAX_WRAP_BYTES = 15 * 1024 * 1024;
+
+  async function decode(blob) {
+    const buf = await blob.arrayBuffer();
+    const Ctx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    if (!Ctx) throw new Error('no OfflineAudioContext');
+    const ctx = new Ctx(1, 16000, 16000);
+    const ab = await new Promise((res, rej) => {
+      const p = ctx.decodeAudioData(buf, res, rej);
+      if (p && typeof p.then === 'function') p.then(res, rej);
+    });
+    const ch = ab.numberOfChannels, len = ab.length;
+    const mono = new Float32Array(len);
+    for (let c = 0; c < ch; c++) {
+      const d = ab.getChannelData(c);
+      for (let i = 0; i < len; i++) mono[i] += d[i] / ch;
+    }
+    return { samples: mono, sr: ab.sampleRate, duration: ab.duration };
+  }
+
+  function frameDb(samples, sr, frameS = 0.02) {
+    const f = Math.max(1, Math.round(sr * frameS));
+    const n = Math.floor(samples.length / f);
+    const db = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      let s = 0;
+      for (let j = i * f, e = j + f; j < e; j++) s += samples[j] * samples[j];
+      db[i] = 20 * Math.log10(Math.sqrt(s / f) + 1e-9);
+    }
+    return db;
+  }
+  function pct(a, p) {
+    if (!a.length) return -180;
+    const s = Float32Array.from(a).sort();
+    const i = Math.min(s.length - 1, Math.max(0, Math.round((p / 100) * (s.length - 1))));
+    return s[i];
+  }
+  const r2 = x => Math.round(x * 100) / 100;
+
+  function level(samples, sr) {
+    const db = frameDb(samples, sr);
+    const peak = pct(db, 95), floor = pct(db, 10);
+    return { peakDb: Math.round(peak), floorDb: Math.round(floor), rangeDb: Math.round(peak - floor) };
+  }
+
+  /* §9 本地粗测：20 ms 帧，第 10 百分位作底噪，高 12 dB 算说话，3 帧多数表决，
+     首尾说话之间连续静音 ≥ pauseSec 算一次停顿。仅作即时反馈。 */
+  function roughPauses(samples, sr, pauseSec) {
+    const frameS = 0.02;
+    const db = frameDb(samples, sr, frameS);
+    const n = db.length;
+    if (n < 10) return null;
+    const floor = pct(db, 10), loud = pct(db, 95);
+    const raw = new Uint8Array(n);
+    for (let i = 0; i < n; i++) raw[i] = db[i] > floor + 12 ? 1 : 0;
+    const sp = new Uint8Array(n);
+    for (let i = 0; i < n; i++) sp[i] = ((i > 0 ? raw[i - 1] : 0) + raw[i] + (i < n - 1 ? raw[i + 1] : 0)) >= 2 ? 1 : 0;
+    const first = sp.indexOf(1), last = sp.lastIndexOf(1);
+    const noisy = loud - floor < 15;
+    if (first < 0) return { pauses: 0, longestPauseSec: 0, speakingRatio: 0, noisy };
+    let pauses = 0, longest = 0, run = 0, speech = 0;
+    for (let i = first; i <= last; i++) {
+      if (sp[i]) {
+        if (run * frameS >= pauseSec) { pauses++; longest = Math.max(longest, run * frameS); }
+        run = 0; speech++;
+      } else run++;
+    }
+    return { pauses, longestPauseSec: r2(longest), speakingRatio: r2(speech / (last - first + 1)), noisy };
+  }
+
+  /* 录制 mimeType / 文件 → 上传类型。其他格式用 base64 包成 text/plain。 */
+  function uploadTypeFor(mime, name) {
+    const m = (mime || '').toLowerCase();
+    const ext = ((name || '').split('.').pop() || '').toLowerCase();
+    if (m.startsWith('audio/webm') || m.startsWith('video/webm') || ext === 'webm') return { type: 'video/webm', wrap: false };
+    if (m.startsWith('audio/mp4') || m.startsWith('video/mp4') || m === 'audio/x-m4a' || m === 'audio/m4a' || ext === 'm4a' || ext === 'mp4') return { type: 'video/mp4', wrap: false };
+    return { type: 'text/plain', wrap: true };
+  }
+  function guessMime(name) {
+    const ext = ((name || '').split('.').pop() || '').toLowerCase();
+    return ({ m4a: 'audio/mp4', mp4: 'audio/mp4', webm: 'audio/webm', mp3: 'audio/mpeg', aac: 'audio/aac', amr: 'audio/amr', ogg: 'audio/ogg', opus: 'audio/ogg', wav: 'audio/wav', '3gp': 'audio/3gpp', flac: 'audio/flac' })[ext] || '';
+  }
+
+  function toBase64(blob) {
+    return new Promise((res, rej) => {
+      const fr = new FileReader();
+      fr.onload = () => res(String(fr.result).split(',')[1] || '');
+      fr.onerror = () => rej(fr.error);
+      fr.readAsDataURL(blob);
+    });
+  }
+  function base64ToBlob(b64, type) {
+    const bin = atob(b64.trim());
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new Blob([bytes], { type: type || 'application/octet-stream' });
+  }
+
+  function pickRecorderMime() {
+    if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) return '';
+    return REC_TYPES.find(t => MediaRecorder.isTypeSupported(t)) || '';
+  }
+
+  /* 上传一段录音：按类型直传，unsupported_type 时改用 base64，store_unavailable 重试一次 */
+  async function uploadRecording(blob, mime, name) {
+    const plan = uploadTypeFor(mime, name);
+    const wrapped = async () => {
+      if (blob.size > MAX_WRAP_BYTES) throw { code: 'too_large', message: '原始文件超过 15 MB' };
+      const b64 = await toBase64(blob);
+      return { res: await withRetry(() => Platform.blobs.upload(new Blob([b64], { type: 'text/plain' }), 'text/plain')), uploadType: 'text/plain' };
+    };
+    if (plan.wrap) return wrapped();
+    try {
+      return { res: await withRetry(() => Platform.blobs.upload(blob, plan.type)), uploadType: plan.type };
+    } catch (e) {
+      if (e.code === 'unsupported_type') return wrapped();
+      throw e;
+    }
+  }
+  async function withRetry(fn) {
+    try { return await fn(); } catch (e) {
+      if (e.code !== 'store_unavailable') throw e;
+      await sleep(1500);
+      return fn();
+    }
+  }
+
+  return { decode, level, roughPauses, uploadTypeFor, guessMime, toBase64, base64ToBlob, pickRecorderMime, uploadRecording, REC_TYPES, MAX_WRAP_BYTES };
+})();
+
+/* ---- probe.js ---- */
+/* =====================================================================
+ * M0 探针：逐项测试设备和 artifact 能力，结果写入 probe/{ts}。
+ * 正式页面里一直保留在"设置 → 诊断"。页面也用同一套结果决定录音方式。
+ * ===================================================================== */
+
+const Probe = (() => {
+  const MR_TYPES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+  const ITEMS = [
+    { n: 1, key: 'gum',        title: '页面里获取麦克风', sub: 'getUserMedia' },
+    { n: 2, key: 'recorder',   title: '页面里录 5 秒',     sub: 'MediaRecorder 格式与录音' },
+    { n: 3, key: 'upload',     title: '上传页面录音',       sub: 'assets.upload，video/webm 或 video/mp4' },
+    { n: 4, key: 'filePick',   title: '系统录音机或选文件', sub: '再以 base64 text/plain 上传', manual: true },
+    { n: 5, key: 'sample',     title: '页面内 Claude',      sub: 'sample.json，quick 档' },
+    { n: 6, key: 'tts',        title: '英文朗读语音',       sub: 'speechSynthesis.getVoices()' },
+    { n: 7, key: 'asr',        title: '网页语音识别',       sub: 'webkitSpeechRecognition', manual: true },
+    { n: 8, key: 'asrWithRec', title: '识别和录音同时进行', sub: 'MediaRecorder + 语音识别', manual: true },
+    { n: 9, key: 'saved',      title: '写入数据库',         sub: 'probe/{ts}' },
+  ];
+  const STATUS = { pass: ['通过', 'ok'], fail: ['失败', 'high'], skip: ['跳过', ''], running: ['进行中', 'accent'], idle: ['未测', ''] };
+
+  let R = null, docId = null, root = null, stream = null, recBlob = null, busy = false;
+  let saveChain = Promise.resolve();
+
+  const SR = () => window.SpeechRecognition || window.webkitSpeechRecognition || null;
+
+  function micPolicy() {
+    try {
+      const fp = document.permissionsPolicy || document.featurePolicy;
+      return fp && fp.allowsFeature ? fp.allowsFeature('microphone') : null;
+    } catch (_) { return null; }
+  }
+  function isFramed() { try { return window.top !== window.self; } catch (_) { return true; } }
+  function device() {
+    const ua = navigator.userAgent;
+    const app = /Claude/i.test(ua) ? 'Claude App' : /wv\)/.test(ua) ? 'WebView' : /Chrome\//.test(ua) ? 'Chrome' : 'Browser';
+    const kind = /Mobile/.test(ua) ? '手机' : /Android/.test(ua) ? '平板' : '电脑';
+    return kind + ' · ' + app;
+  }
+
+  function fresh() {
+    const ts = nowIso();
+    docId = ts;
+    R = {
+      ts, ua: navigator.userAgent, device: device(), appVersion: APP_VERSION, startedAt: ts, updatedAt: ts,
+      context: {
+        hasClaude: Platform.hasClaude, db: Platform.store.available, assets: Platform.blobs.available,
+        sample: Platform.llm.available, downloads: Platform.blobs.canSave,
+        framed: isFramed(), secureContext: window.isSecureContext, micPolicy: micPolicy(),
+        mediaDevices: !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia),
+        mediaRecorder: typeof MediaRecorder !== 'undefined', speechRecognition: !!SR(),
+        speechSynthesis: !!window.speechSynthesis,
+        standalone: !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches),
+      },
+      items: {},
+    };
+  }
+
+  function set(key, val, save = true) {
+    R.items[key] = val;
+    renderItem(key);
+    renderVerdict();
+    if (save && val.status !== 'running') scheduleSave();
+  }
+
+  function scheduleSave() {
+    saveChain = saveChain.then(async () => {
+      const items = Object.assign({}, R.items); delete items.saved;
+      R.updatedAt = nowIso();
+      const doc = JSON.parse(JSON.stringify(Object.assign({}, R, { items })));
+      remember(items);
+      if (!Platform.store.available) { R.items.saved = { status: 'fail', message: '数据库不可用：需要在 Claude 的 artifact 查看器里打开' }; }
+      else {
+        try { await Platform.store.set('probe/' + docId, doc); R.items.saved = { status: 'pass', path: 'probe/' + docId }; }
+        catch (e) { R.items.saved = { status: 'fail', code: e.code, message: e.message }; }
+      }
+      renderItem('saved');
+    });
+  }
+
+  /* 本机结论存在 localStorage，页面据此选择录音方式和"说一次就够" */
+  function remember(items) {
+    const prev = ls.get('probe', {}) || {};
+    const out = Object.assign({}, prev, { ts: R.ts, ua: R.ua });
+    for (const k of ['gum', 'recorder', 'upload', 'filePick', 'sample', 'asr', 'asrWithRec']) {
+      if (items[k] && (items[k].status === 'pass' || items[k].status === 'fail')) out[k] = items[k].status;
+    }
+    ls.set('probe', out);
+  }
+  function flags() { return ls.get('probe', {}) || {}; }
+
+  /* ---------------- 各项测试 ---------------- */
+  async function getStream() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw { name: 'NoAPI', message: 'navigator.mediaDevices.getUserMedia 不存在' };
+    return navigator.mediaDevices.getUserMedia({ audio: true });
+  }
+  function stopStream(s) { try { s && s.getTracks().forEach(t => t.stop()); } catch (_) {} }
+
+  async function runGum() {
+    set('gum', { status: 'running' }, false);
+    try {
+      stream = await getStream();
+      const t = stream.getAudioTracks()[0];
+      const st = t && t.getSettings ? t.getSettings() : {};
+      set('gum', { status: 'pass', label: t ? t.label : '', sampleRate: st.sampleRate || null, channelCount: st.channelCount || null, echoCancellation: st.echoCancellation ?? null, noiseSuppression: st.noiseSuppression ?? null });
+    } catch (e) {
+      stream = null;
+      set('gum', { status: 'fail', error: e.name || 'Error', message: e.message || String(e) });
+    }
+  }
+
+  async function recordFor(s, sec, onTick) {
+    const mime = AudioTools.pickRecorderMime();
+    const rec = new MediaRecorder(s, mime ? { mimeType: mime, audioBitsPerSecond: 64000 } : { audioBitsPerSecond: 64000 });
+    const chunks = [];
+    rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    const stopped = new Promise(res => { rec.onstop = res; });
+    rec.start(1000);
+    for (let i = sec; i > 0; i--) { onTick && onTick(i); await sleep(1000); }
+    rec.stop();
+    await stopped;
+    return new Blob(chunks, { type: rec.mimeType || mime || 'audio/webm' });
+  }
+
+  async function levelOf(blob) {
+    try { const a = await AudioTools.decode(blob); return Object.assign({ duration: Math.round(a.duration * 10) / 10 }, AudioTools.level(a.samples, a.sr)); }
+    catch (_) { return null; }
+  }
+
+  async function runRecorder() {
+    const supported = {};
+    const hasMR = typeof MediaRecorder !== 'undefined';
+    for (const t of MR_TYPES) supported[t] = !!(hasMR && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t));
+    if (!hasMR) return set('recorder', { status: 'fail', supported, error: 'NoMediaRecorder' });
+    if (!stream) return set('recorder', { status: 'skip', supported, message: '第 1 项没通过，无法在页面里录音' });
+    try {
+      recBlob = await recordFor(stream, 5, i => set('recorder', { status: 'running', message: '请说几句英文……还剩 ' + i + ' 秒' }, false));
+      const lv = await levelOf(recBlob);
+      set('recorder', {
+        status: recBlob.size > 0 ? 'pass' : 'fail', supported, mimeType: recBlob.type, sizeBytes: recBlob.size,
+        durationSec: lv ? lv.duration : null, peakDb: lv ? lv.peakDb : null, rangeDb: lv ? lv.rangeDb : null, decodable: !!lv,
+      });
+    } catch (e) {
+      recBlob = null;
+      set('recorder', { status: 'fail', supported, error: e.name || e.code || 'Error', message: e.message || String(e) });
+    }
+  }
+
+  async function runUpload() {
+    if (!recBlob) return set('upload', { status: 'skip', message: '没有第 2 项的录音' });
+    if (!Platform.blobs.available) return set('upload', { status: 'fail', code: 'unavailable', message: 'assets 不可用' });
+    const type = /mp4/i.test(recBlob.type) ? 'video/mp4' : 'video/webm';
+    set('upload', { status: 'running', message: '上传中……' }, false);
+    try {
+      const r = await Platform.blobs.upload(recBlob, type);
+      set('upload', { status: 'pass', type, id: r.id, sizeBytes: r.sizeBytes, contentType: r.contentType });
+    } catch (e) {
+      set('upload', { status: 'fail', type, code: e.code, message: e.message });
+    }
+  }
+
+  async function onFile(file, viaCapture) {
+    if (!file) return;
+    set('filePick', { status: 'running', message: '读取和上传中……' }, false);
+    const info = { viaCapture, name: file.name, type: file.type || '', sizeBytes: file.size };
+    const lv = await levelOf(file);
+    info.decodable = !!lv;
+    info.durationSec = lv ? lv.duration : null;
+    if (!Platform.blobs.available) return set('filePick', Object.assign(info, { status: 'fail', code: 'unavailable', message: 'assets 不可用' }));
+    if (file.size > AudioTools.MAX_WRAP_BYTES) return set('filePick', Object.assign(info, { status: 'fail', code: 'too_large', message: '超过 15 MB' }));
+    try {
+      const b64 = await AudioTools.toBase64(file);
+      const r = await Platform.blobs.upload(new Blob([b64], { type: 'text/plain' }), 'text/plain');
+      info.uploadId = r.id; info.uploadType = 'text/plain'; info.uploadedBytes = r.sizeBytes;
+    } catch (e) { info.code = e.code; info.message = e.message; }
+    const plan = AudioTools.uploadTypeFor(file.type || AudioTools.guessMime(file.name), file.name);
+    if (!plan.wrap) {
+      try { const r2 = await Platform.blobs.upload(file, plan.type); info.directId = r2.id; info.directType = plan.type; }
+      catch (e) { info.directType = plan.type; info.directCode = e.code; }
+    }
+    set('filePick', Object.assign(info, { status: info.uploadId ? 'pass' : 'fail' }));
+  }
+
+  async function runSample() {
+    if (!Platform.llm.available) return set('sample', { status: 'fail', code: Platform.llm.reason || 'unavailable' });
+    set('sample', { status: 'running', message: '等待 Claude……第一次会弹出同意框' }, false);
+    const t0 = performance.now();
+    try {
+      const r = await Platform.llm.json('Reply with only {"ok": true}', { tier: 'quick' });
+      set('sample', { status: r && r.ok === true ? 'pass' : 'fail', reply: JSON.stringify(r).slice(0, 200), ms: Math.round(performance.now() - t0) });
+    } catch (e) {
+      set('sample', { status: 'fail', code: e.code, message: e.message });
+    }
+  }
+
+  async function runTts() {
+    if (!window.speechSynthesis) return set('tts', { status: 'fail', message: '没有 speechSynthesis' });
+    let vs = speechSynthesis.getVoices() || [];
+    for (let i = 0; i < 10 && !vs.length; i++) { await sleep(300); vs = speechSynthesis.getVoices() || []; }
+    const en = vs.filter(v => /^en([-_]|$)/i.test(v.lang));
+    set('tts', { status: en.length ? 'pass' : 'fail', total: vs.length, english: en.slice(0, 12).map(v => v.name + ' (' + v.lang + (v.localService ? '，本地' : '') + ')') });
+  }
+
+  function recognizeOnce(maxMs) {
+    return new Promise(resolve => {
+      const Rec = SR();
+      const rec = new Rec();
+      rec.lang = 'en-US'; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+      let text = '', error = null, started = false, done = false, t = null;
+      const finish = () => { if (done) return; done = true; clearTimeout(t); resolve({ text: text.trim(), error, started }); };
+      rec.onstart = () => { started = true; };
+      rec.onresult = e => { text = Array.from(e.results).map(x => x[0].transcript).join(' '); };
+      rec.onerror = e => { error = e.error || 'error'; };
+      rec.onend = finish;
+      t = setTimeout(() => { try { rec.stop(); } catch (_) {} setTimeout(finish, 1500); }, maxMs);
+      try { rec.start(); } catch (e) { error = e.name || 'start_failed'; finish(); }
+    });
+  }
+
+  async function runAsr() {
+    if (!SR()) return set('asr', { status: 'fail', exists: false, message: '这个浏览器没有语音识别 API' });
+    set('asr', { status: 'running', message: '请说一句英文，比如 "Where are you from?"' }, false);
+    const t0 = performance.now();
+    const r = await recognizeOnce(10000);
+    set('asr', { status: r.text ? 'pass' : 'fail', exists: true, text: r.text, error: r.error, started: r.started, ms: Math.round(performance.now() - t0) });
+  }
+
+  async function runAsrWithRec() {
+    if (!SR()) return set('asrWithRec', { status: 'fail', message: '没有语音识别 API' });
+    if (typeof MediaRecorder === 'undefined') return set('asrWithRec', { status: 'fail', message: '没有 MediaRecorder' });
+    set('asrWithRec', { status: 'running', message: '请说一句英文（边识别边录音）' }, false);
+    let s = null;
+    try { s = await getStream(); } catch (e) { return set('asrWithRec', { status: 'fail', error: e.name, message: '拿不到麦克风：' + (e.message || e.name) }); }
+    try {
+      const mime = AudioTools.pickRecorderMime();
+      const rec = new MediaRecorder(s, mime ? { mimeType: mime, audioBitsPerSecond: 64000 } : {});
+      const chunks = [];
+      rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+      const stopped = new Promise(res => { rec.onstop = res; });
+      rec.start(1000);
+      const r = await recognizeOnce(10000);
+      rec.stop(); await stopped;
+      const blob = new Blob(chunks, { type: rec.mimeType || mime });
+      const lv = await levelOf(blob);
+      const hasAudio = !!(lv && lv.peakDb > -50 && lv.rangeDb >= 10);
+      set('asrWithRec', { status: r.text && hasAudio ? 'pass' : 'fail', text: r.text, error: r.error, recSizeBytes: blob.size, peakDb: lv ? lv.peakDb : null, rangeDb: lv ? lv.rangeDb : null, hasAudio });
+    } catch (e) {
+      set('asrWithRec', { status: 'fail', error: e.name || 'Error', message: e.message || String(e) });
+    } finally { stopStream(s); }
+  }
+
+  async function runAuto() {
+    if (busy) return;
+    busy = true; renderButtons();
+    try {
+      await runGum();
+      await runRecorder();
+      await runUpload();
+      stopStream(stream); stream = null;
+      await runSample();
+      await runTts();
+    } finally { busy = false; renderButtons(); }
+  }
+
+  /* ---------------- 决策表（spec §11） ---------------- */
+  function verdict(it) {
+    const ok = k => it[k] && it[k].status === 'pass';
+    const bad = k => it[k] && (it[k].status === 'fail' || it[k].status === 'skip');
+    const out = [];
+    if (ok('gum') && ok('recorder') && ok('upload')) out.push(['主方案', '在页面里录音']);
+    else if (bad('gum') && ok('filePick')) out.push(['备选 A', '用系统录音机录，页面负责上传。不用去对话里转发文件']);
+    else if (bad('gum') && bad('filePick')) out.push(['备选 B', '录音走对话附件；页面只做文字练习和看板']);
+    else if (bad('gum')) out.push(['待定', '页面里不能录音。请测第 4 项，看能不能用系统录音机']);
+    if (bad('sample')) out.push(['注意', '页面内 Claude 不可用：文字练习回到 Claude 对话里做']);
+    if (ok('asr') && ok('asrWithRec')) out.push(['说一次就够', '在这台设备上启用']);
+    else if (ok('asr') && bad('asrWithRec')) out.push(['语音识别', '可用，但不能和录音同时用：分成两个按钮']);
+    else if (bad('asr')) out.push(['语音识别', '不可用，继续用输入法的语音输入']);
+    return out;
+  }
+
+  /* ---------------- 渲染 ---------------- */
+  const els = {};
+  function detailText(key, v) {
+    if (!v) return '';
+    if (v.message && v.status === 'running') return v.message;
+    const parts = [];
+    const add = (k, x) => { if (x !== undefined && x !== null && x !== '') parts.push(k + '：' + x); };
+    switch (key) {
+      case 'gum': add('错误', v.error); add('说明', v.message); add('设备', v.label); break;
+      case 'recorder':
+        if (v.supported) parts.push(Object.entries(v.supported).map(([t, b]) => (b ? '✓ ' : '✗ ') + t).join('  '));
+        add('录到', v.mimeType); add('大小', v.sizeBytes != null ? fmtBytes(v.sizeBytes) : null); add('时长', v.durationSec != null ? v.durationSec + ' 秒' : null);
+        add('音量', v.peakDb != null ? v.peakDb + ' dB，动态范围 ' + v.rangeDb + ' dB' : null); add('错误', v.error); add('说明', v.message); break;
+      case 'upload': add('类型', v.type); add('资产 id', v.id); add('大小', v.sizeBytes != null ? fmtBytes(v.sizeBytes) : null); add('错误码', v.code); add('说明', v.message); break;
+      case 'filePick':
+        add('文件', v.name); add('类型', v.type || '（空）'); add('大小', v.sizeBytes != null ? fmtBytes(v.sizeBytes) : null);
+        add('可解码', v.decodable === undefined ? null : v.decodable ? '是' : '否'); add('时长', v.durationSec != null ? v.durationSec + ' 秒' : null);
+        add('base64 上传 id', v.uploadId); add('直传 ' + (v.directType || ''), v.directId || v.directCode); add('错误码', v.code); add('说明', v.message); break;
+      case 'sample': add('回复', v.reply); add('耗时', v.ms != null ? v.ms + ' ms' : null); add('错误码', v.code); add('说明', v.message); break;
+      case 'tts': add('语音总数', v.total); add('英文', v.english && v.english.length ? v.english.join('；') : v.status === 'fail' ? '没有' : null); add('说明', v.message); break;
+      case 'asr': add('识别到', v.text || (v.status === 'fail' ? '（没有文字）' : null)); add('错误码', v.error); add('说明', v.message); break;
+      case 'asrWithRec': add('识别到', v.text || (v.status === 'fail' ? '（没有文字）' : null)); add('录音有声音', v.hasAudio === undefined ? null : v.hasAudio ? '是' : '否'); add('音量', v.peakDb != null ? v.peakDb + ' dB' : null); add('错误码', v.error); add('说明', v.message); break;
+      case 'saved': add('位置', v.path); add('错误码', v.code); add('说明', v.message); break;
+    }
+    return parts.join(' · ');
+  }
+
+  function renderItem(key) {
+    const row = els['row-' + key];
+    if (!row) return;
+    const v = (R && R.items[key]) || { status: 'idle' };
+    const [label, cls] = STATUS[v.status] || STATUS.idle;
+    const chip = row.querySelector('.chip');
+    chip.className = 'chip ' + cls;
+    put(clear(chip), v.status === 'running' ? h('span', { class: 'spin', 'aria-hidden': 'true' }) : '', label);
+    row.querySelector('.pi-d').textContent = detailText(key, v);
+  }
+
+  function renderVerdict() {
+    const box = els.verdict;
+    if (!box) return;
+    const lines = verdict((R && R.items) || {});
+    clear(box);
+    if (!lines.length) { box.hidden = true; return; }
+    box.hidden = false;
+    put(box, h('p', { class: 'label' }, '结论（按 spec 决策表）'), ...lines.map(([k, v]) => h('p', null, h('b', null, k + '：'), v)));
+  }
+
+  function renderButtons() {
+    if (els.auto) { els.auto.disabled = busy; els.auto.textContent = busy ? '检测中……' : '运行自动项（1 2 3 5 6）'; }
+  }
+
+  function mount(el) {
+    root = el;
+    fresh();
+    const fileCap = h('input', { type: 'file', accept: 'audio/*', capture: '', id: 'probe-file-cap', hidden: true, onchange: e => onFile(e.target.files[0], true) });
+    const filePick = h('input', { type: 'file', accept: 'audio/*,video/webm,video/mp4,.m4a,.amr,.aac,.3gp,.mp3,.wav,.ogg', id: 'probe-file-pick', hidden: true, onchange: e => onFile(e.target.files[0], false) });
+    const actions = {
+      filePick: [h('button', { class: 'btn small ghost', type: 'button', onclick: () => fileCap.click() }, '用系统录音机录'), h('button', { class: 'btn small ghost', type: 'button', onclick: () => filePick.click() }, '选择录音文件')],
+      tts: [h('button', { class: 'btn small ghost', type: 'button', onclick: () => TTS.speak("Buen Camino! How's it going?") }, '试听')],
+      asr: [h('button', { class: 'btn small ghost', type: 'button', onclick: () => runAsr() }, '开始（说一句英文）')],
+      asrWithRec: [h('button', { class: 'btn small ghost', type: 'button', onclick: () => runAsrWithRec() }, '开始（说一句英文）')],
+    };
+    const list = h('div', { class: 'probe-list' }, ITEMS.map(it => {
+      const row = h('div', { class: 'probe-item' },
+        h('span', { class: 'pi-n' }, String(it.n)),
+        h('div', null, h('div', { class: 'pi-t' }, it.title), h('div', { class: 'small muted' }, it.sub)),
+        h('span', { class: 'chip' }, '未测'),
+        h('div', { class: 'pi-d' }),
+        actions[it.key] ? h('div', { class: 'pi-a' }, actions[it.key]) : null);
+      els['row-' + it.key] = row;
+      return row;
+    }));
+    els.auto = h('button', { class: 'btn', type: 'button', onclick: runAuto }, '运行自动项（1 2 3 5 6）');
+    els.verdict = h('div', { class: 'notice info stack-s', hidden: true });
+    const ctx = R.context;
+    const ctxLine = h('p', { class: 'small muted' },
+      R.device + ' · 数据库 ' + (ctx.db ? '✓' : '✗') + ' · 资产 ' + (ctx.assets ? '✓' : '✗') + ' · Claude ' + (ctx.sample ? '✓' : '✗') + ' · 下载 ' + (ctx.downloads ? '✓' : '✗') +
+      ' · 麦克风策略 ' + (ctx.micPolicy === null ? '未知' : ctx.micPolicy ? '允许' : '禁止'));
+    put(clear(root), 
+      h('div', { class: 'stack' },
+        h('p', { class: 'small' }, '先点"运行自动项"，第 2 项会录 5 秒，请对着手机说几句英文。第 4、7、8 项需要你手动点。结果自动保存，不用转述给 Claude。'),
+        ctxLine,
+        h('div', { class: 'row' }, els.auto, h('button', { class: 'btn ghost', type: 'button', onclick: () => { fresh(); ITEMS.forEach(i => renderItem(i.key)); renderVerdict(); toast('已开始新的一轮检测'); } }, '重新开始')),
+        list, fileCap, filePick, els.verdict));
+    ITEMS.forEach(i => renderItem(i.key));
+  }
+
+  return { mount, flags, verdict };
+})();
+
+/* ---- data.js ---- */
+/* =====================================================================
+ * 数据：订阅 db，维护内存里的状态 S。统计一律由 turns 和 recordings 实时算出。
+ * ===================================================================== */
+
+const DEFAULT_CONFIG = { pauseSec: 0.5, longPauseSec: 1.0, lowConf: 0.6, maxRecSec: 180, artifactUrl: '' };
+
+const S = {
+  nodes: [], nodeMap: {},
+  turns: [],          // 按时间正序
+  recordings: [],     // 按时间倒序
+  sessions: [],       // 按开始时间倒序
+  bank: {}, vocab: [], personas: [],
+  profile: null, profileDraft: null,
+  config: Object.assign({}, DEFAULT_CONFIG),
+  loaded: {},
+  dbError: null,
+};
+
+const Data = (() => {
+  const TRACK_ORDER = { social: 0, service: 1, listening: 2 };
+  function sortNodes(list) {
+    return list.slice().sort((a, b) => (TRACK_ORDER[a.track] ?? 9) - (TRACK_ORDER[b.track] ?? 9) || (a.order || 0) - (b.order || 0) || String(a.id).localeCompare(String(b.id)));
+  }
+  function onErr(what) {
+    return e => {
+      S.dbError = e;
+      console.warn('db ' + what, e);
+      Bus.emit('dbError', e);
+    };
+  }
+  function loaded(key) { S.loaded[key] = true; Bus.emit(key); Bus.emit('any', key); }
+
+  function start() {
+    const st = Platform.store;
+    if (!st.available) return;
+    st.watch('nodes', { limit: 300 }, docs => { S.nodes = sortNodes(docs); S.nodeMap = Object.fromEntries(S.nodes.map(n => [n.id, n])); loaded('nodes'); }, onErr('nodes'));
+    st.watch('turns', { orderBy: 'createdAt', dir: 'desc', limit: 1000 }, docs => { S.turns = docs.slice().reverse(); loaded('turns'); }, onErr('turns'));
+    st.watch('recordings', { orderBy: 'createdAt', dir: 'desc', limit: 500 }, docs => { S.recordings = docs; loaded('recordings'); }, onErr('recordings'));
+    st.watch('sessions', { orderBy: 'startedAt', dir: 'desc', limit: 300 }, docs => { S.sessions = docs; loaded('sessions'); }, onErr('sessions'));
+    st.watch('bank', { limit: 300 }, docs => { S.bank = Object.fromEntries(docs.map(d => [d.id, d])); loaded('bank'); }, onErr('bank'));
+    st.watch('vocab', { orderBy: 'createdAt', dir: 'desc', limit: 1000 }, docs => { S.vocab = docs; loaded('vocab'); }, onErr('vocab'));
+    st.watch('personas', { limit: 100 }, docs => { S.personas = docs.slice().sort((a, b) => (a.order || 0) - (b.order || 0)); loaded('personas'); }, onErr('personas'));
+    st.watchDoc('me/profile', d => { S.profile = d; loaded('profile'); }, onErr('profile'));
+    st.watchDoc('config/app', d => { S.config = Object.assign({}, DEFAULT_CONFIG, d || {}); loaded('config'); }, onErr('config'));
+    st.watchDoc('config/profileDraft', d => { S.profileDraft = d; loaded('profileDraft'); }, onErr('profileDraft'));
+  }
+
+  /* ---------- 派生数据 ---------- */
+  const profileFacts = () => arr(S.profile && S.profile.facts).map(str).filter(Boolean);
+  const turnsOfNode = id => S.turns.filter(t => t.nodeId === id);
+
+  /* 所有带错误的"作答"：文字作答 + 已分析录音 */
+  function answerUnits() {
+    const out = S.turns.map(t => ({ at: t.createdAt, words: t.n_words || countWords(t.raw), errors: arr(t.errors), kind: 'turn' }));
+    for (const r of S.recordings) {
+      if (r.status === 'analyzed' && r.analysis) out.push({ at: r.analyzedAt || r.createdAt, words: r.analysis.n_words || 0, errors: arr(r.analysis.errors), kind: 'rec' });
+    }
+    return out;
+  }
+
+  /* 按类型计数，按次数、再按 high 次数排序；每类带最近一条例句 */
+  function tallyErrors(errors) {
+    const m = {};
+    for (const e of errors) {
+      const code = ERROR_MAP[e.type] ? e.type : 'STRUCT';
+      const x = m[code] || (m[code] = { type: code, count: 0, high: 0, example_orig: '', example_fix: '', note_zh: '' });
+      x.count++;
+      if (e.sev === 'high') x.high++;
+      if (e.orig || e.fix) { x.example_orig = str(e.orig); x.example_fix = str(e.fix); x.note_zh = str(e.note_zh) || x.note_zh; }
+    }
+    return Object.values(m).sort((a, b) => b.count - a.count || b.high - a.high);
+  }
+
+  const sessionTurns = id => S.turns.filter(t => t.sessionId === id);
+
+  return { start, sortNodes, profileFacts, turnsOfNode, answerUnits, tallyErrors, sessionTurns };
+})();
+
+/* =====================================================================
+ * 练习场次：用户开始作答时创建，点"结束本次练习"时关闭。id = 日期-序号。
+ * ===================================================================== */
+const Sessions = (() => {
+  let currentId = null;
+  let creating = null;
+
+  function openSession() { return S.sessions.find(s => !s.endedAt) || null; }
+  function sync() {
+    if (currentId) {
+      const s = S.sessions.find(x => x.id === currentId);
+      if (s && s.endedAt) currentId = null;
+      return;
+    }
+    const o = openSession();
+    if (o && localDate(new Date(o.startedAt)) === localDate()) currentId = o.id;
+  }
+  Bus.on('sessions', () => { sync(); Bus.emit('session'); });
+  Bus.on('turns', () => Bus.emit('session'));
+
+  async function ensure() {
+    sync();
+    if (currentId) return currentId;
+    if (creating) return creating;
+    creating = (async () => {
+      const stale = openSession();
+      if (stale) {
+        const last = Data.sessionTurns(stale.id).slice(-1)[0];
+        await Platform.store.update('sessions/' + stale.id, { endedAt: (last && last.createdAt) || stale.startedAt }).catch(() => {});
+      }
+      const today = localDate();
+      const n = S.sessions.filter(s => String(s.id).startsWith(today + '-')).length + 1;
+      let id = today + '-' + n;
+      if (S.sessions.some(s => s.id === id)) id = today + '-' + n + '-' + Math.random().toString(36).slice(2, 5);
+      await Platform.store.set('sessions/' + id, { startedAt: nowIso(), endedAt: null, summary: null });
+      currentId = id;
+      Bus.emit('session');
+      return id;
+    })();
+    try { return await creating; } finally { creating = null; }
+  }
+
+  function formatTop(top) {
+    return top.map(t => `${t.type} (${ERROR_MAP[t.type] ? ERROR_MAP[t.type].name : ''}) ×${t.count}: "${t.example_orig}" → "${t.example_fix}"`).join('\n');
+  }
+
+  /* 结束：次数页面自己算，口诀和下次重点让 Claude 写（quick 档） */
+  async function end() {
+    const id = currentId;
+    if (!id) return null;
+    const turns = Data.sessionTurns(id);
+    const errors = turns.flatMap(t => arr(t.errors));
+    const top = Data.tallyErrors(errors).slice(0, 3).map(({ type, count, example_orig, example_fix }) => ({ type, count, example_orig, example_fix }));
+    const summary = { top, rule_zh: null, next_focus_zh: [], nTurns: turns.length, nWords: turns.reduce((a, t) => a + (t.n_words || 0), 0) };
+    let llmError = null;
+    if (top.length && Platform.llm.available) {
+      try {
+        const r = await Platform.llm.json(fill(PROMPTS.summary, { top3: formatTop(top) }), { tier: 'quick', cache: false });
+        summary.rule_zh = str(r && r.rule_zh) || null;
+        summary.next_focus_zh = arr(r && r.next_focus_zh).map(str).filter(Boolean).slice(0, 2);
+      } catch (e) { llmError = e; }
+    }
+    await Platform.store.update('sessions/' + id, { endedAt: nowIso(), summary });
+    currentId = null;
+    Bus.emit('session');
+    return { id, summary, llmError };
+  }
+
+  return {
+    get currentId() { sync(); return currentId; },
+    ensure, end, formatTop,
+  };
+})();
+
+/* ---- practice.js ---- */
+/* =====================================================================
+ * 练习：节点列表、节点页（听懂 / 逐句反馈 / 实战对话）、盖章生成口袋本
+ * ===================================================================== */
+
+/* ---------- 反馈结构校验：不信任未验证的 JSON ---------- */
+function cleanErrors(list) {
+  return arr(list).map(e => {
+    if (!e || typeof e !== 'object') return null;
+    let type = str(e.type).toUpperCase().replace('_', '-');
+    if (!ERROR_MAP[type]) type = 'STRUCT';
+    const orig = str(e.orig), fix = str(e.fix);
+    if (!orig && !fix) return null;
+    const sev = e.sev === 'high' || e.sev === 'low' ? e.sev : (ERROR_MAP[type].sev || 'low');
+    return { type, orig, fix, sev, asr_suspect: e.asr_suspect === true && ASR_SUSPECT_TYPES.includes(type), note_zh: str(e.note_zh) };
+  }).filter(Boolean);
+}
+const normText = s => str(s).toLowerCase().replace(/[^a-z0-9']+/g, ' ').trim();
+function cleanFeedback(x) {
+  if (!x || typeof x !== 'object' || Array.isArray(x)) throw { code: 'bad_shape', text: JSON.stringify(x) };
+  const corrected = str(x.corrected);
+  if (!corrected) throw { code: 'bad_shape', text: JSON.stringify(x) };
+  let natural = x.natural == null ? null : (str(x.natural) || null);
+  if (natural && normText(natural) === normText(corrected)) natural = null;
+  return {
+    corrected, natural,
+    errors: cleanErrors(x.errors),
+    asked_back: x.asked_back === true,
+    vocab: arr(x.vocab).map(v => (v && typeof v === 'object' ? { zh: str(v.zh), en: str(v.en), example: str(v.example) } : null)).filter(v => v && v.zh && v.en).slice(0, 8),
+    followup: str(x.followup),
+  };
+}
+const sortErrors = errs => arr(errs).slice().sort((a, b) => (a.sev === 'high' ? 0 : 1) - (b.sev === 'high' ? 0 : 1));
+
+/* ---------- 反馈卡片的零件（录音分析页也用） ---------- */
+function errChip(e) {
+  const t = ERROR_MAP[e.type];
+  const note = h('span', { class: 'note', hidden: true }, e.note_zh || '（没有说明）');
+  return h('button', {
+    class: 'err sev-' + (e.sev === 'high' ? 'high' : 'low'), type: 'button', 'aria-expanded': 'false',
+    onclick: ev => { note.hidden = !note.hidden; ev.currentTarget.setAttribute('aria-expanded', String(!note.hidden)); },
+  },
+    h('span', { class: 'err-top' },
+      h('span', { class: 'code' }, e.type),
+      h('span', { class: 'name' }, t ? t.name : ''),
+      e.sev === 'high' ? h('span', { class: 'chip high' }, '高') : null,
+      e.asr_suspect ? h('span', { class: 'asr' }, '可能是识别问题') : null),
+    h('span', { class: 'fix' }, e.orig ? h('s', null, e.orig) : null, e.orig ? ' → ' : '', e.fix),
+    note);
+}
+function errorsBlock(errors) {
+  const list = sortErrors(errors);
+  const lbl = h('span', { class: 'lbl' }, '错误');
+  if (!list.length) return h('div', { class: 'fb-row' }, lbl, h('div', null, h('span', { class: 'chip ok' }, '没有发现错误')), h('span'));
+  const shown = list.slice(0, MAX_SHOWN_ERRORS), rest = list.slice(MAX_SHOWN_ERRORS);
+  const box = h('div', { class: 'errs' }, shown.map(errChip));
+  if (rest.length) {
+    const more = h('div', { class: 'errs', hidden: true }, rest.map(errChip));
+    const label = '还有 ' + rest.length + ' 个';
+    put(box, more, h('button', { class: 'link-btn', type: 'button', onclick: ev => { more.hidden = !more.hidden; ev.currentTarget.textContent = more.hidden ? label : '收起'; } }, label));
+  }
+  return h('div', { class: 'fb-row' }, lbl, box, h('span'));
+}
+function fbRow(label, text, cls) {
+  return h('div', { class: 'fb-row ' + (cls || '') }, h('span', { class: 'lbl' }, label), h('p', { class: 'en' }, text), sayBtn(text));
+}
+function bubbleThem(text, who) {
+  return h('div', { class: 'bubble them' }, who ? h('span', { class: 'who' }, who) : null, h('div', { class: 'q-line' }, h('p', { class: 'en' }, text), sayBtn(text)));
+}
+function bubbleMe(text) { return h('div', { class: 'bubble me' }, h('p', { class: 'en' }, text)); }
+
+function turnCard(t) {
+  const node = S.nodeMap[t.nodeId];
+  const who = node && node.track === 'service' ? '工作人员' : '旅伴';
+  const askBack = node && node.track === 'social' && t.mode === 'drill' && !t.asked_back
+    ? h('p', { class: 'askback' }, '没有反问。结尾加一句，比如 ', h('span', { class: 'en-s' }, 'What about you?'))
+    : null;
+  const vocab = arr(t.vocab).length ? h('p', { class: 'fb-extra' }, '词汇缺口：', t.vocab.map(v => v.zh + ' → ' + v.en).join('；')) : null;
+  return h('article', { class: 'turn' },
+    t.q ? bubbleThem(t.q, who) : null,
+    bubbleMe(t.raw),
+    h('div', { class: 'card fb' },
+      fbRow('改后', t.corrected, 'corrected'),
+      errorsBlock(t.errors),
+      t.natural ? fbRow('更自然', t.natural) : null,
+      askBack, vocab));
+}
+
+function llmNotice() {
+  return h('div', { class: 'notice' }, h('b', null, '页面内 Claude 用不了。'), sampleErrZh(Platform.llm.reason || 'unavailable'),
+    ' 文字练习请回到 Claude 对话里做；这里还可以看听懂材料、录音和看板。');
+}
+function stampEl(status) { const s = status || 'todo'; return h('span', { class: 'stamp ' + s }, STATUS_ZH[s] || s); }
+
+/* ---------- "说一次就够"：页面内语音识别，可选同时录音（M0 第 7、8 项通过才启用） ---------- */
+const Voice = (() => {
+  const SRc = () => window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  function mode() { return ls.get('voiceMode', 'auto'); }
+  function enabled() {
+    if (!SRc() || mode() === 'off' || ls.get('voiceBlocked', false)) return false;
+    return mode() === 'on' || Probe.flags().asr === 'pass';
+  }
+  function withRecording() { return Probe.flags().asrWithRec === 'pass' && typeof MediaRecorder !== 'undefined'; }
+
+  async function start(ta, onEnd) {
+    const rec = new (SRc())();
+    rec.lang = 'en-US'; rec.interimResults = true; rec.continuous = true; rec.maxAlternatives = 1;
+    const base = ta.value.trim() ? ta.value.trim() + ' ' : '';
+    const st = { error: null, blob: null, mime: '', durationSec: null };
+    let stream = null, mr = null, chunks = [], t0 = 0, recStopped = null;
+    if (withRecording()) {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mime = AudioTools.pickRecorderMime();
+        mr = new MediaRecorder(stream, mime ? { mimeType: mime, audioBitsPerSecond: 64000 } : { audioBitsPerSecond: 64000 });
+        mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+        recStopped = new Promise(res => { mr.onstop = res; });
+        mr.start(1000); t0 = performance.now();
+      } catch (_) { mr = null; if (stream) stream.getTracks().forEach(t => t.stop()); stream = null; }
+    }
+    rec.onresult = e => {
+      let fin = '', interim = '';
+      for (const r of Array.from(e.results)) { if (r.isFinal) fin += r[0].transcript; else interim += r[0].transcript; }
+      ta.value = (base + fin + interim).replace(/\s+/g, ' ').trimStart();
+    };
+    rec.onerror = e => {
+      st.error = e.error || 'error';
+      if (st.error === 'not-allowed' || st.error === 'service-not-allowed') ls.set('voiceBlocked', true);
+    };
+    rec.onend = async () => {
+      if (mr && mr.state !== 'inactive') { mr.stop(); await recStopped; }
+      if (stream) stream.getTracks().forEach(t => t.stop());
+      if (mr && chunks.length) {
+        st.blob = new Blob(chunks, { type: mr.mimeType || 'audio/webm' });
+        st.mime = st.blob.type; st.durationSec = Math.round((performance.now() - t0) / 100) / 10;
+      }
+      ta.dispatchEvent(new Event('input'));
+      onEnd(st);
+    };
+    try { rec.start(); } catch (e) { st.error = e.name || 'start_failed'; rec.onend(); }
+    return { stop() { try { rec.stop(); } catch (_) {} } };
+  }
+  return { enabled, withRecording, start, mode };
+})();
+
+/* ===================================================================== */
+const Practice = (() => {
+  let root = null, cur = null, autoOpened = false;
+
+  function init(el) {
+    root = el;
+    Bus.on('nodes', () => {
+      if (!autoOpened && S.nodes.length) { autoOpened = true; autoOpen(); return; }
+      if (cur) { const n = S.nodeMap[cur.id]; if (n) { cur.node = n; refreshHead(); } }
+      else renderList();
+    });
+    Bus.on('turns', () => { if (cur) refreshHead(); else renderList(); });
+    Platform.llm.onBlocked(() => { if (cur) openNode(cur.id, true); });
+    Bus.on('personas', () => { if (cur && !cur.convo && !cur.busy) renderConvo(); });
+  }
+
+  function autoOpen() {
+    const last = ls.get('lastNode');
+    if (last && S.nodeMap[last]) return openNode(last);
+    const first = S.nodes.find(n => n.priority === 1 && n.status !== 'done' && n.track !== 'listening');
+    if (first) openNode(first.id); else renderList();
+  }
+
+  function show() {
+    if (!Platform.store.available) return renderNoDb();
+    if (!S.loaded.nodes) { put(clear(root), h('p', { class: 'muted' }, '正在读取大纲……')); return; }
+    if (cur) return;
+    renderList();
+  }
+  function renderNoDb() {
+    put(clear(root), h('div', { class: 'notice bad' }, h('b', null, '没有连上数据库。'), '请在 claude.ai 的 artifact 查看器里打开这个页面。'));
+  }
+
+  /* ---------------- 节点列表 ---------------- */
+  function renderList() {
+    if (!root || cur || !S.loaded.nodes) return;
+    const counts = {};
+    for (const t of S.turns) counts[t.nodeId] = (counts[t.nodeId] || 0) + 1;
+    if (!S.nodes.length) { put(clear(root), h('div', { class: 'notice' }, '大纲还没有写入数据库。请让 Claude 按 spec 附录 A 用 ArtifactData 写入种子数据。')); return; }
+    const p1 = S.nodes.filter(n => n.priority === 1);
+    const lastId = ls.get('lastNode');
+    const blocks = TRACKS.map(tr => {
+      const ns = S.nodes.filter(n => n.track === tr.id);
+      if (!ns.length) return null;
+      return h('section', { class: 'track' },
+        h('div', { class: 'track-head' }, h('h3', null, tr.name + ' · ' + tr.sub), h('span', { class: 'small muted' }, ns.filter(n => n.status === 'done').length + '/' + ns.length + ' 已盖章')),
+        h('ul', { class: 'node-list' }, ns.map(n => h('li', null,
+          h('button', { class: 'node-row' + (n.id === lastId ? ' is-current' : ''), type: 'button', onclick: () => openNode(n.id) },
+            h('span', { class: 'nid' }, n.id),
+            h('span', { class: 'nt' }, n.title_zh),
+            h('span', { class: 'nq' }, n.main_q || (arr(n.listen).length + ' 条听力')),
+            h('span', { class: 'nr' }, stampEl(n.status), h('span', { class: 'small muted' }, 'P' + n.priority + ' · ' + (counts[n.id] || 0) + ' 条')))))));
+    });
+    put(clear(root), 
+      h('div', { class: 'row-between' }, h('h2', { class: 'section-title' }, '场景大纲'), h('span', { class: 'small muted' }, '出发前必练 ' + p1.filter(n => n.status === 'done').length + '/' + p1.length + ' 已盖章')),
+      profileNudge(), ...blocks);
+  }
+
+  function profileNudge() {
+    if (S.profile || !S.loaded.profile) return null;
+    return h('div', { class: 'notice info' }, '先在设置里确认"我的素材"（住哪、做什么、为什么来），追问和口袋本会更贴近你。 ',
+      h('button', { class: 'link-btn', type: 'button', onclick: () => App.go('settings') }, '去确认'));
+  }
+
+  /* ---------------- 节点页 ---------------- */
+  function initialQ(node) {
+    const sid = Sessions.currentId;
+    const last = sid ? Data.sessionTurns(sid).filter(t => t.nodeId === node.id && t.mode === 'drill').slice(-1)[0] : null;
+    return (last && last.followup) || node.main_q || '';
+  }
+
+  function openNode(id, keepScroll) {
+    const node = S.nodeMap[id];
+    if (!node) return;
+    if (cur && cur.ctl) cur.ctl.abort();
+    if (cur && cur.voice) cur.voice.stop();
+    ls.set('lastNode', id);
+    cur = {
+      id, node, mode: ls.get('mode:' + id, 'drill'), q: initialQ(node), qIdx: 0,
+      busy: false, ctl: null, voice: null, voiceRec: null, els: {},
+      convo: ls.get('convo:' + id, null),
+    };
+    const els = cur.els;
+    const listening = node.track === 'listening';
+    els.head = h('div', { class: 'node-head' });
+    refreshHead();
+    const parts = [els.head, buildListen(node, listening)];
+    if (!listening) {
+      els.seg = h('div', { class: 'seg', role: 'group', 'aria-label': '练习方式' },
+        h('button', { type: 'button', 'aria-pressed': String(cur.mode === 'drill'), onclick: () => setMode('drill') }, '逐句反馈'),
+        h('button', { type: 'button', 'aria-pressed': String(cur.mode === 'convo'), onclick: () => setMode('convo') }, '实战对话'));
+      els.drill = buildDrill();
+      els.convo = h('div', { class: 'stack' });
+      els.drill.hidden = cur.mode !== 'drill';
+      els.convo.hidden = cur.mode !== 'convo';
+      parts.push(els.seg, els.drill, els.convo);
+      renderConvo();
+    }
+    els.foot = h('div', { class: 'stack' });
+    renderFoot();
+    parts.push(els.foot);
+    put(clear(root), ...parts);
+    if (!keepScroll) window.scrollTo(0, 0);
+    Bus.emit('nodeOpened', id);
+  }
+
+  function backToList() {
+    if (cur && cur.ctl) cur.ctl.abort();
+    if (cur && cur.voice) cur.voice.stop();
+    cur = null;
+    renderList();
+    window.scrollTo(0, 0);
+  }
+
+  function refreshHead() {
+    if (!cur) return;
+    const n = cur.node;
+    const tr = TRACKS.find(t => t.id === n.track);
+    const count = Data.turnsOfNode(n.id).length;
+    put(clear(cur.els.head), 
+      h('button', { class: 'link-btn', type: 'button', onclick: backToList }, '← 全部场景'),
+      h('h2', null, h('span', { class: 'nid' }, n.id), n.title_zh, stampEl(n.status)),
+      h('p', { class: 'small muted' }, (tr ? tr.name : n.track) + ' · P' + n.priority + (n.track === 'listening' ? '' : ' · 已答 ' + count + ' 条')));
+  }
+
+  function phrase(en, zh, note, tts) {
+    return h('div', { class: 'phrase' },
+      h('p', { class: 'en-s' }, en),
+      zh || note ? h('p', { class: 'zh' }, zh || '', note ? h('span', { class: 'note' }, (zh ? ' · ' : '') + note) : null) : null,
+      tts === false ? h('span') : sayBtn(en));
+  }
+  function buildListen(node, open) {
+    const sec = (title, kids) => h('div', { class: 'stack-s' }, h('p', { class: 'label' }, title), h('div', { class: 'phrase-list' }, kids));
+    const secs = [];
+    const asks = [node.main_q, ...arr(node.variants)].filter(Boolean);
+    if (asks.length) secs.push(sec(node.track === 'service' ? '对方可能这样说' : '别人可能这样问', asks.map(t => phrase(t))));
+    if (arr(node.say).length) secs.push(sec('你要说的', node.say.map(t => phrase(t))));
+    if (arr(node.listen).length) secs.push(sec('可能听到', node.listen.map(l => phrase(l.en, l.zh, l.note, l.tts))));
+    if (arr(node.tips_zh).length) secs.push(h('div', { class: 'stack-s' }, h('p', { class: 'label' }, '小提示'), h('ul', { class: 'tips' }, node.tips_zh.map(t => h('li', null, t)))));
+    const hasTurns = Data.turnsOfNode(node.id).length > 0;
+    return h('details', { class: 'listen', open: open || !hasTurns }, h('summary', null, '听懂'), h('div', { class: 'listen-body' }, secs));
+  }
+
+  function setMode(m) {
+    if (!cur || cur.busy) return;
+    cur.mode = m; ls.set('mode:' + cur.id, m);
+    cur.els.seg.querySelectorAll('button').forEach((b, i) => b.setAttribute('aria-pressed', String((i === 0) === (m === 'drill'))));
+    cur.els.drill.hidden = m !== 'drill';
+    cur.els.convo.hidden = m !== 'convo';
+  }
+
+  /* ---------------- 逐句反馈 ---------------- */
+  function buildDrill() {
+    const els = cur.els, node = cur.node;
+    const pane = h('div', { class: 'stack' });
+    els.thread = h('div', { class: 'thread' });
+    const sid = Sessions.currentId;
+    if (sid) Data.sessionTurns(sid).filter(t => t.nodeId === node.id && t.mode === 'drill').forEach(t => put(els.thread, turnCard(t)));
+
+    els.qText = h('p', { class: 'en' });
+    els.reveal = h('button', { class: 'link-btn', type: 'button', onclick: () => { els.qText.classList.remove('hidden-text'); els.reveal.hidden = true; } }, '显示文字');
+    const variants = [node.main_q, ...arr(node.variants)].filter(Boolean);
+    const lf = h('input', { type: 'checkbox', id: 'listen-first', checked: !!ls.get('listenFirst', false), onchange: e => ls.set('listenFirst', e.target.checked) });
+    els.qBubble = h('div', { class: 'bubble them' },
+      h('span', { class: 'who' }, node.track === 'service' ? '工作人员' : '旅伴'),
+      h('div', { class: 'q-line' }, els.qText, sayBtn(() => cur.q)),
+      h('div', { class: 'q-actions' }, els.reveal,
+        variants.length > 1 ? h('button', { class: 'link-btn', type: 'button', onclick: () => { cur.qIdx = (cur.qIdx + 1) % variants.length; setQ(variants[cur.qIdx], true); } }, '换个问法') : null,
+        h('label', { class: 'check tts-only', for: 'listen-first' }, lf, '先听后看')));
+
+    const pane2 = [els.thread, els.qBubble];
+    if (!Platform.llm.available) {
+      pane2.push(llmNotice());
+    } else {
+      els.ta = h('textarea', {
+        id: 'drill-answer', class: 'en', rows: 3, placeholder: '用输入法的语音输入回答；卡住的词直接说中文；别手动改',
+        oninput: () => ls.set('draft:' + cur.id, els.ta.value),
+      });
+      els.ta.value = ls.get('draft:' + node.id, '') || '';
+      els.status = h('div', { class: 'status', role: 'status' });
+      els.stop = h('button', { class: 'btn ghost small', type: 'button', hidden: true, onclick: () => cur.ctl && cur.ctl.abort() }, '停止');
+      els.send = h('button', { class: 'btn', type: 'button', onclick: sendDrill }, '发送');
+      els.mic = Voice.enabled() ? h('button', { class: 'mic-btn', type: 'button', 'aria-label': '说一次就够：页面内语音识别', onclick: toggleVoice }, icon('mic')) : null;
+      els.problem = h('div', { class: 'stack-s', hidden: true });
+      pane2.push(h('div', { class: 'composer' }, els.ta, h('div', { class: 'composer-row' }, els.mic, els.status, els.stop, els.send), els.problem));
+    }
+    put(pane, ...pane2);
+    setQ(cur.q, false);
+    return pane;
+  }
+
+  function setQ(q, fresh) {
+    cur.q = q || cur.node.main_q || '';
+    const els = cur.els;
+    els.qText.textContent = cur.q;
+    const hide = fresh && ls.get('listenFirst', false) && TTS.available;
+    els.qText.classList.toggle('hidden-text', !!hide);
+    els.reveal.hidden = !hide;
+    if (hide) TTS.speak(cur.q);
+  }
+
+  function setBusy(b, msg) {
+    cur.busy = b;
+    const els = cur.els;
+    if (els.send) els.send.disabled = b;
+    if (els.stop) els.stop.hidden = !b;
+    if (els.status) put(clear(els.status), b ? h('span', { class: 'spin', 'aria-hidden': 'true' }) : null, msg || '');
+  }
+
+  function showProblem(e, retry) {
+    const box = cur.els.problem;
+    if (!box) return;
+    clear(box);
+    if (!e) { box.hidden = true; return; }
+    box.hidden = false;
+    put(box, h('div', { class: e.code === 'rate_limited' ? 'notice' : 'notice bad' }, sampleErrZh(e.code)));
+    if (e.text) put(box, h('details', null, h('summary', { class: 'small muted' }, '查看 Claude 的原文'), h('pre', { class: 'raw-reply' }, e.text)));
+    if (retry && (e.code === 'invalid_json' || e.code === 'bad_shape' || e.code === 'upstream_error' || e.code === 'empty_completion')) {
+      put(box, h('div', null, h('button', { class: 'btn ghost small', type: 'button', onclick: retry }, '重试')));
+    }
+  }
+
+  function drillPrompt(node, q, raw, sid) {
+    const facts = Data.profileFacts();
+    const hist = sid ? Data.sessionTurns(sid).filter(t => t.nodeId === node.id && t.mode === 'drill').slice(-6) : [];
+    return fill(PROMPTS.drill, {
+      title_zh: node.title_zh, main_q: node.main_q || '',
+      profile_facts: facts.length ? facts.map(f => '- ' + f).join('\n') : '(none yet)',
+      history: hist.length ? hist.map(t => 'Q: ' + t.q + '\nA: ' + t.raw).join('\n') : '(none)',
+      q, raw, rules: RULES_1_TO_3,
+      role: DRILL_ROLE[node.track] || DRILL_ROLE.social,
+      followups: arr(node.followups).length ? node.followups.join(' / ') : '(none)',
+    });
+  }
+
+  async function sendDrill() {
+    if (!cur || cur.busy) return;
+    const c = cur, els = c.els, node = c.node;
+    const raw = els.ta.value.trim();
+    if (!raw) { els.ta.focus(); return; }
+    if (c.voice) c.voice.stop();
+    ls.set('draft:' + c.id, raw);
+    showProblem(null);
+    const ctl = new AbortController();
+    c.ctl = ctl;
+    setBusy(true, 'Thinking…');
+    let fb;
+    try {
+      const sid = await Sessions.ensure();
+      const res = await Platform.llm.json(drillPrompt(node, c.q, raw, sid), { tier: 'default', cache: false, signal: ctl.signal });
+      fb = cleanFeedback(res);
+      const turn = {
+        nodeId: node.id, sessionId: sid, mode: 'drill', q: c.q, raw,
+        corrected: fb.corrected, natural: fb.natural, errors: fb.errors, asked_back: fb.asked_back,
+        n_words: countWords(raw), vocab: fb.vocab, followup: fb.followup || null, persona: null, createdAt: nowIso(),
+      };
+      const id = uid('t');
+      if (cur !== c) return;
+      put(els.thread, turnCard(Object.assign({ id }, turn)));
+      try {
+        await Platform.store.set('turns/' + id, turn);
+        ls.del('draft:' + c.id);
+        if (cur === c) els.ta.value = '';
+        setBusy(false, '');
+      } catch (e) {
+        setBusy(false, '');
+        showProblem({ code: 'upstream_error' });
+        toast('这条没存上（' + (e.code || '出错') + '），原话留在输入框里了');
+      }
+      for (const v of fb.vocab) Platform.store.set('vocab/' + uid('v'), { zh: v.zh, en: v.en, example: v.example, nodeId: node.id, createdAt: nowIso() }).catch(() => {});
+      if (!node.status || node.status === 'todo') Platform.store.update('nodes/' + node.id, { status: 'doing' }).catch(() => {});
+      if (c.voiceRec) { const vr = c.voiceRec; c.voiceRec = null; Record.saveRecording({ blob: vr.blob, recMime: vr.mime, durationSec: vr.durationSec, prompt: c.q, nodeId: node.id, turnId: id, fixedPrompt: null }).catch(() => toast('顺带的录音没传上去')); }
+      if (cur === c) {
+        setQ(fb.followup || node.main_q, true);
+        els.qBubble.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      }
+    } catch (e) {
+      if (cur !== c) return;
+      setBusy(false, e.code === 'cancelled' ? '已停止。原话还在输入框里。' : '');
+      if (e.code !== 'cancelled') showProblem(e, sendDrill);
+    } finally {
+      if (cur === c) { c.ctl = null; if (c.busy) setBusy(false, ''); }
+    }
+  }
+
+  function toggleVoice() {
+    const c = cur;
+    if (!c || c.busy) return;
+    if (c.voice) { c.voice.stop(); return; }
+    c.els.mic.classList.add('live');
+    setBusy(false, Voice.withRecording() ? '在听，也在录音……再点一下结束' : '在听……再点一下结束');
+    Voice.start(c.els.ta, st => {
+      c.voice = null;
+      if (c.els.mic) c.els.mic.classList.remove('live');
+      if (st.blob) c.voiceRec = { blob: st.blob, mime: st.mime, durationSec: st.durationSec };
+      if (st.error && st.error !== 'no-speech' && st.error !== 'aborted') {
+        setBusy(false, '语音识别出错：' + st.error + '。可以改用输入法的语音输入。');
+        if (ls.get('voiceBlocked', false) && c.els.mic) { c.els.mic.remove(); c.els.mic = null; }
+      } else setBusy(false, c.voiceRec ? '说完了。确认没问题就发送（录音会一起存下）' : '');
+    }).then(v => { c.voice = v; });
+  }
+
+  /* ---------------- 实战对话 ---------------- */
+  const personaOf = id => S.personas.find(p => p.id === id) || null;
+  const learnerCount = c => (c ? c.msgs.filter((m, i) => i > 0 && m.role === 'user').length : 0);
+  function saveConvo() { if (cur) ls.set('convo:' + cur.id, cur.convo); }
+  function trimMsgs(msgs) {
+    const out = msgs.map(m => ({ role: m.role, content: m.content }));
+    const enc = new TextEncoder();
+    const size = () => out.reduce((a, m) => a + enc.encode(m.content).length, 0);
+    while (out.length > 3 && size() > 48000) out.splice(1, 1);
+    return out;
+  }
+
+  function renderConvo() {
+    if (!cur || !cur.els.convo) return;
+    const pane = clear(cur.els.convo), c = cur.convo;
+    if (!Platform.llm.available) { put(pane, llmNotice()); return; }
+    if (!c) {
+      if (!S.personas.length) { put(pane, h('p', { class: 'muted' }, S.loaded.personas ? '还没有角色。' : '正在读取角色……')); return; }
+      put(pane, h('p', { class: 'small muted' }, '选一个人聊 8 到 10 轮。过程中不纠错，结束后统一讲评。'),
+        h('div', { class: 'persona-grid' }, S.personas.map(p => h('button', { class: 'persona', type: 'button', onclick: () => startConvo(p) },
+          h('span', { class: 'pn' }, p.name, h('span', { class: 'chip ' + (p.native ? 'accent' : '') }, p.native ? '母语' : p.fluent ? '非母语 · 流利' : '非母语')),
+          h('span', { class: 'pb' }, p.bio_zh || p.bio),
+          h('span', { class: 'ps' }, '场景：' + (p.setting_zh || p.setting))))));
+      return;
+    }
+    const p = personaOf(c.personaId) || { name: c.personaName || '对方', setting_zh: '' };
+    const n = learnerCount(c);
+    put(pane, h('div', { class: 'row-between' },
+      h('div', null, h('b', null, '和 ' + p.name + ' 聊天'), h('p', { class: 'small muted' }, p.setting_zh || '')),
+      h('button', { class: 'btn quiet small', type: 'button', onclick: resetConvo }, c.debrief ? '换个人再聊' : '换人')));
+    const thread = h('div', { class: 'thread' });
+    c.msgs.forEach((m, i) => { if (i === 0) return; put(thread, m.role === 'assistant' ? bubbleThem(m.content, p.name) : bubbleMe(m.content)); });
+    cur.els.convoLive = h('p', { class: 'en' });
+    const liveBubble = h('div', { class: 'bubble them', hidden: true }, h('span', { class: 'who' }, p.name), cur.els.convoLive);
+    cur.els.convoLiveBubble = liveBubble;
+    put(thread, liveBubble);
+    put(pane, thread);
+
+    if (c.debrief) { put(pane, debriefView(c)); return; }
+
+    const lastIsUser = c.msgs[c.msgs.length - 1].role === 'user';
+    cur.els.cta = h('textarea', { id: 'convo-answer', class: 'en', rows: 3, placeholder: '用输入法的语音输入回答；卡住的词直接说中文；别手动改', oninput: () => ls.set('cdraft:' + cur.id, cur.els.cta.value) });
+    cur.els.cta.value = ls.get('cdraft:' + cur.id, '') || '';
+    cur.els.cstatus = h('div', { class: 'status', role: 'status' }, n >= 8 ? '聊得差不多了，可以结束看讲评。' : '第 ' + n + ' 轮（8 到 10 轮后讲评）');
+    cur.els.cstop = h('button', { class: 'btn ghost small', type: 'button', hidden: true, onclick: () => cur.ctl && cur.ctl.abort() }, '停止');
+    cur.els.csend = h('button', { class: 'btn', type: 'button', onclick: convoSend }, '发送');
+    cur.els.cproblem = h('div', { class: 'stack-s' });
+    put(pane, h('div', { class: 'composer' },
+      cur.els.cta,
+      h('div', { class: 'composer-row' }, cur.els.cstatus, cur.els.cstop, cur.els.csend),
+      cur.els.cproblem,
+      h('div', { class: 'row' },
+        lastIsUser ? h('button', { class: 'btn ghost small', type: 'button', onclick: () => personaReply() }, '让对方重新回复') : null,
+        n > 0 ? h('button', { class: 'btn ghost small', type: 'button', onclick: runDebrief }, '结束对话，看讲评') : null)));
+  }
+
+  function convoBusy(b, msg) {
+    cur.busy = b;
+    const e = cur.els;
+    if (e.csend) e.csend.disabled = b;
+    if (e.cstop) e.cstop.hidden = !b;
+    if (e.cstatus) put(clear(e.cstatus), b ? h('span', { class: 'spin', 'aria-hidden': 'true' }) : null, msg || '');
+  }
+  function convoProblem(err) {
+    const box = cur && cur.els.cproblem;
+    if (!box) return;
+    clear(box);
+    if (err && err.code !== 'cancelled') {
+      put(box, h('div', { class: err.code === 'rate_limited' ? 'notice' : 'notice bad' }, sampleErrZh(err.code)));
+      if (err.text) put(box, h('details', null, h('summary', { class: 'small muted' }, '查看 Claude 的原文'), h('pre', { class: 'raw-reply' }, err.text)));
+    }
+  }
+
+  async function startConvo(p) {
+    if (!cur || cur.busy) return;
+    const instr = fill(PROMPTS.convo, { name: p.name, bio: p.bio, setting: p.setting, style: p.native ? '' : NON_NATIVE_STYLE });
+    cur.convo = { personaId: p.id, personaName: p.name, msgs: [{ role: 'user', content: instr, at: nowIso() }], debrief: null, saved: false, startedAt: nowIso() };
+    saveConvo();
+    renderConvo();
+    await personaReply();
+  }
+
+  function resetConvo() {
+    if (!cur || cur.busy) return;
+    cur.convo = null; saveConvo(); ls.del('cdraft:' + cur.id);
+    renderConvo();
+  }
+
+  async function personaReply() {
+    const c = cur;
+    if (!c || !c.convo || c.busy) return;
+    const cv = c.convo;
+    const ctl = new AbortController();
+    c.ctl = ctl;
+    convoBusy(true, 'Thinking…');
+    convoProblem(null);
+    if (c.els.convoLiveBubble) { c.els.convoLiveBubble.hidden = false; c.els.convoLive.textContent = '…'; }
+    try {
+      const r = await Platform.llm.text(trimMsgs(cv.msgs), { tier: 'quick', cache: false, signal: ctl.signal, onText: ({ text }) => { if (c.els.convoLive) c.els.convoLive.textContent = text; } });
+      cv.msgs.push({ role: 'assistant', content: r.text.trim(), at: nowIso() });
+      saveConvo();
+    } catch (e) {
+      if (cur === c) { c.busy = false; renderConvo(); convoProblem(e); }
+      return;
+    } finally { c.ctl = null; c.busy = false; }
+    if (cur !== c) return;
+    renderConvo();
+    if (cur.els.cta) cur.els.cta.focus({ preventScroll: true });
+    if (learnerCount(cv) >= 10) await runDebrief();
+  }
+
+  async function convoSend() {
+    const c = cur;
+    if (!c || !c.convo || c.busy) return;
+    const text = c.els.cta.value.trim();
+    if (!text) { c.els.cta.focus(); return; }
+    c.convo.msgs.push({ role: 'user', content: text, at: nowIso() });
+    saveConvo(); ls.del('cdraft:' + c.id);
+    renderConvo();
+    Sessions.ensure().catch(() => {});
+    await personaReply();
+  }
+
+  async function runDebrief() {
+    const c = cur;
+    if (!c || !c.convo || c.busy) return;
+    const cv = c.convo;
+    const p = personaOf(cv.personaId) || { id: cv.personaId, name: cv.personaName || 'P' };
+    const lines = [], learner = [];
+    cv.msgs.forEach((m, i) => {
+      if (i === 0) return;
+      if (m.role === 'assistant') lines.push('P: ' + m.content);
+      else { learner.push(i); lines.push('L' + learner.length + ': ' + m.content); }
+    });
+    if (!learner.length) return;
+    const ctl = new AbortController();
+    c.ctl = ctl;
+    convoBusy(true, '讲评中…… Thinking…');
+    convoProblem(null);
+    try {
+      const r = await Platform.llm.json(fill(PROMPTS.debrief, { name: p.name, rules: RULES_1_TO_3, transcript_lines: lines.join('\n') }), { tier: 'default', cache: false, signal: ctl.signal });
+      if (!r || typeof r !== 'object' || !Array.isArray(r.turns)) throw { code: 'bad_shape', text: JSON.stringify(r) };
+      const perTurn = learner.map((mi, k) => {
+        const t = r.turns.find(x => x && Number(x.i) === k + 1) || r.turns[k] || {};
+        let natural = t.natural == null ? null : (str(t.natural) || null);
+        const corrected = str(t.corrected) || cv.msgs[mi].content;
+        if (natural && normText(natural) === normText(corrected)) natural = null;
+        return { corrected, errors: cleanErrors(t.errors), natural };
+      });
+      const s = r.summary && typeof r.summary === 'object' ? r.summary : {};
+      const summary = {
+        top: arr(s.top).map(x => x && ({ type: ERROR_MAP[str(x.type).toUpperCase()] ? str(x.type).toUpperCase() : 'STRUCT', count: Number(x.count) || 0, example_orig: str(x.example_orig), example_fix: str(x.example_fix) })).filter(Boolean).slice(0, 3),
+        strengths_zh: str(s.strengths_zh), rule_zh: str(s.rule_zh),
+        next_focus_zh: Array.isArray(s.next_focus_zh) ? s.next_focus_zh.map(str).filter(Boolean) : str(s.next_focus_zh) ? [str(s.next_focus_zh)] : [],
+      };
+      cv.debrief = { perTurn, summary, at: nowIso() };
+      saveConvo();
+      const sid = await Sessions.ensure();
+      for (let k = 0; k < learner.length; k++) {
+        const mi = learner[k], m = cv.msgs[mi];
+        const prev = cv.msgs[mi - 1] && cv.msgs[mi - 1].role === 'assistant' ? cv.msgs[mi - 1].content : '';
+        const next = cv.msgs[mi + 1] && cv.msgs[mi + 1].role === 'assistant' ? cv.msgs[mi + 1].content : null;
+        const pt = perTurn[k];
+        await Platform.store.set('turns/' + uid('t'), {
+          nodeId: c.id, sessionId: sid, mode: 'convo', q: prev, raw: m.content,
+          corrected: pt.corrected, natural: pt.natural, errors: pt.errors,
+          asked_back: /\?\s*$/.test(m.content) || /\?\s*$/.test(pt.corrected),
+          n_words: countWords(m.content), vocab: [], followup: next, persona: p.id, createdAt: m.at || nowIso(),
+        });
+      }
+      cv.saved = true;
+      saveConvo();
+      if (!c.node.status || c.node.status === 'todo') Platform.store.update('nodes/' + c.id, { status: 'doing' }).catch(() => {});
+    } catch (e) {
+      if (cur === c) { c.busy = false; renderConvo(); convoProblem(e.code ? e : { code: 'upstream_error' }); }
+      return;
+    } finally { c.ctl = null; c.busy = false; }
+    if (cur === c) renderConvo();
+  }
+
+  function debriefView(c) {
+    const d = c.debrief, box = h('div', { class: 'card stack' }, h('h3', { class: 'section-title' }, '讲评'));
+    let k = 0;
+    c.msgs.forEach((m, i) => {
+      if (i === 0 || m.role !== 'user') return;
+      const pt = d.perTurn[k++] || { corrected: m.content, errors: [], natural: null };
+      put(box, h('div', { class: 'debrief-turn' },
+        bubbleMe(m.content),
+        h('div', { class: 'fb' }, fbRow('改后', pt.corrected, 'corrected'), errorsBlock(pt.errors), pt.natural ? fbRow('更自然', pt.natural) : null)));
+    });
+    const s = d.summary || {};
+    put(box, h('div', { class: 'stack-s' },
+      h('p', { class: 'label' }, '总结'),
+      arr(s.top).length ? h('ul', { class: 'stack-s' }, s.top.map(t => h('li', null, h('b', null, (ERROR_MAP[t.type] ? ERROR_MAP[t.type].name : t.type) + ' ×' + t.count), ' ', h('span', { class: 'en-s' }, t.example_orig ? h('s', null, t.example_orig) : null, t.example_orig ? ' → ' : '', t.example_fix)))) : null,
+      s.strengths_zh ? h('p', null, '做得好：' + s.strengths_zh) : null,
+      s.rule_zh ? h('p', { class: 'notice info' }, h('b', null, '口诀：'), s.rule_zh) : null,
+      arr(s.next_focus_zh).length ? h('p', null, '下次重点：' + s.next_focus_zh.join('；')) : null,
+      h('p', { class: 'small muted' }, c.saved ? '这次对话的每条回答都已记进错误统计。' : '')));
+    return box;
+  }
+
+  /* ---------------- 底部：盖章、结束本次练习 ---------------- */
+  function renderFoot(result) {
+    if (!cur) return;
+    if (result !== undefined) cur.footResult = result;
+    const node = cur.node, foot = clear(cur.els.foot);
+    if (cur.footResult) put(foot, cur.footResult);
+    if (node.track === 'listening') {
+      put(foot, h('div', { class: 'node-foot' },
+        node.status === 'done' ? h('span', { class: 'small muted' }, '已经听熟了。') :
+          h('button', { class: 'btn ghost', type: 'button', onclick: () => Platform.store.update('nodes/' + node.id, { status: 'done' }).then(() => toast('已盖章'), e => toast('没存上：' + e.code)) }, '听熟了，盖章')));
+      return;
+    }
+    put(foot, h('div', { class: 'node-foot' },
+      h('button', { class: 'btn ghost', type: 'button', onclick: () => finishNode(false) }, node.status === 'done' ? '重新整理口袋本' : '这个节点练完了'),
+      Sessions.currentId ? h('button', { class: 'btn ghost', type: 'button', onclick: () => App.endSession() }, '结束本次练习') : null));
+  }
+
+  async function finishNode(force) {
+    const c = cur;
+    if (!c || c.busy) return;
+    const node = c.node;
+    const answers = Data.turnsOfNode(node.id).map(t => t.corrected).filter(Boolean).slice(-12);
+    const stampOnly = () => Platform.store.update('nodes/' + node.id, { status: 'done' }).then(() => { toast('已盖章'); renderFoot(null); }, e => toast('没存上：' + e.code));
+    if (!answers.length) { toast('先练几句，再整理口袋本'); return; }
+    if (!Platform.llm.available) { await stampOnly(); return; }
+    const existing = S.bank[node.id];
+    if (existing && existing.edited && !force) {
+      renderFoot(h('div', { class: 'notice' }, '口袋本里这一条你改过。重新生成会覆盖你的修改。',
+        h('div', { class: 'row', style: 'margin-top:8px' },
+          h('button', { class: 'btn small', type: 'button', onclick: () => finishNode(true) }, '覆盖'),
+          h('button', { class: 'btn ghost small', type: 'button', onclick: stampOnly }, '只盖章，不覆盖'))));
+      return;
+    }
+    c.busy = true;
+    renderFoot(h('p', { class: 'status' }, h('span', { class: 'spin', 'aria-hidden': 'true' }), ' 正在整理最佳回答…… Thinking…'));
+    try {
+      const facts = Data.profileFacts();
+      const r = await Platform.llm.json(fill(PROMPTS.bank, {
+        title_zh: node.title_zh, main_q: node.main_q || '', profile_facts: facts.length ? facts.join('; ') : '(none)',
+        corrected_answers: '\n' + answers.map(a => '- ' + a).join('\n'),
+      }), { tier: 'default', cache: false });
+      const best_en = str(r && r.best_en);
+      if (!best_en) throw { code: 'bad_shape', text: JSON.stringify(r) };
+      const chunks = arr(r.chunks).map(x => x && ({ en: str(x.en), zh: str(x.zh) })).filter(x => x && x.en).slice(0, 8);
+      await Platform.store.set('bank/' + node.id, { best_en, chunks, updatedAt: nowIso(), edited: false });
+      await Platform.store.update('nodes/' + node.id, { status: 'done' });
+      if (cur !== c) return;
+      renderFoot(h('div', { class: 'card stack' },
+        h('p', { class: 'label' }, '已盖章 · 存进口袋本'),
+        h('div', { class: 'q-line row' }, h('p', { class: 'en', style: 'flex:1' }, best_en), sayBtn(best_en)),
+        h('div', { class: 'chunks' }, chunks.map(x => h('div', { class: 'chunk' }, h('span', { class: 'en-s' }, x.en), h('span', { class: 'zh' }, x.zh), sayBtn(x.en)))),
+        h('button', { class: 'link-btn', type: 'button', onclick: () => App.go('pocket') }, '去口袋本看看')));
+    } catch (e) {
+      if (cur === c) renderFoot(h('div', { class: 'notice bad' }, sampleErrZh(e.code || 'upstream_error'), ' ', h('button', { class: 'link-btn', type: 'button', onclick: () => finishNode(force) }, '重试')));
+    } finally { c.busy = false; }
+  }
+
+  Bus.on('session', () => { if (cur) renderFoot(); });
+
+  return {
+    init, show, openNode,
+    get currentNodeId() { return cur ? cur.id : ls.get('lastNode'); },
+  };
+})();
+
+/* ---- record.js ---- */
+/* =====================================================================
+ * 录音：页面里录（MediaRecorder）或用系统录音机 / 选文件（备选 A），
+ * 本地粗测停顿，上传到 assets，写 recordings（status=pending）。
+ * 分析由 Claude 会话按 tools/RUNBOOK.md 完成后写回。
+ * ===================================================================== */
+
+const Record = (() => {
+  let root = null, built = false, visible = false;
+  const els = {};
+  let live = null;        // 正在录音
+  let pending = null;     // 最近一段（本地结果 + 上传状态）
+  const expanded = new Set();
+  const bodyCache = new Map();
+  const blobUrls = {};
+
+  const UPLOAD_ERR_ZH = {
+    too_large: '文件太大了（上限：原始文件 15 MB，或 20 MB 的 webm/mp4）。录短一点再传。',
+    quota_or_state: '存储空间满了。到下面的列表里删掉分析完的音频再试。',
+    rate_limited: '传得太频繁了，稍等一下再点重新上传。',
+    unsupported_type: '这个格式传不上去。',
+    not_granted: '只有这个 artifact 的所有者和编辑者能上传录音。',
+    capability_disabled: '当前环境里不能上传。',
+    unavailable: '当前环境里不能上传（需要在 Claude 的 artifact 查看器里打开）。',
+    upstream_auth: '登录状态失效了，刷新页面或重新登录后再试。',
+    store_unavailable: '存储服务暂时不可用，稍后点重新上传。',
+  };
+  const uploadErrZh = e => UPLOAD_ERR_ZH[e && e.code] || ('上传失败（' + ((e && e.code) || '未知错误') + '）。录音还在，可以重新上传。');
+
+  function init(el) {
+    root = el;
+    Bus.on('recordings', () => { if (visible) { renderList(); renderBanner(); } });
+    Bus.on('config', () => { if (visible) renderBanner(); });
+    Bus.on('nodeOpened', () => { if (built) renderPrompt(); });
+  }
+  function show() {
+    visible = true;
+    if (!built) build();
+    renderPrompt(); renderStage(); renderBanner(); renderList();
+  }
+  function hide() { visible = false; }
+
+  /* ---------------- 题目 ---------------- */
+  function promptMode() { return ls.get('recPrompt', 'node'); }
+  function currentPrompt() {
+    const m = promptMode();
+    if (m === 'intro') return { prompt: FIXED_PROMPTS.intro.en, fixedPrompt: 'intro', nodeId: null, label: FIXED_PROMPTS.intro.zh };
+    if (m === 'custom') { const t = str(els.custom && els.custom.value); return { prompt: t || '（自定义题目）', fixedPrompt: null, nodeId: null, label: '自定义' }; }
+    const n = S.nodeMap[Practice.currentNodeId];
+    if (n && n.main_q) return { prompt: n.main_q, fixedPrompt: null, nodeId: n.id, label: n.id + ' ' + n.title_zh };
+    return { prompt: FIXED_PROMPTS.intro.en, fixedPrompt: 'intro', nodeId: null, label: FIXED_PROMPTS.intro.zh };
+  }
+
+  function build() {
+    built = true;
+    els.banner = h('div', { class: 'notice info banner' });
+    els.seg = h('div', { class: 'seg', role: 'group', 'aria-label': '题目' });
+    els.promptText = h('p', { class: 'en' });
+    els.promptLabel = h('p', { class: 'small muted' });
+    els.custom = h('input', { type: 'text', id: 'rec-custom', class: 'en-s', placeholder: '写下题目，比如 Tell me about your hometown.', hidden: true, oninput: () => ls.set('recCustom', els.custom.value) });
+    els.custom.value = ls.get('recCustom', '') || '';
+    els.stage = h('div', { class: 'rec-stage' });
+    els.result = h('div', { class: 'stack' });
+    els.fileCap = h('input', { type: 'file', accept: 'audio/*', capture: '', id: 'rec-file-cap', hidden: true, onchange: onFile });
+    els.filePick = h('input', { type: 'file', accept: 'audio/*,video/webm,video/mp4,.m4a,.amr,.aac,.3gp,.mp3,.wav,.ogg,.webm', id: 'rec-file-pick', hidden: true, onchange: onFile });
+    els.list = h('ul', { class: 'rec-list' });
+    put(clear(root), 
+      els.banner,
+      h('section', { class: 'card stack' },
+        h('h2', { class: 'section-title' }, '录一段'),
+        els.seg, h('div', { class: 'stack-s' }, els.promptLabel, els.promptText, els.custom),
+        els.stage, els.result, els.fileCap, els.filePick),
+      h('div', { class: 'row-between' }, h('h2', { class: 'section-title' }, '录音列表'), h('span', { class: 'small muted', id: 'rec-count' })),
+      els.list,
+      h('p', { class: 'small muted' }, '页面里录音和选文件都不行时：直接把录音文件作为附件发到 Claude 对话里，说"分析"。结果会出现在这个列表里。'));
+  }
+
+  function renderPrompt() {
+    if (!built) return;
+    const m = promptMode();
+    put(clear(els.seg), ...[['node', '当前节点'], ['intro', '自我介绍'], ['custom', '自定义']].map(([k, t]) =>
+      h('button', { type: 'button', 'aria-pressed': String(m === k), onclick: () => { ls.set('recPrompt', k); renderPrompt(); } }, t)));
+    const p = currentPrompt();
+    els.custom.hidden = m !== 'custom';
+    els.promptText.hidden = m === 'custom';
+    els.promptText.textContent = p.prompt;
+    els.promptLabel.textContent = m === 'intro' ? '固定题，用来看流利度趋势' : m === 'custom' ? '自定义题目' : p.label;
+  }
+
+  /* ---------------- 录音方式 ---------------- */
+  function route() {
+    if (!Platform.blobs.available) return 'none';
+    const forced = ls.get('recRoute');
+    if (forced === 'file' || forced === 'page') return forced;
+    if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) || typeof MediaRecorder === 'undefined') return 'file';
+    if (Probe.flags().gum === 'fail' || ls.get('micBlocked', false)) return 'file';
+    return 'page';
+  }
+
+  function renderStage(errName) {
+    if (!built) return;
+    const st = clear(els.stage);
+    const r = route();
+    if (r === 'none') {
+      put(st, h('div', { class: 'notice' }, Platform.store.available ? '这个视图不能上传录音：只有 artifact 的所有者和编辑者能上传。' : '需要在 Claude 的 artifact 查看器里打开才能上传录音。'));
+      return;
+    }
+    if (r === 'page') {
+      const max = S.config.maxRecSec || 180;
+      els.recBtn = h('button', { class: 'rec-btn' + (live ? ' live' : ''), type: 'button', onclick: () => (live ? stopRec() : startRec()) }, live ? '停止' : '开始录音');
+      els.timer = h('div', { class: 'timer', 'aria-live': 'off' }, '0:00 / ' + fmtDur(max));
+      els.meterFill = h('span');
+      put(st, els.recBtn, els.timer, h('div', { class: 'meter', 'aria-hidden': 'true' }, els.meterFill),
+        live ? null : h('button', { class: 'link-btn', type: 'button', onclick: () => { ls.set('recRoute', 'file'); renderStage(); } }, '改用系统录音机'));
+      return;
+    }
+    const canPage = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) && typeof MediaRecorder !== 'undefined';
+    put(st, 
+      h('p', { class: 'small', style: 'text-align:center' }, errName ? '页面里用不了麦克风（' + errName + '）。' : ls.get('micBlocked', false) || Probe.flags().gum === 'fail' ? '这台设备上页面里用不了麦克风。' : '',
+        '用手机自带的录音机录好，再传上来：'),
+      h('div', { class: 'file-btns' },
+        h('button', { class: 'btn', type: 'button', onclick: () => els.fileCap.click() }, '用系统录音机录'),
+        h('button', { class: 'btn ghost', type: 'button', onclick: () => els.filePick.click() }, '选择录音文件')),
+      canPage ? h('button', { class: 'link-btn', type: 'button', onclick: () => { ls.del('micBlocked'); ls.set('recRoute', 'page'); renderStage(); } }, '再试页面里录音') : null);
+  }
+
+  async function startRec() {
+    if (live) return;
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (e) {
+      ls.set('micBlocked', true); ls.del('recRoute');
+      renderStage(e.name || 'Error');
+      return;
+    }
+    const mime = AudioTools.pickRecorderMime();
+    let mr;
+    try { mr = new MediaRecorder(stream, mime ? { mimeType: mime, audioBitsPerSecond: 64000 } : { audioBitsPerSecond: 64000 }); }
+    catch (e) { stream.getTracks().forEach(t => t.stop()); toast('无法开始录音：' + (e.name || e)); return; }
+    const chunks = [];
+    mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    live = { stream, mr, chunks, t0: performance.now(), snap: currentPrompt(), ctx: null, raf: 0, timer: 0, wake: null };
+    mr.onstop = finishRec;
+    mr.start(1000);
+    renderStage();
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      live.ctx = new AC();
+      const an = live.ctx.createAnalyser();
+      an.fftSize = 1024;
+      live.ctx.createMediaStreamSource(stream).connect(an);
+      const buf = new Float32Array(an.fftSize);
+      const loop = () => {
+        if (!live) return;
+        an.getFloatTimeDomainData(buf);
+        let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i];
+        const db = 20 * Math.log10(Math.sqrt(s / buf.length) + 1e-9);
+        if (els.meterFill) els.meterFill.style.width = Math.max(0, Math.min(100, ((db + 60) / 55) * 100)) + '%';
+        live.raf = requestAnimationFrame(loop);
+      };
+      loop();
+    } catch (_) {}
+    live.timer = setInterval(() => {
+      if (!live) return;
+      const sec = (performance.now() - live.t0) / 1000, max = S.config.maxRecSec || 180;
+      if (els.timer) els.timer.textContent = fmtDur(sec) + ' / ' + fmtDur(max);
+      if (sec >= max) stopRec();
+    }, 250);
+    try { if (navigator.wakeLock) live.wake = await navigator.wakeLock.request('screen'); } catch (_) {}
+  }
+  function stopRec() { if (live && live.mr.state !== 'inactive') live.mr.stop(); }
+  function finishRec() {
+    const r = live;
+    live = null;
+    if (!r) return;
+    clearInterval(r.timer); cancelAnimationFrame(r.raf);
+    r.stream.getTracks().forEach(t => t.stop());
+    if (r.ctx) r.ctx.close().catch(() => {});
+    if (r.wake && r.wake.release) r.wake.release().catch(() => {});
+    const blob = new Blob(r.chunks, { type: r.mr.mimeType || 'audio/webm' });
+    const durationSec = Math.round((performance.now() - r.t0) / 100) / 10;
+    renderStage();
+    if (!blob.size) { toast('没有录到声音'); return; }
+    handleBlob(blob, { recMime: blob.type, durationSec, fileName: null, snap: r.snap });
+  }
+
+  function onFile(e) {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    handleBlob(f, { recMime: f.type || AudioTools.guessMime(f.name), fileName: f.name, durationSec: null, snap: currentPrompt() });
+  }
+
+  function mediaDuration(url) {
+    return new Promise(res => {
+      const a = new Audio();
+      const done = v => { res(v); a.src = ''; };
+      a.preload = 'metadata';
+      a.onloadedmetadata = () => done(isFinite(a.duration) ? Math.round(a.duration * 10) / 10 : null);
+      a.onerror = () => done(null);
+      setTimeout(() => done(null), 4000);
+      a.src = url;
+    });
+  }
+
+  async function handleBlob(blob, meta) {
+    const item = {
+      id: uid('r'), blob, recMime: meta.recMime || '', fileName: meta.fileName, durationSec: meta.durationSec,
+      snap: meta.snap, local: null, localFailed: false, state: 'local', error: null, uploaded: null,
+      url: URL.createObjectURL(blob),
+    };
+    pending = item;
+    renderResult();
+    try {
+      const a = await AudioTools.decode(blob);
+      item.local = AudioTools.roughPauses(a.samples, a.sr, S.config.pauseSec || 0.5);
+      if (!item.durationSec) item.durationSec = Math.round(a.duration * 10) / 10;
+    } catch (_) {
+      item.localFailed = true;
+      if (!item.durationSec) item.durationSec = await mediaDuration(item.url);
+    }
+    renderResult();
+    await upload(item);
+  }
+
+  async function upload(item) {
+    item.state = 'uploading'; item.error = null;
+    renderResult();
+    try {
+      await saveRecording({
+        id: item.id, blob: item.blob, recMime: item.recMime, fileName: item.fileName, durationSec: item.durationSec, local: item.local,
+        prompt: item.snap.prompt, fixedPrompt: item.snap.fixedPrompt, nodeId: item.snap.nodeId, turnId: null, uploaded: item.uploaded,
+      }, s => { item.state = s; if (pending === item) renderResult(); });
+      item.state = 'done';
+    } catch (e) {
+      item.state = 'failed'; item.error = e;
+      if (e && e.uploaded) item.uploaded = e.uploaded;
+    }
+    if (pending === item) renderResult();
+  }
+
+  /* 上传并写 recordings（练习页"说一次就够"也用它） */
+  async function saveRecording(o, onState) {
+    const step = onState || (() => {});
+    let up = o.uploaded;
+    if (!up) { step('uploading'); up = await AudioTools.uploadRecording(o.blob, o.recMime, o.fileName); }
+    step('saving');
+    const id = o.id || uid('r');
+    const doc = {
+      nodeId: o.nodeId || null, prompt: o.prompt || '', fixedPrompt: o.fixedPrompt || null, turnId: o.turnId || null,
+      assetId: up.res.id, uploadType: up.uploadType, recMime: o.recMime || '', durationSec: o.durationSec == null ? null : o.durationSec,
+      sizeBytes: o.blob.size, fileName: o.fileName || null, local: o.local || null,
+      status: 'pending', analysis: null, createdAt: nowIso(), analyzedAt: null,
+    };
+    try { await Platform.store.set('recordings/' + id, doc); }
+    catch (e) { throw Object.assign({}, e, { uploaded: up }); }
+    return { id, assetId: up.res.id };
+  }
+
+  function localStats(local, durationSec) {
+    if (!local) return null;
+    return h('div', { class: 'stack-s' },
+      h('div', { class: 'stats' },
+        stat(local.pauses, '停顿次数'),
+        stat(local.longestPauseSec + ' 秒', '最长停顿'),
+        stat(Math.round(local.speakingRatio * 100) + '%', '说话时间占比'),
+        durationSec != null ? stat(fmtDur(durationSec), '时长') : null),
+      h('p', { class: 'small muted' }, '粗测，以分析结果为准。', local.noisy ? '底噪比较大，粗测可能不准。' : ''));
+  }
+  function stat(v, k) { return h('div', { class: 'stat' }, h('span', { class: 'v mono' }, String(v)), h('span', { class: 'k' }, k)); }
+
+  function renderResult() {
+    if (!built) return;
+    const box = clear(els.result), it = pending;
+    if (!it) return;
+    const status = {
+      local: [h('span', { class: 'spin' }), ' 本地粗测中……'],
+      uploading: [h('span', { class: 'spin' }), ' 上传中……'],
+      saving: [h('span', { class: 'spin' }), ' 写入记录……'],
+      done: [h('span', { class: 'chip ok' }, '已上传'), ' 等分析。录好几段后把上面那句话发给 Claude。'],
+      failed: [h('span', { class: 'chip high' }, '没传上'), ' ', uploadErrZh(it.error)],
+    }[it.state];
+    put(box, 
+      h('p', { class: 'label' }, '刚录的一段'),
+      h('audio', { controls: true, src: it.url, preload: 'metadata' }),
+      localStats(it.local, it.durationSec),
+      it.localFailed ? h('p', { class: 'small muted' }, '这个格式在页面里解码不了，跳过粗测，直接上传。') : null,
+      it.durationSec > (S.config.maxRecSec || 180) ? h('p', { class: 'small muted' }, '超过 3 分钟了，下次录短一点。') : null,
+      h('p', { class: 'status row' }, ...status),
+      it.state === 'failed' ? h('div', null, h('button', { class: 'btn ghost small', type: 'button', onclick: () => upload(it) }, '重新上传')) : null);
+  }
+
+  /* ---------------- 提示横幅 ---------------- */
+  function renderBanner() {
+    if (!built) return;
+    const pend = S.recordings.filter(r => r.status === 'pending').length;
+    const analyzing = S.recordings.filter(r => r.status === 'analyzing').length;
+    const url = S.config.artifactUrl;
+    const text = '请分析口语特训的新录音：' + (url || '（这个页面的地址）');
+    const code = h('code', null, text);
+    put(clear(els.banner), 
+      h('p', null, pend ? h('b', null, '有 ' + pend + ' 段待分析。') : null, analyzing ? ' ' + analyzing + ' 段正在分析。' : null, ' 录好几段后，把下面这句话发给 Claude：'),
+      h('div', { class: 'copy-line' }, code, h('button', { class: 'btn small', type: 'button', onclick: () => copyText(text, code) }, '复制')));
+  }
+
+  /* ---------------- 列表 ---------------- */
+  const REC_STATUS = { pending: ['待分析', 'warn'], analyzing: ['分析中', 'accent'], analyzed: ['已分析', 'ok'], failed: ['失败', 'high'] };
+
+  function renderList() {
+    if (!built) return;
+    const recs = S.recordings;
+    const cnt = $('#rec-count');
+    if (cnt) cnt.textContent = recs.length ? recs.length + ' 段' : '';
+    clear(els.list);
+    if (!recs.length) { put(els.list, h('li', { class: 'muted' }, S.loaded.recordings ? '还没有录音。' : '读取中……')); return; }
+    for (const r of recs) {
+      const [label, cls] = REC_STATUS[r.status] || [r.status, ''];
+      const open = expanded.has(r.id);
+      const head = h('button', { class: 'rec-head', type: 'button', 'aria-expanded': String(open), onclick: () => { if (expanded.has(r.id)) expanded.delete(r.id); else expanded.add(r.id); renderList(); } },
+        h('span', { class: 'rp' }, r.prompt || '（没有题目）'),
+        h('span', { class: 'rm' }, [fmtWhen(r.createdAt), r.durationSec != null ? fmtDur(r.durationSec) : null, r.fixedPrompt === 'intro' ? '固定题' : null, r.nodeId, r.turnId ? '随文字作答录下' : null].filter(Boolean).join(' · ')),
+        h('span', { class: 'chip ' + cls }, label));
+      put(els.list, h('li', { class: 'rec-item' }, head, open ? cachedBody(r) : null));
+    }
+  }
+
+  function cachedBody(r) {
+    const key = [r.status, r.analyzedAt, r.assetId, r.error].join('|');
+    const c = bodyCache.get(r.id);
+    if (c && c.key === key) return c.el;
+    const el = recBody(r);
+    bodyCache.set(r.id, { key, el });
+    return el;
+  }
+
+  function player(r) {
+    if (!r.assetId) return h('p', { class: 'small muted' }, r.audioDeletedAt ? '音频已删除，分析结果保留。' : '没有音频文件（来自对话附件）。');
+    const box = h('div');
+    if (r.uploadType === 'text/plain') {
+      const load = async () => {
+        put(clear(box), h('p', { class: 'small muted' }, '加载中……'));
+        try {
+          if (!blobUrls[r.id]) blobUrls[r.id] = URL.createObjectURL(AudioTools.base64ToBlob(await Platform.blobs.fetchText(r.assetId), r.recMime));
+          put(clear(box), h('audio', { controls: true, src: blobUrls[r.id] }));
+        } catch (e) { put(clear(box), h('p', { class: 'small muted' }, '加载失败（' + (e.code || e.message || e) + '）')); }
+      };
+      put(box, h('button', { class: 'btn ghost small', type: 'button', onclick: load }, '加载音频'));
+      return box;
+    }
+    const src = Platform.blobs.url(r.assetId);
+    const audio = h('audio', { controls: true, preload: 'none', src });
+    audio.addEventListener('error', () => { put(clear(box), h('video', { controls: true, preload: 'metadata', playsinline: true, src })); }, { once: true });
+    put(box, audio);
+    return box;
+  }
+
+  const LC_KIND = { grammar: '语法错误处', pronunciation: '发音问题', unclear: '没说清' };
+
+  function analysisView(r) {
+    const a = r.analysis || {};
+    const lowConf = S.config.lowConf || 0.6;
+    const kinds = {}, notes = {}, pausesAfter = {};
+    arr(a.pause_kinds).forEach(k => { kinds[k.after_index] = k.kind; });
+    arr(a.lowconf_notes).forEach(n => { notes[n.index] = n; });
+    arr(a.pauses).forEach(p => { pausesAfter[p.after_index] = p; });
+    const lowIdx = new Set(arr(a.low_confidence).map(x => x.index));
+    const note = h('div', { class: 'lc-note', hidden: true, role: 'status' });
+    const tr = h('p', { class: 'transcript' });
+    const words = arr(a.words);
+    if (words.length) {
+      words.forEach((w, i) => {
+        const low = lowIdx.has(i) || (typeof w.c === 'number' && w.c < lowConf);
+        const showNote = () => {
+          const n = notes[i];
+          put(clear(note), h('b', { class: 'en-s' }, w.w), ' 置信度 ' + (typeof w.c === 'number' ? w.c.toFixed(2) : '?') + '。',
+            n ? [' ' + (LC_KIND[n.kind] || n.kind || '') + (n.target ? '，原本想说 ' : ''), n.target ? h('span', { class: 'en-s' }, n.target) : null, n.note_zh ? '。' + n.note_zh : ''] : ' 机器没听清这个词。');
+          note.hidden = false;
+        };
+        put(tr, low ? h('span', { class: 'w low', tabindex: '0', role: 'button', onclick: showNote, onkeydown: e => { if (e.key === 'Enter') showNote(); } }, w.w) : h('span', { class: 'w' }, w.w), ' ');
+        const p = pausesAfter[i];
+        if (p) {
+          const kind = kinds[i] || (p.after_punct ? 'boundary' : 'mid');
+          put(tr, h('span', { class: 'pz ' + kind, title: kind === 'mid' ? '句中卡壳' : '句间停顿' }, '‖' + Number(p.sec).toFixed(1) + 's‖'), ' ');
+        }
+      });
+    } else tr.textContent = a.text || '（没有转写）';
+    const n = v => (v == null ? '–' : v);
+    return h('div', { class: 'stack' },
+      h('p', { class: 'label' }, '转写'),
+      tr,
+      h('div', { class: 'legend' }, h('span', null, h('span', { class: 'pz mid' }, '‖1.2s‖'), ' 句中卡壳'), h('span', null, h('span', { class: 'pz' }, '‖0.8s‖'), ' 句间停顿'), h('span', null, h('span', { class: 'transcript' }, h('span', { class: 'w low' }, 'word')), ' 机器没听清，点开看说明')),
+      note,
+      h('div', { class: 'stats' },
+        stat(n(a.wpm), '语速（词/分）'),
+        stat(n(a.wpm_excl_pauses), '去掉停顿后的语速'),
+        stat(n(a.pauses_per_min), '每分钟停顿'),
+        stat(n(a.mean_length_of_run), '平均连续词数'),
+        stat(a.longest_pause_s == null ? '–' : a.longest_pause_s + ' 秒', '最长停顿')),
+      a.pause_method === 'word_gaps' ? h('p', { class: 'small muted' }, '底噪太大，停顿按词与词的间隔估算，会偏短。') : null,
+      h('div', { class: 'fb' }, errorsBlock(a.errors)),
+      a.summary_zh ? h('div', { class: 'notice info', style: 'white-space:pre-wrap' }, a.summary_zh) : null);
+  }
+
+  function recBody(r) {
+    const body = h('div', { class: 'rec-body' });
+    put(body, player(r));
+    if (r.status === 'analyzed' && r.analysis) put(body, analysisView(r));
+    else if (r.status === 'failed') put(body, h('div', { class: 'notice bad' }, '分析失败' + (r.error ? '：' + r.error : '') + '。在对话里说"重试失败的录音"。'));
+    else if (r.status === 'analyzing') put(body, h('p', { class: 'small muted' }, 'Claude 正在分析……'));
+    else put(body, h('p', { class: 'small muted' }, '还没分析。把上面那句话发给 Claude。'));
+    if (r.local && r.status !== 'analyzed') put(body, localStats(r.local, r.durationSec));
+    put(body, deleteControls(r));
+    return body;
+  }
+
+  function deleteControls(r) {
+    const box = h('div', { class: 'row' });
+    const analyzed = r.status === 'analyzed';
+    if (analyzed && !r.assetId) return box;
+    const label = analyzed ? '删除音频（保留分析结果）' : '删除这条录音';
+    const ask = () => {
+      put(clear(box), h('span', { class: 'small' }, analyzed ? '删掉音频后不能再回放。' : '录音和记录都会删掉。'),
+        h('button', { class: 'btn danger small', type: 'button', onclick: doDelete }, '确认删除'),
+        h('button', { class: 'btn quiet small', type: 'button', onclick: () => put(clear(box), first()) }, '取消'));
+    };
+    const first = () => h('button', { class: 'btn quiet small', type: 'button', onclick: ask }, label);
+    const doDelete = async () => {
+      if (!Platform.blobs.available) { toast('这个视图不能删除文件'); return; }
+      put(clear(box), h('span', { class: 'spin' }));
+      try {
+        if (r.assetId) await Platform.blobs.remove(r.assetId);
+        if (analyzed) await Platform.store.update('recordings/' + r.id, { assetId: null, audioDeletedAt: nowIso() });
+        else { await Platform.store.remove('recordings/' + r.id); expanded.delete(r.id); }
+        toast('已删除');
+      } catch (e) { toast('删除失败：' + (e.code || e)); put(clear(box), first()); }
+    };
+    put(box, first());
+    return box;
+  }
+
+  return { init, show, hide, saveRecording };
+})();
+
+/* ---- dash.js ---- */
+/* =====================================================================
+ * 看板：前三类错误（每百词、近 7 天对比之前）、全部类型、反问率、流利度趋势
+ * ===================================================================== */
+
+const Dash = (() => {
+  let root = null, visible = false, usage = null, usageErr = null, usageAt = 0;
+
+  function init(el) {
+    root = el;
+    ['turns', 'recordings', 'sessions', 'vocab'].forEach(k => Bus.on(k, () => { if (visible) render(); }));
+  }
+  function show() {
+    visible = true;
+    render();
+    if (Platform.blobs.available && Date.now() - usageAt > 60000) {
+      usageAt = Date.now();
+      Platform.blobs.usage().then(u => { usage = u; usageErr = null; if (visible) render(); }, e => { usageErr = e; if (visible) render(); });
+    }
+  }
+  function hide() { visible = false; }
+
+  function ratesOf(units) {
+    const words = units.reduce((a, u) => a + (u.words || 0), 0);
+    const list = Data.tallyErrors(units.flatMap(u => u.errors));
+    return { words, list, byType: Object.fromEntries(list.map(x => [x.type, x])) };
+  }
+  const per100 = (x, words) => (x && words ? (x.count / words) * 100 : 0);
+  const f1 = v => (v == null ? '–' : (Math.round(v * 10) / 10).toFixed(1));
+
+  function render() {
+    if (!root) return;
+    if (!Platform.store.available) { put(clear(root), h('div', { class: 'notice bad' }, '没有连上数据库。')); return; }
+    const units = Data.answerUnits().sort((a, b) => String(a.at).localeCompare(String(b.at)));
+    const cutoff = Date.now() - 7 * 86400000;
+    const recent = units.filter(u => new Date(u.at).getTime() >= cutoff);
+    const before = units.filter(u => new Date(u.at).getTime() < cutoff);
+    const A = ratesOf(units), R = ratesOf(recent), B = ratesOf(before);
+
+    put(clear(root),
+      h('div', { class: 'kpis' },
+        kpi(S.turns.length, '条回答'),
+        kpi(S.sessions.filter(s => s.endedAt).length, '次练习'),
+        kpi(S.recordings.length, '段录音')),
+      topErrors(A, R, B),
+      askBack(),
+      fluency(),
+      allTypes(A),
+      lastSessions(),
+      footer());
+  }
+
+  function kpi(v, k) { return h('div', { class: 'kpi' }, h('span', { class: 'v' }, String(v)), h('span', { class: 'k' }, k)); }
+  function card(title, sub, ...kids) {
+    return h('section', { class: 'card stack' }, h('div', { class: 'row-between' }, h('h2', { class: 'section-title' }, title), sub ? h('span', { class: 'small muted' }, sub) : null), ...kids);
+  }
+
+  function topErrors(A, R, B) {
+    if (!A.list.length) return card('前三类错误', null, h('p', { class: 'muted' }, '还没有错误记录。练完几句，这里就有数了。'));
+    const base = R.words ? R : A;
+    const ranked = base.list.slice().sort((a, b) => per100(b, base.words) - per100(a, base.words) || b.high - a.high).slice(0, 3);
+    return card('前三类错误', R.words ? '按每百词次数，近 7 天' : '按每百词次数，全部',
+      h('div', { class: 'top-errs' }, ranked.map((x, i) => {
+        const t = ERROR_MAP[x.type];
+        const rr = R.words ? per100(R.byType[x.type], R.words) : null;
+        const rb = B.words ? per100(B.byType[x.type], B.words) : null;
+        const ex = A.byType[x.type] || x;
+        let trend = null;
+        if (rr != null && rb != null) {
+          const d = rr - rb;
+          trend = Math.abs(d) < 0.05 ? h('span', null, '持平') : d > 0 ? h('span', { class: 'trend-up' }, '↑ 变多') : h('span', { class: 'trend-down' }, '↓ 变少');
+        }
+        return h('div', { class: 'top-err' },
+          h('span', { class: 'rank' }, String(i + 1)),
+          h('div', null, h('span', { class: 't' }, t ? t.name : x.type), ' ', h('span', { class: 'mono small muted' }, x.type)),
+          h('div', { class: 'rate' },
+            h('div', null, h('b', { class: 'mono' }, f1(rr != null ? rr : per100(A.byType[x.type], A.words))), ' / 百词'),
+            rb != null ? h('div', null, '之前 ', h('span', { class: 'mono' }, f1(rb)), ' ', trend) : null),
+          ex.example_orig || ex.example_fix ? h('p', { class: 'ex' }, ex.example_orig ? h('s', null, ex.example_orig) : null, ex.example_orig ? ' → ' : '', ex.example_fix) : null);
+      })));
+  }
+
+  function askBack() {
+    const social = S.turns.filter(t => { const n = S.nodeMap[t.nodeId]; return n && n.track === 'social'; }).slice(-20);
+    if (!social.length) return card('反问率', null, h('p', { class: 'muted' }, '社交场景还没有作答。'));
+    const yes = social.filter(t => t.asked_back).length;
+    const pct = Math.round((yes / social.length) * 100);
+    return card('反问率', '社交场景最近 ' + social.length + ' 条',
+      h('div', { class: 'row-between' }, h('span', { class: 'kpi-v', style: 'font-size:28px;font-weight:700' }, pct + '%'), h('span', { class: 'small muted' }, yes + ' 条以提问结尾')),
+      h('div', { class: 'meter-bar', role: 'img', 'aria-label': '反问率 ' + pct + '%' }, h('span', { style: 'width:' + pct + '%' })),
+      pct < 50 ? h('p', { class: 'small' }, '答完别停：加一句 ', h('span', { class: 'en-s' }, 'What about you?'), ' 就能把话题接下去。') : null);
+  }
+
+  /* 固定题"一分钟自我介绍"的趋势：单序列迷你折线，悬停看每个点 */
+  function fluency() {
+    const recs = S.recordings.filter(r => r.fixedPrompt === 'intro' && r.status === 'analyzed' && r.analysis)
+      .slice().sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)));
+    if (!recs.length) return card('流利度趋势', '一分钟自我介绍', h('p', { class: 'muted' }, '在"录音"里选"一分钟自我介绍"录几次，分析后这里显示语速、停顿和连续词数的变化。'));
+    const metrics = [
+      { key: 'wpm', name: '语速', unit: '词/分', better: 'up' },
+      { key: 'pauses_per_min', name: '每分钟停顿', unit: '次', better: 'down' },
+      { key: 'mean_length_of_run', name: '平均连续词数', unit: '词', better: 'up' },
+    ];
+    return card('流利度趋势', '一分钟自我介绍 · ' + recs.length + ' 次',
+      h('div', { class: 'spark-grid' }, metrics.map(m => {
+        const pts = recs.map(r => ({ v: Number(r.analysis[m.key]), at: r.createdAt })).filter(p => isFinite(p.v));
+        if (!pts.length) return null;
+        const last = pts[pts.length - 1].v, first = pts[0].v;
+        let delta = null;
+        if (pts.length > 1) {
+          const d = last - first;
+          const good = m.better === 'up' ? d > 0 : d < 0;
+          delta = h('span', { class: 'small ' + (Math.abs(d) < 0.05 ? 'muted' : good ? 'trend-down' : 'trend-up') }, (d > 0 ? '+' : '') + f1(d) + (Math.abs(d) < 0.05 ? '' : good ? ' 更好' : ' 变差'));
+        }
+        return h('div', { class: 'spark' },
+          h('span', { class: 'k' }, m.name + '（' + m.unit + '）'),
+          h('div', { class: 'row' }, h('span', { class: 'v mono' }, f1(last)), delta),
+          pts.length > 1 ? sparkline(pts, m) : h('span', { class: 'small muted' }, '录满 2 次后显示趋势'));
+      })));
+  }
+
+  function sparkline(pts, m) {
+    const W = 220, H = 52, px = 5, py = 6;
+    const vs = pts.map(p => p.v);
+    let min = Math.min(...vs), max = Math.max(...vs);
+    if (max - min < 1e-6) { min -= 1; max += 1; }
+    const x = i => px + (i * (W - 2 * px)) / (pts.length - 1);
+    const y = v => H - py - ((v - min) / (max - min)) * (H - 2 * py);
+    const line = pts.map((p, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p.v).toFixed(1)).join(' ');
+    const area = line + ' L' + x(pts.length - 1).toFixed(1) + ' ' + (H - py) + ' L' + x(0).toFixed(1) + ' ' + (H - py) + ' Z';
+    const tip = h('span', { class: 'tip', hidden: true });
+    const svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet', role: 'img', 'aria-label': m.name + '：' + pts.map(p => f1(p.v)).join('，') },
+      svgEl('line', { class: 'sp-grid', x1: px, x2: W - px, y1: H - py, y2: H - py }),
+      svgEl('path', { class: 'sp-area', d: area }),
+      svgEl('path', { class: 'sp-line', d: line }),
+      svgEl('circle', { class: 'sp-dot', cx: x(pts.length - 1), cy: y(pts[pts.length - 1].v), r: 4 }));
+    const hover = svgEl('circle', { class: 'sp-hover', r: 4, cx: 0, cy: 0, visibility: 'hidden' });
+    svg.append(hover);
+    const step = (W - 2 * px) / (pts.length - 1);
+    pts.forEach((p, i) => {
+      const hit = svgEl('rect', { class: 'sp-hit', x: x(i) - step / 2, y: 0, width: step, height: H });
+      const on = () => { hover.setAttribute('cx', x(i)); hover.setAttribute('cy', y(p.v)); hover.setAttribute('visibility', 'visible'); tip.textContent = fmtWhen(p.at) + ' · ' + f1(p.v); tip.hidden = false; };
+      hit.addEventListener('pointerenter', on);
+      hit.addEventListener('pointerdown', on);
+      hit.addEventListener('pointerleave', () => { tip.hidden = true; hover.setAttribute('visibility', 'hidden'); });
+      svg.append(hit);
+    });
+    return h('div', { style: 'position:relative' }, svg, tip);
+  }
+
+  function allTypes(A) {
+    const rows = ERROR_TYPES.map(t => ({ t, x: A.byType[t.code] || { count: 0, high: 0 } }))
+      .sort((a, b) => b.x.count - a.x.count);
+    return card('全部错误类型', A.words ? '共 ' + A.words + ' 词' : null,
+      h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl' },
+        h('thead', null, h('tr', null, h('th', null, '类型'), h('th', null, '代码'), h('th', { class: 'num' }, '次数'), h('th', { class: 'num' }, 'high 占比'))),
+        h('tbody', null, rows.map(({ t, x }) => h('tr', { class: x.count ? '' : 'zero' },
+          h('td', null, t.name), h('td', { class: 'mono' }, t.code), h('td', { class: 'num mono' }, String(x.count)),
+          h('td', { class: 'num mono' }, x.count ? Math.round((x.high / x.count) * 100) + '%' : '–')))))));
+  }
+
+  function lastSessions() {
+    const done = S.sessions.filter(s => s.endedAt && s.summary).slice(0, 3);
+    if (!done.length) return null;
+    return card('最近的练习小结', null, h('div', { class: 'stack' }, done.map(s => h('div', { class: 'stack-s' },
+      h('p', { class: 'small muted' }, s.id + ' · ' + (s.summary.nTurns || 0) + ' 条回答'),
+      arr(s.summary.top).length ? h('p', null, s.summary.top.map(t => (ERROR_MAP[t.type] ? ERROR_MAP[t.type].name : t.type) + ' ×' + t.count).join('，')) : h('p', { class: 'muted' }, '没有发现错误'),
+      s.summary.rule_zh ? h('p', { class: 'notice info' }, h('b', null, '口诀：'), s.summary.rule_zh) : null))));
+  }
+
+  function footer() {
+    const u = usage;
+    return card('其他', null,
+      h('div', { class: 'row-between' }, h('span', null, '词汇缺口'), h('button', { class: 'link-btn', type: 'button', onclick: () => App.go('pocket') }, S.vocab.length + ' 个 · 去口袋本')),
+      Platform.blobs.available ? h('div', { class: 'stack-s' },
+        h('div', { class: 'row-between' }, h('span', null, '录音存储'),
+          h('span', { class: 'small mono' }, u ? fmtBytes(u.bytes) + ' / ' + fmtBytes(u.maxBytes) + ' · ' + u.files + ' / ' + u.maxFiles + ' 个文件' : usageErr ? '读取失败' : '读取中……')),
+        u ? h('div', { class: 'meter-bar' }, h('span', { style: 'width:' + Math.min(100, Math.round((u.bytes / Math.max(1, u.maxBytes)) * 100)) + '%' })) : null) : null);
+  }
+
+  return { init, show, hide };
+})();
+
+/* ---- pocket.js ---- */
+/* =====================================================================
+ * 口袋本：最佳回答（可编辑）、词汇缺口、听力清单、前三类错误和口诀；导出离线 HTML
+ * ===================================================================== */
+
+const Pocket = (() => {
+  let root = null, visible = false, editing = null;
+
+  function init(el) {
+    root = el;
+    ['bank', 'vocab', 'nodes', 'turns', 'sessions', 'recordings'].forEach(k => Bus.on(k, () => { if (visible && !editing) render(); }));
+  }
+  function show() { visible = true; render(); }
+  function hide() { visible = false; }
+
+  function myTop() {
+    const all = Data.answerUnits().sort((a, b) => String(a.at).localeCompare(String(b.at))).flatMap(u => u.errors);
+    const top = Data.tallyErrors(all).slice(0, 3);
+    const last = S.sessions.find(s => s.endedAt && s.summary && s.summary.rule_zh);
+    return { top, rule: last ? last.summary.rule_zh : '', focus: last ? arr(last.summary.next_focus_zh) : [] };
+  }
+
+  function render() {
+    if (!root) return;
+    if (!Platform.store.available) { put(clear(root), h('div', { class: 'notice bad' }, '没有连上数据库。')); return; }
+    const practiced = S.nodes.filter(n => n.track !== 'listening');
+    const withBank = practiced.filter(n => S.bank[n.id]);
+    const without = practiced.filter(n => !S.bank[n.id]);
+    const mt = myTop();
+    put(clear(root),
+      h('div', { class: 'row-between' },
+        h('h2', { class: 'section-title' }, '口袋本'),
+        Platform.blobs.canSave ? h('button', { class: 'btn', type: 'button', onclick: exportPocket }, '导出离线版') : h('span', { class: 'small muted' }, '这个视图不能导出文件')),
+      h('p', { class: 'small muted' }, '导出的是一个 HTML 文件，存在手机里，没网也能打开。出发前（10/16）记得导出一次最新的。'),
+
+      h('section', { class: 'card stack' },
+        h('h3', { class: 'section-title' }, '我的前三类错误'),
+        mt.top.length ? h('div', { class: 'top-errs' }, mt.top.map((x, i) => h('div', { class: 'top-err' },
+          h('span', { class: 'rank' }, String(i + 1)),
+          h('div', null, h('span', { class: 't' }, ERROR_MAP[x.type] ? ERROR_MAP[x.type].name : x.type), h('span', { class: 'small muted' }, ' ×' + x.count)),
+          h('span'),
+          h('p', { class: 'ex' }, x.example_orig ? h('s', null, x.example_orig) : null, x.example_orig ? ' → ' : '', x.example_fix),
+          x.note_zh ? h('p', { class: 'small', style: 'grid-column:2 / span 2' }, x.note_zh) : null))) : h('p', { class: 'muted' }, '还没有错误记录。'),
+        mt.rule ? h('p', { class: 'notice info' }, h('b', null, '口诀：'), mt.rule) : null,
+        mt.focus.length ? h('p', { class: 'small' }, '下次重点：' + mt.focus.join('；')) : null),
+
+      h('section', { class: 'card stack' },
+        h('h3', { class: 'section-title' }, '最佳回答 ', h('span', { class: 'muted' }, withBank.length + '/' + practiced.length)),
+        withBank.length ? withBank.map(bankItem) : h('p', { class: 'muted' }, '还没有。在练习页练完一个节点，点"这个节点练完了"，最佳回答会存到这里。'),
+        without.length ? h('p', { class: 'small muted' }, '还没整理：' + without.map(n => n.id + ' ' + n.title_zh).join('、')) : null),
+
+      h('section', { class: 'card stack' },
+        h('h3', { class: 'section-title' }, '词汇缺口 ', h('span', { class: 'muted' }, S.vocab.length + ' 个')),
+        S.vocab.length ? h('div', { class: 'phrase-list' }, S.vocab.map(vocabRow)) : h('p', { class: 'muted' }, '作答时卡住直接说中文，Claude 会把这些词记到这里。')),
+
+      h('section', { class: 'card stack' },
+        h('h3', { class: 'section-title' }, '听力清单'),
+        TRACKS.map(tr => {
+          const ns = S.nodes.filter(n => n.track === tr.id && arr(n.listen).length);
+          if (!ns.length) return null;
+          return h('details', { class: 'listen' }, h('summary', null, tr.name + ' · ' + ns.reduce((a, n) => a + n.listen.length, 0) + ' 条'),
+            h('div', { class: 'listen-body' }, ns.map(n => h('div', { class: 'stack-s' },
+              h('p', { class: 'label' }, n.id + ' ' + n.title_zh),
+              h('div', { class: 'phrase-list' }, n.listen.map(l => h('div', { class: 'phrase' },
+                h('p', { class: 'en-s' }, l.en),
+                h('p', { class: 'zh' }, l.zh || '', l.note ? h('span', { class: 'note' }, ' · ' + l.note) : null),
+                l.tts === false ? h('span') : sayBtn(l.en))))))));
+        })));
+  }
+
+  function bankItem(n) {
+    const b = S.bank[n.id];
+    const box = h('div', { class: 'bank-item' });
+    const view = () => put(clear(box),
+      h('div', { class: 'row-between' }, h('b', null, n.id + ' ' + n.title_zh), h('span', { class: 'small muted' }, b.edited ? '已手动修改' : '')),
+      n.main_q ? h('p', { class: 'small muted en-s' }, n.main_q) : null,
+      h('div', { class: 'row', style: 'align-items:flex-start;flex-wrap:nowrap' }, h('p', { class: 'en', style: 'flex:1' }, b.best_en), sayBtn(b.best_en)),
+      arr(b.chunks).length ? h('div', { class: 'chunks' }, b.chunks.map(c => h('div', { class: 'chunk' }, h('span', { class: 'en-s' }, c.en), h('span', { class: 'zh' }, c.zh || ''), sayBtn(c.en)))) : null,
+      h('div', null, h('button', { class: 'btn quiet small', type: 'button', onclick: edit }, '修改')));
+    const edit = () => {
+      editing = n.id;
+      const ta = h('textarea', { class: 'en', id: 'bank-edit-' + n.id, rows: 4 });
+      ta.value = b.best_en;
+      put(clear(box), h('b', null, n.id + ' ' + n.title_zh), ta,
+        h('div', { class: 'row' },
+          h('button', { class: 'btn small', type: 'button', onclick: async () => {
+            const v = ta.value.trim();
+            if (!v) return;
+            try { await Platform.store.update('bank/' + n.id, { best_en: v, edited: true, updatedAt: nowIso() }); toast('已保存'); }
+            catch (e) { toast('没存上：' + (e.code || e)); return; }
+            editing = null; render();
+          } }, '保存'),
+          h('button', { class: 'btn quiet small', type: 'button', onclick: () => { editing = null; render(); } }, '取消')));
+      ta.focus();
+    };
+    view();
+    return box;
+  }
+
+  function vocabRow(v) {
+    return h('div', { class: 'phrase' },
+      h('p', { class: 'en-s' }, v.en, h('span', { class: 'muted' }, '  ' + v.zh)),
+      h('p', { class: 'zh' }, v.example || '', ' ',
+        h('button', { class: 'link-btn', type: 'button', onclick: () => Platform.store.remove('vocab/' + v.id).then(() => toast('已删除'), e => toast('删除失败：' + (e.code || e))) }, '删除')),
+      sayBtn(v.example || v.en));
+  }
+
+  /* ---------------- 导出离线 HTML ---------------- */
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const say = t => '<button class="say" data-t="' + esc(t) + '" aria-label="朗读">▶</button>';
+
+  function buildHtml() {
+    const mt = myTop();
+    const parts = [];
+    parts.push('<h1>口语口袋本</h1><p class="m">导出于 ' + esc(localDate()) + ' · ' + esc(S.config.tripStart ? '入境 ' + S.config.tripStart : '') + '</p>');
+    parts.push('<h2>我的前三类错误</h2>');
+    if (mt.top.length) {
+      parts.push('<ol>' + mt.top.map(x => '<li><b>' + esc(ERROR_MAP[x.type] ? ERROR_MAP[x.type].name : x.type) + '</b> ×' + x.count +
+        '<div class="en"><s>' + esc(x.example_orig) + '</s> → ' + esc(x.example_fix) + '</div>' + (x.note_zh ? '<div class="m">' + esc(x.note_zh) + '</div>' : '') + '</li>').join('') + '</ol>');
+    } else parts.push('<p class="m">还没有记录。</p>');
+    if (mt.rule) parts.push('<p class="rule"><b>口诀：</b>' + esc(mt.rule) + '</p>');
+
+    parts.push('<h2>最佳回答</h2>');
+    const nodes = S.nodes.filter(n => n.track !== 'listening');
+    for (const n of nodes) {
+      const b = S.bank[n.id];
+      if (!b) continue;
+      parts.push('<section><h3>' + esc(n.id + ' ' + n.title_zh) + '</h3>' + (n.main_q ? '<p class="q">' + esc(n.main_q) + ' ' + say(n.main_q) + '</p>' : '') +
+        '<p class="en best">' + esc(b.best_en) + ' ' + say(b.best_en) + '</p>' +
+        (arr(b.chunks).length ? '<ul class="chunks">' + b.chunks.map(c => '<li><span class="en">' + esc(c.en) + '</span> ' + say(c.en) + '<br><span class="m">' + esc(c.zh) + '</span></li>').join('') + '</ul>' : '') + '</section>');
+    }
+    const svc = S.nodes.filter(n => arr(n.say).length);
+    if (svc.length) {
+      parts.push('<h2>办事时要说的话</h2>');
+      for (const n of svc) parts.push('<section><h3>' + esc(n.id + ' ' + n.title_zh) + '</h3><ul>' + n.say.map(s => '<li class="en">' + esc(s) + ' ' + say(s) + '</li>').join('') + '</ul></section>');
+    }
+    if (S.vocab.length) {
+      parts.push('<h2>词汇缺口</h2><ul>' + S.vocab.map(v => '<li><span class="en">' + esc(v.en) + '</span> ' + say(v.en) + ' <span class="m">' + esc(v.zh) + '</span>' + (v.example ? '<div class="en m">' + esc(v.example) + '</div>' : '') + '</li>').join('') + '</ul>');
+    }
+    parts.push('<h2>听力清单</h2>');
+    for (const n of S.nodes.filter(n => arr(n.listen).length)) {
+      parts.push('<section><h3>' + esc(n.id + ' ' + n.title_zh) + '</h3><ul>' + n.listen.map(l => '<li><span class="en">' + esc(l.en) + '</span>' + (l.tts === false ? '' : ' ' + say(l.en)) + '<br><span class="m">' + esc(l.zh) + (l.note ? ' · ' + esc(l.note) : '') + '</span></li>').join('') + '</ul></section>');
+    }
+    const css = ':root{color-scheme:light dark;--bg:#F1F3F7;--ink:#14203A;--m:#56627A;--line:#D4DAE4;--acc:#1E4D8C;--hi:#B0382A;--card:#fff}' +
+      '@media (prefers-color-scheme:dark){:root{--bg:#0E1420;--ink:#E6EAF2;--m:#A8B3C7;--line:#2B3751;--acc:#8FB3EC;--hi:#F2978B;--card:#161F31}}' +
+      'body{margin:0;padding:16px;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"HarmonyOS Sans SC","PingFang SC","Noto Sans SC",sans-serif}' +
+      'main{max-width:680px;margin:0 auto}h1{font-size:22px;margin:0}h2{font-size:17px;margin:28px 0 8px;padding-top:12px;border-top:2px solid var(--acc)}h3{font-size:15px;margin:14px 0 4px}' +
+      'section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}' +
+      '.en{font-family:Georgia,"Noto Serif",serif;font-size:17px}.best{font-size:18px}.q{color:var(--m);font-family:Georgia,serif}.m{color:var(--m);font-size:14px}' +
+      's{color:var(--hi)}ul,ol{padding-left:20px;margin:6px 0}li{margin:6px 0}.rule{background:var(--card);border-left:4px solid #F0B40A;padding:8px 12px;border-radius:6px}' +
+      '.say{border:1px solid var(--line);background:var(--card);color:var(--acc);border-radius:50%;width:28px;height:28px;font-size:11px;cursor:pointer;vertical-align:middle}.no-tts .say{display:none}';
+    const js = '(function(){var s=window.speechSynthesis;function v(){var a=s?s.getVoices():[];return a.filter(function(x){return /^en/i.test(x.lang)})[0]||null}' +
+      'if(!s){document.documentElement.className="no-tts";return}document.addEventListener("click",function(e){var b=e.target.closest(".say");if(!b)return;s.cancel();var u=new SpeechSynthesisUtterance(b.getAttribute("data-t"));var x=v();if(x){u.voice=x;u.lang=x.lang}else u.lang="en-US";u.rate=0.95;s.speak(u)})})();';
+    return '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>口语口袋本</title><style>' + css + '</style></head><body><main>' + parts.join('\n') + '</main><script>' + js + '<\/script></body></html>';
+  }
+
+  async function exportPocket() {
+    try {
+      const r = await Platform.blobs.saveFile('口语口袋本-' + localDate() + '.html', buildHtml());
+      toast(r && r.status === 'delivered' ? '已交出' : '已保存');
+    } catch (e) {
+      toast(e.code === 'declined' ? '已取消' : e.code === 'rate_limited' ? '已经有一个保存框开着了' : '导出失败：' + (e.code || e));
+    }
+  }
+
+  return { init, show, hide };
+})();
+
+/* ---- settings.js ---- */
+/* =====================================================================
+ * 设置：我的素材、练习偏好、导出全部数据、诊断（M0 探针）、关于
+ * ===================================================================== */
+
+const Settings = (() => {
+  let root = null, built = false;
+  const els = {};
+
+  function init(el) {
+    root = el;
+    Bus.on('profile', () => { if (built) renderProfile(); });
+    Bus.on('profileDraft', () => { if (built) renderProfile(); });
+    Bus.on('config', () => { if (built) renderAbout(); });
+    TTS.onChange(() => { if (built) renderPrefs(); });
+  }
+
+  function show(anchor) {
+    if (!built) build();
+    renderProfile(); renderPrefs(); renderAbout();
+    if (anchor === 'probe' && els.probeCard) els.probeCard.scrollIntoView({ block: 'start' });
+    else window.scrollTo(0, 0);
+  }
+  function hide() {}
+
+  function build() {
+    built = true;
+    els.profile = h('section', { class: 'card stack' });
+    els.prefs = h('section', { class: 'card stack' });
+    els.data = h('section', { class: 'card stack' });
+    els.probe = h('div');
+    els.probeCard = h('section', { class: 'card stack', id: 'probe' }, h('h2', { class: 'section-title' }, '诊断'), h('p', { class: 'small muted' }, '检测这台设备能不能在页面里录音、上传、调用 Claude、朗读和语音识别。换设备或换 App 时再测一次。'), els.probe);
+    els.about = h('section', { class: 'card stack' });
+    put(clear(root),
+      h('div', { class: 'row-between' }, h('button', { class: 'link-btn', type: 'button', onclick: () => App.back() }, '← 返回'), h('h2', { class: 'section-title' }, '设置')),
+      els.profile, els.prefs, els.data, els.probeCard, els.about);
+    renderData();
+    Probe.mount(els.probe);
+  }
+
+  /* ---------------- 我的素材 ---------------- */
+  function renderProfile() {
+    const confirmed = !!S.profile;
+    const facts = confirmed ? arr(S.profile.facts) : arr(S.profileDraft && S.profileDraft.facts);
+    const ta = h('textarea', { id: 'profile-facts', rows: 7 });
+    ta.value = facts.join('\n');
+    const save = async () => {
+      const list = ta.value.split('\n').map(s => s.trim()).filter(Boolean);
+      try { await Platform.store.set('me/profile', { facts: list, updatedAt: nowIso() }); toast('已保存'); }
+      catch (e) { toast('没存上：' + (e.code || e)); }
+    };
+    put(clear(els.profile),
+      h('h2', { class: 'section-title' }, '我的素材'),
+      h('p', { class: 'small muted' }, '一行写一条关于你自己的事实。页面内 Claude 只在追问和整理口袋本时用它，让你前后说的一致。'),
+      confirmed ? null : h('div', { class: 'notice' }, '下面是根据已知信息预填的草稿，还没生效。确认或修改后点"保存"。"老家"那条记得填上。'),
+      ta,
+      h('div', { class: 'row' }, h('button', { class: 'btn', type: 'button', onclick: save }, confirmed ? '保存' : '确认并保存'),
+        confirmed && S.profile.updatedAt ? h('span', { class: 'small muted' }, '上次保存 ' + fmtWhen(S.profile.updatedAt)) : null));
+  }
+
+  /* ---------------- 偏好（存在本机） ---------------- */
+  function select(id, value, options, onchange) {
+    const s = h('select', { id, onchange: e => onchange(e.target.value) }, options.map(([v, t]) => h('option', { value: v }, t)));
+    s.value = value;
+    return s;
+  }
+  function field(label, control, hint) {
+    return h('div', { class: 'stack-s' }, h('label', { class: 'small', for: control.id, style: 'font-weight:600' }, label), control, hint ? h('p', { class: 'small muted' }, hint) : null);
+  }
+  function renderPrefs() {
+    const voices = TTS.voices;
+    const hasSR = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    const pf = Probe.flags();
+    put(clear(els.prefs),
+      h('h2', { class: 'section-title' }, '练习偏好'),
+      h('p', { class: 'small muted' }, '这些设置只存在这台设备上。'),
+      h('label', { class: 'check', for: 'pref-listen-first' },
+        h('input', { type: 'checkbox', id: 'pref-listen-first', checked: !!ls.get('listenFirst', false), onchange: e => ls.set('listenFirst', e.target.checked) }),
+        '先听后看：新问题先朗读，点一下才显示文字'),
+      voices.length ? field('朗读语音', select('pref-voice', TTS.voice ? TTS.voice.voiceURI : '', voices.map(v => [v.voiceURI, v.name + '（' + v.lang + '）']), v => TTS.setVoice(v))) :
+        h('p', { class: 'small muted' }, '这台设备没有英文朗读语音，朗读按钮已隐藏。'),
+      voices.length ? field('朗读语速', select('pref-rate', String(ls.get('ttsRate', 0.95)), [['0.95', '正常'], ['0.8', '慢一点'], ['0.65', '很慢']], v => ls.set('ttsRate', Number(v)))) : null,
+      field('说一次就够（页面内语音识别）', select('pref-voice-mode', Voice.mode(), [['auto', '自动：诊断第 7 项通过才显示'], ['on', '总是显示麦克风按钮'], ['off', '关闭']], v => { ls.set('voiceMode', v); ls.del('voiceBlocked'); }),
+        !hasSR ? '这个浏览器没有语音识别 API（比如平板没有谷歌服务），会自动隐藏。' : '诊断结果：第 7 项 ' + (pf.asr ? (pf.asr === 'pass' ? '通过' : '失败') : '未测') + '，第 8 项 ' + (pf.asrWithRec ? (pf.asrWithRec === 'pass' ? '通过' : '失败') : '未测') + '。改动后重新打开节点生效。'),
+      field('录音方式', select('pref-rec-route', ls.get('recRoute') || 'auto', [['auto', '自动'], ['page', '页面里录'], ['file', '系统录音机或选文件']], v => { if (v === 'auto') ls.del('recRoute'); else ls.set('recRoute', v); ls.del('micBlocked'); })));
+  }
+
+  /* ---------------- 数据 ---------------- */
+  function renderData() {
+    const status = h('p', { class: 'small muted', role: 'status' });
+    const btn = h('button', { class: 'btn ghost', type: 'button', onclick: async () => {
+      if (!Platform.store.available) { toast('数据库不可用'); return; }
+      btn.disabled = true; status.textContent = '正在读取全部数据……';
+      try {
+        const data = await collectAll();
+        status.textContent = '共 ' + Object.values(data.collections).reduce((a, x) => a + x.length, 0) + ' 个文档，等你确认保存……';
+        const r = await Platform.blobs.saveFile('口语特训-数据-' + localDate() + '.json', JSON.stringify(data, null, 1));
+        status.textContent = r && r.status === 'delivered' ? '已交出。' : '已保存。';
+      } catch (e) {
+        status.textContent = e.code === 'declined' ? '已取消。' : '导出失败：' + (e.code || e.message || e);
+      } finally { btn.disabled = false; }
+    } }, '导出全部数据（JSON）');
+    put(clear(els.data),
+      h('h2', { class: 'section-title' }, '数据'),
+      h('p', { class: 'small muted' }, '把所有记录导出成一个 JSON 文件：既是备份，也是以后换成独立 App 时的数据来源。录音文件本身不在里面。'),
+      Platform.blobs.canSave ? h('div', null, btn) : h('p', { class: 'small muted' }, '这个视图不能保存文件。'),
+      status);
+  }
+
+  async function collectAll() {
+    const st = Platform.store;
+    const byField = { turns: 'createdAt', recordings: 'createdAt', sessions: 'startedAt', vocab: 'createdAt', probe: 'ts' };
+    const plain = ['nodes', 'bank', 'personas', 'config'];
+    const out = { app: '口语特训', version: APP_VERSION, exportedAt: nowIso(), artifactUrl: S.config.artifactUrl || '', collections: {} };
+    for (const c of plain) out.collections[c] = await st.query(c, { limit: 1000 });
+    for (const [c, f] of Object.entries(byField)) out.collections[c] = await st.queryAll(c, f);
+    const me = await st.get('me/profile');
+    out.collections.me = me ? [me] : [];
+    return out;
+  }
+
+  /* ---------------- 关于 ---------------- */
+  function renderAbout() {
+    const url = S.config.artifactUrl || '';
+    const code = h('code', null, url || '（未设置）');
+    put(clear(els.about),
+      h('h2', { class: 'section-title' }, '关于'),
+      h('dl', { class: 'kv' },
+        h('dt', null, '版本'), h('dd', { class: 'mono' }, APP_VERSION),
+        h('dt', null, '文档数'), h('dd', null, [S.nodes.length + ' 节点', S.turns.length + ' 回答', S.recordings.length + ' 录音', S.sessions.length + ' 场次', S.vocab.length + ' 词'].join(' · ')),
+        h('dt', null, '行程'), h('dd', null, S.config.tripStart ? S.config.tripStart + ' 至 ' + (S.config.tripEnd || '') : '–'),
+        h('dt', null, '阈值'), h('dd', { class: 'mono' }, '停顿 ≥ ' + S.config.pauseSec + 's · 长停顿 ≥ ' + S.config.longPauseSec + 's · 低置信 < ' + S.config.lowConf + ' · 最长 ' + S.config.maxRecSec + 's')),
+      url ? h('div', { class: 'copy-line' }, code, h('button', { class: 'btn small ghost', type: 'button', onclick: () => copyText(url, code) }, '复制地址')) : null,
+      h('p', { class: 'small muted' }, '录音分析脚本和流程随页面发布在 tools/analyze.py 和 tools/RUNBOOK.md。'));
+  }
+
+  return { init, show, hide };
+})();
+
+/* ---- main.js ---- */
+/* =====================================================================
+ * 入口：底部导航、顶栏（倒计时、本次练习）、结束本次练习的小结
+ * ===================================================================== */
+
+const App = (() => {
+  const TABS = [
+    { id: 'practice', label: '练习', icon: 'talk' },
+    { id: 'record', label: '录音', icon: 'mic' },
+    { id: 'dash', label: '看板', icon: 'chart' },
+    { id: 'pocket', label: '口袋本', icon: 'book' },
+  ];
+  const MODS = { practice: Practice, record: Record, dash: Dash, pocket: Pocket, settings: Settings };
+  const tabBtns = {};
+  let current = null, prev = 'practice';
+
+  function buildTabs() {
+    const bar = $('#tabs');
+    for (const t of TABS) {
+      const badge = h('span', { class: 'badge', hidden: true });
+      const b = h('button', { class: 'tab', role: 'tab', type: 'button', 'aria-selected': 'false', onclick: () => go(t.id) }, icon(t.icon), h('span', null, t.label), badge);
+      b._badge = badge;
+      tabBtns[t.id] = b;
+      put(bar, b);
+    }
+  }
+
+  function go(id, anchor) {
+    if (!MODS[id]) id = 'practice';
+    if (current && current !== id) {
+      MODS[current].hide && MODS[current].hide();
+      if (current !== 'settings') prev = current;
+    }
+    for (const k of Object.keys(MODS)) $('#view-' + k).hidden = k !== id;
+    for (const [k, b] of Object.entries(tabBtns)) b.setAttribute('aria-selected', String(k === id));
+    const changed = current !== id;
+    current = id;
+    if (id !== 'settings') ls.set('tab', id);
+    MODS[id].show(anchor);
+    if (changed && id !== 'practice' && id !== 'settings') window.scrollTo(0, 0);
+  }
+  function back() { go(prev || 'practice'); }
+
+  function renderCountdown() {
+    const el = $('#countdown');
+    const d = daysUntil(S.config.tripStart), e = daysUntil(S.config.tripEnd);
+    if (d == null) el.textContent = '';
+    else if (d > 0) el.textContent = '距入境申根 ' + d + ' 天';
+    else if (e != null && e >= 0) el.textContent = '旅途第 ' + (1 - d) + ' 天';
+    else el.textContent = '';
+  }
+
+  function renderSession() {
+    const pill = $('#session-pill');
+    const id = Sessions.currentId;
+    if (!id) { pill.hidden = true; return; }
+    pill.hidden = false;
+    put(clear(pill), '本次 ', h('b', null, String(Data.sessionTurns(id).length)), ' 条 · 结束');
+  }
+
+  function renderBadge() {
+    const b = tabBtns.record && tabBtns.record._badge;
+    if (!b) return;
+    const n = S.recordings.filter(r => r.status === 'pending').length;
+    b.hidden = !n;
+    b.textContent = String(n);
+  }
+
+  function endSession() {
+    const id = Sessions.currentId;
+    if (!id) return;
+    const n = Data.sessionTurns(id).length;
+    openSheet((sheet, close) => {
+      const body = h('div', { class: 'stack' });
+      const confirm = () => {
+        put(clear(body), h('p', { class: 'status row' }, h('span', { class: 'spin', 'aria-hidden': 'true' }), ' 正在统计、生成口诀…… Thinking…'));
+        Sessions.end().then(
+          res => showSummary(body, res, close),
+          e => put(clear(body), h('div', { class: 'notice bad' }, '没能结束：' + ((e && e.code) || e)), h('button', { class: 'btn ghost', type: 'button', onclick: close }, '关闭')));
+      };
+      put(sheet, h('h2', { class: 'section-title' }, '结束本次练习'), body);
+      put(body,
+        h('p', null, '本次练习（' + id + '）共 ' + n + ' 条回答。结束后生成小结：前三类错误、次数、例句和一句口诀。'),
+        h('div', { class: 'row' },
+          h('button', { class: 'btn', type: 'button', onclick: confirm }, '结束并生成小结'),
+          h('button', { class: 'btn ghost', type: 'button', onclick: close }, '继续练')));
+    });
+  }
+
+  function showSummary(body, res, close) {
+    const s = res.summary;
+    put(clear(body),
+      s.top.length ? h('div', { class: 'top-errs' }, s.top.map((t, i) => h('div', { class: 'top-err' },
+        h('span', { class: 'rank' }, String(i + 1)),
+        h('div', null, h('span', { class: 't' }, ERROR_MAP[t.type] ? ERROR_MAP[t.type].name : t.type), h('span', { class: 'small muted' }, ' ×' + t.count)),
+        h('span'),
+        h('p', { class: 'ex' }, t.example_orig ? h('s', null, t.example_orig) : null, t.example_orig ? ' → ' : '', t.example_fix))))
+        : h('p', null, s.nTurns ? '这次没有发现错误。' : '这次没有作答，已结束。'),
+      s.rule_zh ? h('p', { class: 'notice info' }, h('b', null, '口诀：'), s.rule_zh) : null,
+      arr(s.next_focus_zh).length ? h('p', null, '下次重点：' + s.next_focus_zh.join('；')) : null,
+      res.llmError ? h('p', { class: 'small muted' }, '口诀没生成：' + sampleErrZh(res.llmError.code)) : null,
+      h('button', { class: 'btn block', type: 'button', onclick: close }, '好'));
+  }
+
+  async function start() {
+    buildTabs();
+    $('#settings-btn').addEventListener('click', () => go('settings'));
+    $('#session-pill').addEventListener('click', endSession);
+    Practice.init($('#view-practice'));
+    Record.init($('#view-record'));
+    Dash.init($('#view-dash'));
+    Pocket.init($('#view-pocket'));
+    Settings.init($('#view-settings'));
+    Bus.on('config', renderCountdown);
+    Bus.on('session', renderSession);
+    Bus.on('recordings', renderBadge);
+    put(clear($('#view-practice')), h('p', { class: 'muted' }, '正在连接 Claude 查看器……'));
+    await Platform.ready;
+    Data.start();
+    const hash = (location.hash || '').slice(1);
+    const initial = hash === 'probe' ? 'settings' : MODS[hash] ? hash : ls.get('tab', 'practice');
+    go(initial, hash === 'probe' ? 'probe' : undefined);
+  }
+
+  return { start, go, back, endSession };
+})();
+
+App.start();
+
+</script>
