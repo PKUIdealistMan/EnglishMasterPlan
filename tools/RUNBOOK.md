@@ -5,7 +5,9 @@
 - Artifact：https://claude.ai/artifact/84cSQjgc69s1EM4Epd65Qv
 - 数据库集合：`recordings`（录音）、`audio`（发音索引）、`config/app`（阈值、地址、可选的 `voices`）、`probe`（M0 诊断结果）
 
-**触发条件**：用户说"分析"或"生成发音"，或者发来页面上复制的那句话：`请处理口语特训的新内容（分析录音、生成发音）：<artifact 地址>`（旧版是`请分析口语特训的新录音：…`）。
+**触发条件**：用户说"分析"或"生成发音"，或者发来页面上复制的那句话：`请处理口语特训的新内容（分析录音、生成发音）：<artifact 地址>`（后面跟着"先用 Artifact read 读这个 artifact 的 tools/RUNBOOK.md"；旧版是`请分析口语特训的新录音：…`）。
+
+**在哪个会话里做**：任何带 Artifact / ArtifactData 工具、能跑 Python 和访问 GitHub Releases 的会话（Claude Code 云端会话、Cowork）。新会话要先做第 1 步和"生成发音"的准备（约 5 分钟，下载约 800 MB 模型）。
 
 收到这句话就把两件事都做：第 1–6 步分析待分析的录音，然后做文末"生成发音"。没有待分析的录音就只做后者。
 

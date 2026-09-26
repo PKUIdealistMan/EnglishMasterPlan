@@ -2779,7 +2779,7 @@ const Record = (() => {
     const analyzing = S.recordings.filter(r => r.status === 'analyzing').length;
     const missing = Data.audioMissing();
     const url = S.config.artifactUrl;
-    const text = '请处理口语特训的新内容（分析录音、生成发音）：' + (url || '（这个页面的地址）');
+    const text = '请处理口语特训的新内容（分析录音、生成发音）：' + (url || '（这个页面的地址）') + ' 先用 Artifact read 读这个 artifact 的 tools/RUNBOOK.md，按里面的步骤做。';
     const code = h('code', null, text);
     const todo = [pend ? pend + ' 段录音待分析' : null, analyzing ? analyzing + ' 段正在分析' : null, missing ? missing + ' 句还没有真人发音' : null].filter(Boolean);
     return h('div', { class: 'notice info banner' },
