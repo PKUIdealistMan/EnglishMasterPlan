@@ -7,7 +7,7 @@ const Pocket = (() => {
 
   function init(el) {
     root = el;
-    ['bank', 'vocab', 'nodes', 'turns', 'sessions', 'recordings'].forEach(k => Bus.on(k, () => { if (visible && !editing) render(); }));
+    ['bank', 'vocab', 'nodes', 'turns', 'sessions', 'recordings', 'audio'].forEach(k => Bus.on(k, () => { if (visible && !editing) render(); }));
   }
   function show() { visible = true; render(); }
   function hide() { visible = false; }
@@ -31,6 +31,7 @@ const Pocket = (() => {
         h('h2', { class: 'section-title' }, '口袋本'),
         Platform.blobs.canSave ? h('button', { class: 'btn', type: 'button', onclick: exportPocket }, '导出离线版') : h('span', { class: 'small muted' }, '这个视图不能导出文件')),
       h('p', { class: 'small muted' }, '导出的是一个 HTML 文件，存在手机里，没网也能打开。出发前（10/16）记得导出一次最新的。'),
+      Data.audioMissing() ? Record.taskBanner() : null,
 
       h('section', { class: 'card stack' },
         h('h3', { class: 'section-title' }, '我的前三类错误'),

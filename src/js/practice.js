@@ -27,6 +27,9 @@ function cleanFeedback(x) {
     asked_back: x.asked_back === true,
     vocab: arr(x.vocab).map(v => (v && typeof v === 'object' ? { zh: str(v.zh), en: str(v.en), example: str(v.example) } : null)).filter(v => v && v.zh && v.en).slice(0, 8),
     followup: str(x.followup),
+    understood: str(x.understood) || null,
+    tip_zh: str(x.tip_zh) || null,
+    ask_back_en: str(x.ask_back_en) || null,
   };
 }
 const sortErrors = errs => arr(errs).slice().sort((a, b) => (a.sev === 'high' ? 0 : 1) - (b.sev === 'high' ? 0 : 1));
@@ -61,28 +64,41 @@ function errorsBlock(errors) {
   return h('div', { class: 'fb-row' }, lbl, box, h('span'));
 }
 function fbRow(label, text, cls) {
-  return h('div', { class: 'fb-row ' + (cls || '') }, h('span', { class: 'lbl' }, label), h('p', { class: 'en' }, text), sayBtn(text));
+  return h('div', { class: 'fb-row ' + (cls || '') }, h('span', { class: 'lbl' }, label), h('p', { class: 'en' }, text), sayBtn(text, { always: cls === 'natural' || cls === 'corrected' }));
 }
 function bubbleThem(text, who) {
   return h('div', { class: 'bubble them' }, who ? h('span', { class: 'who' }, who) : null, h('div', { class: 'q-line' }, h('p', { class: 'en' }, text), sayBtn(text)));
 }
 function bubbleMe(text) { return h('div', { class: 'bubble me' }, h('p', { class: 'en' }, text)); }
 
+/* 对方是谁：社交节点是一位旅伴（角色），办事节点是工作人员 */
+function partnerLabel(node, partnerId) {
+  if (node && node.track === 'service') return '工作人员';
+  const p = partnerId && S.personas.find(x => x.id === partnerId);
+  return p ? p.name + ' · 旅伴' : '旅伴';
+}
+
 function turnCard(t) {
   const node = S.nodeMap[t.nodeId];
-  const who = node && node.track === 'service' ? '工作人员' : '旅伴';
-  const askBack = node && node.track === 'social' && t.mode === 'drill' && !t.asked_back
-    ? h('p', { class: 'askback' }, '没有反问。结尾加一句，比如 ', h('span', { class: 'en-s' }, 'What about you?'))
+  const who = partnerLabel(node, t.partner || t.persona);
+  const heard = t.understood && normText(t.understood) !== normText(t.raw)
+    ? h('div', { class: 'fb-row heard' }, h('span', { class: 'lbl' }, '理解为'), h('p', { class: 'en-s' }, t.understood), h('span'))
+    : null;
+  const coach = t.tip_zh || t.ask_back_en
+    ? h('div', { class: 'coach' },
+        t.tip_zh ? h('p', null, t.tip_zh) : null,
+        t.ask_back_en ? h('div', { class: 'q-line' }, h('span', { class: 'small muted' }, '可以反问'), h('p', { class: 'en-s', style: 'flex:1' }, t.ask_back_en), sayBtn(t.ask_back_en, { always: true })) : null)
     : null;
   const vocab = arr(t.vocab).length ? h('p', { class: 'fb-extra' }, '词汇缺口：', t.vocab.map(v => v.zh + ' → ' + v.en).join('；')) : null;
   return h('article', { class: 'turn' },
     t.q ? bubbleThem(t.q, who) : null,
     bubbleMe(t.raw),
     h('div', { class: 'card fb' },
+      heard,
       fbRow('改后', t.corrected, 'corrected'),
       errorsBlock(t.errors),
-      t.natural ? fbRow('更自然', t.natural) : null,
-      askBack, vocab));
+      t.natural ? fbRow('更自然', t.natural, 'natural') : null,
+      coach, vocab));
 }
 
 function llmNotice() {
@@ -155,7 +171,11 @@ const Practice = (() => {
     });
     Bus.on('turns', () => { if (cur) refreshHead(); else renderList(); });
     Platform.llm.onBlocked(() => { if (cur) openNode(cur.id, true); });
-    Bus.on('personas', () => { if (cur && !cur.convo && !cur.busy) renderConvo(); });
+    Bus.on('personas', () => {
+      if (!cur) return;
+      if (cur.els.qWho) cur.els.qWho.textContent = partnerLabel(cur.node, partnerId(cur.node));
+      if (!cur.convo && !cur.busy) renderConvo();
+    });
   }
 
   function autoOpen() {
@@ -305,11 +325,22 @@ const Practice = (() => {
     els.reveal = h('button', { class: 'link-btn', type: 'button', onclick: () => { els.qText.classList.remove('hidden-text'); els.reveal.hidden = true; } }, '显示文字');
     const variants = [node.main_q, ...arr(node.variants)].filter(Boolean);
     const lf = h('input', { type: 'checkbox', id: 'listen-first', checked: !!ls.get('listenFirst', false), onchange: e => ls.set('listenFirst', e.target.checked) });
+    els.qWho = h('span', { class: 'who' }, partnerLabel(node, partnerId(node)));
+    const swap = node.track === 'social' ? h('button', { class: 'link-btn', type: 'button', onclick: () => {
+      if (cur.busy) return;
+      const pool = DRILL_PARTNERS.filter(x => S.personas.some(p => p.id === x) && x !== ls.get('partner:' + node.id));
+      if (!pool.length) return;
+      ls.set('partner:' + node.id, pool[Math.floor(Math.random() * pool.length)]);
+      els.qWho.textContent = partnerLabel(node, partnerId(node));
+      setQ(node.main_q, true);
+      toast('换了一位旅伴：' + partnerLabel(node, partnerId(node)).split(' · ')[0]);
+    } }, '换个旅伴') : null;
     els.qBubble = h('div', { class: 'bubble them' },
-      h('span', { class: 'who' }, node.track === 'service' ? '工作人员' : '旅伴'),
-      h('div', { class: 'q-line' }, els.qText, sayBtn(() => cur.q)),
+      els.qWho,
+      h('div', { class: 'q-line' }, els.qText, els.qSay = sayBtn(() => cur.q)),
       h('div', { class: 'q-actions' }, els.reveal,
         variants.length > 1 ? h('button', { class: 'link-btn', type: 'button', onclick: () => { cur.qIdx = (cur.qIdx + 1) % variants.length; setQ(variants[cur.qIdx], true); } }, '换个问法') : null,
+        swap,
         h('label', { class: 'check tts-only', for: 'listen-first' }, lf, '先听后看')));
 
     const pane2 = [els.thread, els.qBubble];
@@ -337,10 +368,12 @@ const Practice = (() => {
     cur.q = q || cur.node.main_q || '';
     const els = cur.els;
     els.qText.textContent = cur.q;
-    const hide = fresh && ls.get('listenFirst', false) && TTS.available;
+    els.qSay.setAttribute('data-say', normWS(cur.q));
+    els.qSay.classList.toggle('real', Say.has(cur.q));
+    const hide = fresh && ls.get('listenFirst', false) && (TTS.available || Say.has(cur.q));
     els.qText.classList.toggle('hidden-text', !!hide);
     els.reveal.hidden = !hide;
-    if (hide) TTS.speak(cur.q);
+    if (hide) Say.play(cur.q, { quiet: true });
   }
 
   function setBusy(b, msg) {
@@ -364,16 +397,36 @@ const Practice = (() => {
     }
   }
 
-  function drillPrompt(node, q, raw, sid) {
+  /* 社交节点的旅伴：每个节点记住一位，点"换人"再换 */
+  function partnerId(node) {
+    if (node.track !== 'social') return null;
+    let id = ls.get('partner:' + node.id);
+    const pool = DRILL_PARTNERS.filter(x => S.personas.some(p => p.id === x));
+    if (!id || (pool.length && !pool.includes(id))) {
+      id = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+      if (id) ls.set('partner:' + node.id, id);
+    }
+    return id;
+  }
+  function partnerDesc(node, pid) {
+    if (node.track === 'service') return DRILL_STAFF;
+    const p = pid && S.personas.find(x => x.id === pid);
+    if (!p) return 'a friendly fellow pilgrim on the Camino';
+    return p.name + ', ' + p.bio + '. You meet the learner on the Camino.' + (p.native ? '' : ' ' + NON_NATIVE_STYLE);
+  }
+  function drillPrompt(node, q, raw, sid, pid) {
     const facts = Data.profileFacts();
-    const hist = sid ? Data.sessionTurns(sid).filter(t => t.nodeId === node.id && t.mode === 'drill').slice(-6) : [];
+    const done = sid ? Data.sessionTurns(sid).filter(t => t.nodeId === node.id && t.mode === 'drill') : [];
+    const hist = done.slice(-10);
+    const tips = done.map(t => t.tip_zh).filter(Boolean);
     return fill(PROMPTS.drill, {
       title_zh: node.title_zh, main_q: node.main_q || '',
+      partner: partnerDesc(node, pid),
       profile_facts: facts.length ? facts.map(f => '- ' + f).join('\n') : '(none yet)',
-      history: hist.length ? hist.map(t => 'Q: ' + t.q + '\nA: ' + t.raw).join('\n') : '(none)',
+      history: hist.length ? hist.map(t => 'P: ' + t.q + '\nL: ' + (t.understood || t.raw)).join('\n') : '(none yet)',
       q, raw, rules: RULES_1_TO_3,
-      role: DRILL_ROLE[node.track] || DRILL_ROLE.social,
       followups: arr(node.followups).length ? node.followups.join(' / ') : '(none)',
+      tips_given: tips.length ? tips.map(x => '"' + x + '"').join('; ') : '(none)',
     });
   }
 
@@ -391,12 +444,14 @@ const Practice = (() => {
     let fb;
     try {
       const sid = await Sessions.ensure();
-      const res = await Platform.llm.json(drillPrompt(node, c.q, raw, sid), { tier: 'default', cache: false, signal: ctl.signal });
+      const pid = partnerId(node);
+      const res = await Platform.llm.json(drillPrompt(node, c.q, raw, sid, pid), { tier: 'default', cache: false, signal: ctl.signal });
       fb = cleanFeedback(res);
       const turn = {
         nodeId: node.id, sessionId: sid, mode: 'drill', q: c.q, raw,
         corrected: fb.corrected, natural: fb.natural, errors: fb.errors, asked_back: fb.asked_back,
         n_words: countWords(raw), vocab: fb.vocab, followup: fb.followup || null, persona: null, createdAt: nowIso(),
+        understood: fb.understood, tip_zh: fb.tip_zh, ask_back_en: fb.ask_back_en, partner: pid,
       };
       const id = uid('t');
       if (cur !== c) return;

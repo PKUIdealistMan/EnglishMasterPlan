@@ -3,7 +3,7 @@
 旅行英语口语特训工具（spec v1.1 的实现）。一个发布在 claude.ai 上的 Artifact 页面，外加录音分析脚本。
 
 - **页面**：https://claude.ai/artifact/84cSQjgc69s1EM4Epd65Qv （M0 探针和正式页面同一地址，db 和录音跨版本保留）
-- **附属文件**（随页面发布，任何会话可用 `Artifact read` + `path` 取回）：`tools/analyze.py`、`tools/RUNBOOK.md`
+- **附属文件**（随页面发布，任何会话可用 `Artifact read` + `path` 取回）：`tools/analyze.py`、`tools/speak.py`、`tools/RUNBOOK.md`
 - 诊断入口：页面右上角"设置 → 诊断"，或打开 `…/84cSQjgc69s1EM4Epd65Qv#probe`
 
 ## 目录
@@ -26,7 +26,8 @@
 | `dist/kouyu.html` | 构建产物，也就是发布的页面 |
 | `seed/seed.json` | 种子数据（附录 A）：16 个节点、7 个角色、`config/app`、`config/profileDraft` |
 | `tools/analyze.py` | 录音分析脚本（附录 B，已在 Claude Code 云端容器里跑通） |
-| `tools/RUNBOOK.md` | 录音分析流程（spec §10） |
+| `tools/speak.py` | 真人感发音：用 Kokoro v1.0 生成音轨，写 `audio/<sprite>` 索引 |
+| `tools/RUNBOOK.md` | 录音分析流程（spec §10）和生成发音流程 |
 
 ## 构建与发布
 
@@ -37,7 +38,7 @@ node --check dist/kouyu.js  # 语法检查
 ```
 
 发布（在有 Artifact 工具的会话里）：`Artifact publish`，`file_path: dist/kouyu.html`，`url` 填上面的地址，`files` 带上
-`tools/analyze.py`（`contentType: text/plain`）和 `tools/RUNBOOK.md`（`text/markdown`）。capabilities 已存为
+`tools/analyze.py`、`tools/speak.py`（`contentType: text/plain`）和 `tools/RUNBOOK.md`（`text/markdown`）。capabilities 已存为
 `{db, assets, sample, downloads}`，重新发布时省略即可沿用。
 
 种子数据用 ArtifactData `batch` 写入（每个文档一个 `set`）。已经写过一次；再写会覆盖节点的 `status`。
@@ -53,3 +54,13 @@ node --check dist/kouyu.js  # 语法检查
 - `recordings` 另有 `sizeBytes`、`fileName`、`audioDeletedAt`、`error`；`sessions.summary` 另有 `nTurns`、`nWords`。
 - `analyze.py` 多读一个环境变量 `FFMPEG`（容器里没有 ffmpeg 时用 imageio-ffmpeg 的二进制）。
 - 每个 artifact 的 db 上限 5000 个文档。每条回答一个 `turns` 文档，按每天 30 条算到 11 月也不到 2000，够用。
+
+## v1.1 改动（2026-09-26，按试用反馈）
+
+- **语音输入不准**：提示词加了 `ASR_NOTE`，先还原输入法听错的词（Camino → communal、walking → working 等），
+  输出 `understood`；听错不再算成学习者的错误。反馈卡在原话和理解不一样时显示"理解为"。
+- **对方只会追问**：逐句反馈里"对方"现在是一位具体的旅伴（`DRILL_PARTNERS`，每个节点记住一位，可"换个旅伴"），
+  会先回答学习者的反问、分享自己的经历、不重复问过的问题，不是每轮都提问。实战对话的提示词同样调整。
+- **提示单一**：去掉固定的"没有反问，加 What about you"，改为 Claude 按需给的 `tip_zh`（不重复）和贴合当下的 `ask_back_en`。
+- **真人感发音**：Claude 会话用 Kokoro 生成音频（`tools/speak.py`），存为资产 + `audio/*` 索引；页面实心播放按钮播它，
+  可放慢且不变调；没有时退回手机朗读。`turns` 新增字段 `understood`、`tip_zh`、`ask_back_en`、`partner`。

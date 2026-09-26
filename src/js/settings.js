@@ -76,9 +76,10 @@ const Settings = (() => {
       h('label', { class: 'check', for: 'pref-listen-first' },
         h('input', { type: 'checkbox', id: 'pref-listen-first', checked: !!ls.get('listenFirst', false), onchange: e => ls.set('listenFirst', e.target.checked) }),
         '先听后看：新问题先朗读，点一下才显示文字'),
-      voices.length ? field('朗读语音', select('pref-voice', TTS.voice ? TTS.voice.voiceURI : '', voices.map(v => [v.voiceURI, v.name + '（' + v.lang + '）']), v => TTS.setVoice(v))) :
+      voices.length ? field('手机朗读语音', select('pref-voice', TTS.voice ? TTS.voice.voiceURI : '', voices.map(v => [v.voiceURI, v.name + '（' + v.lang + '）']), v => TTS.setVoice(v))) :
         h('p', { class: 'small muted' }, '这台设备没有英文朗读语音，朗读按钮已隐藏。'),
-      voices.length ? field('朗读语速', select('pref-rate', String(ls.get('ttsRate', 0.95)), [['0.95', '正常'], ['0.8', '慢一点'], ['0.65', '很慢']], v => ls.set('ttsRate', Number(v)))) : null,
+      field('发音语速', select('pref-rate', String(ls.get('ttsRate', 0.95)), [['0.95', '正常'], ['0.8', '慢一点'], ['0.65', '很慢']], v => ls.set('ttsRate', Number(v))),
+        '实心的播放按钮是 Claude 生成的真人感发音（Kokoro），空心的是手机自带朗读。放慢时音调不变。'),
       field('说一次就够（页面内语音识别）', select('pref-voice-mode', Voice.mode(), [['auto', '自动：诊断第 7 项通过才显示'], ['on', '总是显示麦克风按钮'], ['off', '关闭']], v => { ls.set('voiceMode', v); ls.del('voiceBlocked'); }),
         !hasSR ? '这个浏览器没有语音识别 API（比如平板没有谷歌服务），会自动隐藏。' : '诊断结果：第 7 项 ' + (pf.asr ? (pf.asr === 'pass' ? '通过' : '失败') : '未测') + '，第 8 项 ' + (pf.asrWithRec ? (pf.asrWithRec === 'pass' ? '通过' : '失败') : '未测') + '。改动后重新打开节点生效。'),
       field('录音方式', select('pref-rec-route', ls.get('recRoute') || 'auto', [['auto', '自动'], ['page', '页面里录'], ['file', '系统录音机或选文件']], v => { if (v === 'auto') ls.del('recRoute'); else ls.set('recRoute', v); ls.del('micBlocked'); })));

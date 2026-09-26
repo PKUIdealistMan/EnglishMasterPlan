@@ -9,7 +9,7 @@ const S = {
   turns: [],          // 按时间正序
   recordings: [],     // 按时间倒序
   sessions: [],       // 按开始时间倒序
-  bank: {}, vocab: [], personas: [],
+  bank: {}, vocab: [], personas: [], audioDocs: [],
   profile: null, profileDraft: null,
   config: Object.assign({}, DEFAULT_CONFIG),
   loaded: {},
@@ -43,6 +43,7 @@ const Data = (() => {
     st.watchDoc('me/profile', d => { S.profile = d; loaded('profile'); }, onErr('profile'));
     st.watchDoc('config/app', d => { S.config = Object.assign({}, DEFAULT_CONFIG, d || {}); loaded('config'); }, onErr('config'));
     st.watchDoc('config/profileDraft', d => { S.profileDraft = d; loaded('profileDraft'); }, onErr('profileDraft'));
+    st.watch('audio', { limit: 500 }, docs => { S.audioDocs = docs; Say.setDocs(docs); loaded('audio'); }, onErr('audio'));
   }
 
   /* ---------- 派生数据 ---------- */
@@ -73,7 +74,18 @@ const Data = (() => {
 
   const sessionTurns = id => S.turns.filter(t => t.sessionId === id);
 
-  return { start, sortNodes, profileFacts, turnsOfNode, answerUnits, tallyErrors, sessionTurns };
+  /* 学习者要模仿的句子里，还没有真人感发音的（tools/speak.py 生成的是它的超集） */
+  function audioMissing() {
+    if (!S.loaded.audio) return 0;
+    const want = new Set();
+    for (const t of S.turns) { [t.natural || t.corrected, t.ask_back_en].forEach(x => { if (x) want.add(normWS(x)); }); }
+    for (const b of Object.values(S.bank)) { if (b.best_en) want.add(normWS(b.best_en)); arr(b.chunks).forEach(c => c && c.en && want.add(normWS(c.en))); }
+    let n = 0;
+    want.forEach(x => { if (!Say.has(x)) n++; });
+    return n;
+  }
+
+  return { start, sortNodes, profileFacts, turnsOfNode, answerUnits, tallyErrors, sessionTurns, audioMissing };
 })();
 
 /* =====================================================================

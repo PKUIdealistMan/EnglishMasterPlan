@@ -1,11 +1,13 @@
 # 口语特训 · 录音分析 Runbook
 
-在 Claude 会话中执行（Cowork 或 Claude Code 云端会话都可以）。本文件随页面发布在 artifact 的 `tools/RUNBOOK.md`，脚本在 `tools/analyze.py`。
+在 Claude 会话中执行（Cowork 或 Claude Code 云端会话都可以）。本文件随页面发布在 artifact 的 `tools/RUNBOOK.md`，脚本在 `tools/analyze.py`（录音分析）和 `tools/speak.py`（真人感发音）。
 
 - Artifact：https://claude.ai/artifact/84cSQjgc69s1EM4Epd65Qv
-- 数据库集合：`recordings`（录音）、`config/app`（阈值与地址）、`probe`（M0 诊断结果）
+- 数据库集合：`recordings`（录音）、`audio`（发音索引）、`config/app`（阈值、地址、可选的 `voices`）、`probe`（M0 诊断结果）
 
-**触发条件**：用户说"分析"，或者发来页面"录音"栏里复制的那句话：`请分析口语特训的新录音：<artifact 地址>`。
+**触发条件**：用户说"分析"或"生成发音"，或者发来页面上复制的那句话：`请处理口语特训的新内容（分析录音、生成发音）：<artifact 地址>`（旧版是`请分析口语特训的新录音：…`）。
+
+收到这句话就把两件事都做：第 1–6 步分析待分析的录音，然后做文末"生成发音"。没有待分析的录音就只做后者。
 
 ---
 
@@ -126,3 +128,49 @@ cd "$SPEECH_DIR" && python3 analyze.py rec1.webm rec2.m4a rec3.txt > out.json
 1. 把附件存到 `$SPEECH_DIR`，跑 `analyze.py`。
 2. 按第 4 步解读。
 3. 用 ArtifactData `set` 新建 `recordings/<r-时间戳>`：`{nodeId: null, prompt: "<用户说的题目或 null>", fixedPrompt: null, turnId: null, assetId: null, uploadType: null, recMime: "<附件类型>", durationSec, local: null, status: "analyzed", analysis, createdAt, analyzedAt}`。页面的录音列表和看板会直接显示。
+
+---
+
+## 生成发音（真人感发音，Kokoro）
+
+页面上实心的播放按钮播放这里生成的音频；没有的句子退回手机自带朗读。页面的横幅会显示"N 句还没有真人发音"。
+
+**原理**：`speak.py` 把多句话拼成一个 mp4（AAC）"音轨"，一次上传一个资产；`audio/<spriteId>` 文档记录
+`{assetId, createdAt, items: [{k, t, s, d, v, r}]}`（key、原文、起点秒、时长秒、声音、角色）。key 是规范化文本的
+FNV-1a 32 位哈希，页面 `audioKey()` 用同一算法。
+
+**1. 准备**（和录音分析共用 sherpa-onnx；模型约 330 MB）
+
+```bash
+pip install --break-system-packages sherpa-onnx==1.13.8 soundfile onnx
+cd "$SPEECH_DIR"
+curl -L --retry 2 -o kokoro.tar.bz2 \
+  https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_0.tar.bz2
+file kokoro.tar.bz2   # 必须是 bzip2
+tar xjf kokoro.tar.bz2 && rm kokoro.tar.bz2
+export KOKORO_DIR="$SPEECH_DIR/kokoro-multi-lang-v1_0"
+```
+
+用 `Artifact read`（`path: "tools/speak.py"`）取回脚本。没有 ffmpeg 时同上设置 `FFMPEG`。
+
+**2. 导出数据**：ArtifactData `list`，每个集合都带 `out_dir: "$SPEECH_DIR/dump"`：`nodes`、`turns`（limit 1000）、`bank`、`audio`、`config`。
+
+**3. 算出还缺哪些句子，生成音轨**
+
+```bash
+python3 speak.py todo dump > todo.json          # stderr 打印"N sentences need audio"；N 为 0 就结束
+python3 speak.py synth todo.json out            # 约 1 秒/句（4 线程 CPU）
+```
+
+**4. 上传**：`Artifact read` 不能上传，要用 `Artifact publish`：`url` = artifact 地址，`asset: true`，
+`file_paths` = `out/*.mp4`（一次最多 25 个；文件必须在工作目录里，先复制进去，比如 `build/audio/`）。
+结果里每个文件有一个 id，写成 `ids.json`：`{"<文件名>.mp4": "<id>", ...}`。
+
+**5. 写索引**：`python3 speak.py docs out/manifest.json ids.json docs` 打印 ArtifactData `batch` 的 `writes` 数组，原样用它写入。
+
+**声音**：默认"我"（更自然、改后、口袋本、要说的话）= `af_heart`，"对方" = `am_michael`，工作人员 = `bm_george`，
+旅伴角色各有一个（`speak.py` 里的 `VOICES`）。用户想换，就在 `config/app` 里写 `voices: {"me": "am_michael", ...}`，
+可选名单见模型元数据 `speaker_names`（英语：`af_*` `am_*` 美式，`bf_*` `bm_*` 英式）。已经生成的不会自动重做：要重做就删掉
+对应的 `audio/*` 文档（和资产），再跑一遍。
+
+**配额**：资产上限 5000 个文件、1 GiB。一次运行通常只有 1 个"turns"音轨，几乎不占文件数。

@@ -188,7 +188,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   background: var(--surface); color: var(--accent); display: inline-grid; place-items: center; cursor: pointer; vertical-align: middle;
 }
 .say-btn svg { width: 17px; height: 17px; }
-.no-tts .say-btn, .no-tts .tts-only { display: none !important; }
+.say-btn.real { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.no-tts .say-btn:not(.real):not(.always), .no-tts .tts-only { display: none !important; }
 
 .chip {
   display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px;
@@ -298,6 +299,9 @@ details > summary::-webkit-details-marker { display: none; }
 .fb-row .lbl { font-size: 12px; font-weight: 700; color: var(--ink-3); padding-top: 4px; }
 .fb-row.corrected .en { color: var(--ink); }
 .fb-extra { font-size: 14px; color: var(--ink-2); }
+.fb-row.heard .en-s { color: var(--ink-2); font-size: 15px; }
+.coach { display: flex; flex-direction: column; gap: 6px; font-size: 14px; background: var(--accent-2); border-radius: 8px; padding: 8px 10px; }
+.coach .q-line { display: flex; align-items: center; gap: 8px; }
 .askback { font-size: 14px; color: var(--warn); background: var(--warn-bg); border-radius: 8px; padding: 6px 10px; }
 .askback .en-s { font-size: 15px; }
 
@@ -495,62 +499,91 @@ const FIXED_PROMPTS = {
 /* 实战对话里非母语角色固定用这句 style；母语者留空 */
 const NON_NATIVE_STYLE = 'Use simple words and short sentences, like a non-native speaker, but keep your grammar correct.';
 
-/* drill 模板第 6 条里 Claude 扮演的角色：社交节点是路上的旅伴，办事节点是工作人员 */
-const DRILL_ROLE = {
-  social: 'a friendly fellow traveler',
-  service: 'the staff member in this scenario (stay in that role)',
-};
+/* 逐句反馈里"对方"是谁：社交节点是一位旅伴（从角色里挑），办事节点是工作人员 */
+const DRILL_STAFF = 'the staff member in this scenario (albergue warden, waiter, ticket clerk, receptionist — whichever fits)';
+const DRILL_PARTNERS = ['linda', 'jonas', 'siobhan', 'jiwoo'];
+
+/* 输入法语音输入常把英文听错。页面内 Claude 先还原本意，听错不算学习者的错。 */
+const ASR_NOTE = `The learner speaks into a Chinese phone keyboard's voice input, which often mishears
+English: similar-sounding words (walking → "working"), split or merged words, stray Chinese
+characters, broken-off fragments, and trip words it doesn't know. Trip words it often mangles:
+Camino (heard as "communal", "commune", "come in", "terminal"), Santiago, Sarria, Portomarín,
+albergue, pilgrim, credencial, Buen Camino, Finisterre, Galicia. Work out what the learner most
+likely said before judging. A mishearing is never the learner's error.`;
 
 /* §8.1 任务 1–3，drill 和 debrief 共用 */
-const RULES_1_TO_3 = `1. corrected: the minimal-edit correct version. Keep the learner's own words and meaning;
-   fix only real errors. Ignore capitalization and punctuation.
-2. errors: every error, each {type, orig, fix, sev, asr_suspect, note_zh}.
+const RULES_1_TO_3 = `1. corrected: the minimal-edit correct version of what the learner said (mishearings repaired).
+   Keep the learner's own words and meaning; fix only real errors. Ignore capitalization and punctuation.
+2. errors: every error the learner actually made, each {type, orig, fix, sev, asr_suspect, note_zh}.
    type is one of: T-PAST, T-PERF, T-FUT, T-OTHER, BE-V, AGR, PLUR, ART, PREP, QWO, PRON,
    YESNO, WORD, STRUCT. sev is "high" if it could cause a misunderstanding, else "low".
    asr_suspect is true only for a missing or extra -s/-ed ending that speech-to-text could
    have produced. note_zh is one short Chinese sentence stating the rule.
-   Casual spoken forms (gonna, yeah, dropped subjects in replies) are not errors.
+   Casual spoken forms (gonna, yeah, dropped subjects in replies) and fillers (um, hmm,
+   repeated words) are not errors. Voice-input mishearings are not errors.
 3. natural: a more natural spoken version ONLY if clearly better than corrected; else null.
    Simple, friendly, everyday spoken English. Not fancy.`;
 
 const PROMPTS = {
-  /* §8.1 逐句反馈 */
-  drill: `You are an English speaking coach for a Chinese native speaker preparing for a trip
+  /* §8.1 逐句反馈（改版：还原语音识别、对方会回答反问、提示按需给） */
+  drill: `You play two roles for a Chinese native speaker practicing travel English for a trip
 (Camino de Santiago from Sarria, then Barcelona, Milan, Venice, Florence, Rome, Naples;
-Oct 17 – Nov 20). The learner answered by phone speech-to-text; the text is raw.
+Oct 17 – Nov 20): P, the person they are talking to, and a quiet speaking coach.
+P is {{partner}}.
 
-Scenario: {{title_zh}} — main question: "{{main_q}}"
-Facts the learner has confirmed about themself (keep follow-ups consistent with them):
+${ASR_NOTE}
+
+Scenario: {{title_zh}} — opening line: "{{main_q}}"
+Facts the learner (L) has confirmed about themself:
 {{profile_facts}}
-Conversation so far in this scenario (oldest first, at most 6 exchanges):
+Conversation so far (oldest first):
 {{history}}
 
-Question asked: "{{q}}"
-Learner's raw answer: "{{raw}}"
+P just said: "{{q}}"
+L's raw voice-input text: "{{raw}}"
 
 Tasks:
+0. understood: what L most likely said, with voice-input mishearings repaired but L's own
+   grammar and word choices kept exactly as spoken. Judge tasks 1–5 against this.
 {{rules}}
-4. asked_back: true if the answer ends by asking the other person something.
-5. vocab: Chinese words the learner used because they lacked the English,
-   each {zh, en, example}.
-6. followup: your next line as {{role}}. React briefly to what they
-   said, then ask ONE natural follow-up question (max 20 words). Draw on these if they
-   fit: {{followups}}
+4. asked_back: true if L asked P anything, anywhere in the answer.
+5. vocab: Chinese words L used because they lacked the English, each {zh, en, example}.
+6. followup: P's next line. 1–3 short spoken sentences (max 35 words) of everyday English,
+   the way a real person talks, not an interviewer:
+   - If L asked P something, answer it first with a concrete detail about yourself, consistent
+     with what P said earlier.
+   - React to the specific thing L said, not with a generic "That's great!". Sometimes share
+     a small experience or opinion of your own.
+   - Then either ask ONE question or say something L can respond to. Do not ask a question
+     every turn. Never repeat a question P already asked above. Use these only if they fit
+     and were not asked yet: {{followups}}
+   - If L said "pardon", "sorry?" or seemed lost, say your last line again more simply.
+7. tip_zh: usually null. One short Chinese coaching tip ONLY when there is something specific
+   and new to say about how L handled the conversation (a one-word answer, a missed chance to
+   ask back, answering a different question, or something done well worth repeating).
+   Never repeat an earlier tip: {{tips_given}}
+8. ask_back_en: if asking P something would have been natural here and L didn't, one short
+   question L could have asked that fits this exact moment; otherwise null. Avoid
+   "What about you?" unless it really is the best fit.
 
 Reply with only JSON:
-{"corrected":"…","errors":[],"natural":null,"asked_back":false,"vocab":[],"followup":"…"}`,
+{"understood":"…","corrected":"…","errors":[],"natural":null,"asked_back":false,"vocab":[],"followup":"…","tip_zh":null,"ask_back_en":null}`,
 
-  /* §8.2 实战对话（第一条 user 消息） */
+  /* §8.2 实战对话（第一条 user 消息；改版：像真人聊天，不是一味追问） */
   convo: `Role-play for speaking practice. You are {{name}}: {{bio}}. Setting: {{setting}}.
 Talk the way this person would in real life: 1–3 short spoken sentences per turn,
 everyday English. {{style}}
-React to what the learner says and keep the conversation going; ask a question most turns.
-Never correct the learner and never mention that this is practice. If you can't understand
-them, ask for clarification like a real person would.
+Be a real conversation partner, not an interviewer: react to what the learner actually said,
+answer their questions with concrete details about yourself, share small stories or opinions,
+and ask a question only some of the time. Never repeat a question you already asked.
+The learner's messages come from phone voice input that mishears words (e.g. "communal" for
+"Camino", "working" for "walking"); guess what they meant, and ask for clarification only if
+you really can't. Never correct the learner and never mention that this is practice.
 Start with a natural opening line.`,
 
   /* §8.3 对话讲评 */
   debrief: `Below is a role-play transcript between a learner (L) and {{name}} (P).
+${ASR_NOTE}
 For EACH learner turn i, return {i, corrected, errors, natural} using these rules:
 {{rules}}
 Then a summary: {top:[{type,count,example_orig,example_fix}], strengths_zh, rule_zh,
@@ -919,11 +952,82 @@ const TTS = (() => {
   };
 })();
 
-function sayBtn(text) {
-  return h('button', {
-    class: 'say-btn', type: 'button', 'aria-label': '朗读', title: '朗读',
-    onclick: e => { e.stopPropagation(); TTS.speak(typeof text === 'function' ? text() : text); },
+/* ---------- 真人感发音：Claude 会话用 Kokoro 生成、存在 audio/<sprite> 里的音频；没有就退回手机朗读 ---------- */
+const normWS = t => String(t == null ? '' : t).replace(/\s+/g, ' ').trim();
+/* FNV-1a 32 位，和 tools/speak.py 的 audio_key() 一致 */
+function audioKey(text) {
+  const bytes = new TextEncoder().encode(normWS(text));
+  let x = 0x811c9dc5;
+  for (let i = 0; i < bytes.length; i++) { x ^= bytes[i]; x = Math.imul(x, 0x01000193) >>> 0; }
+  return 'a' + x.toString(16).padStart(8, '0');
+}
+
+const Say = (() => {
+  const index = new Map();     // key -> {a: assetId, s, d, t}
+  const players = new Map();   // assetId -> HTMLAudioElement
+  let cur = null, timer = null;
+  function setDocs(docs) {
+    index.clear();
+    for (const doc of docs) for (const it of arr(doc.items)) {
+      if (it && it.k && doc.assetId) index.set(it.k, { a: doc.assetId, s: Number(it.s) || 0, d: Number(it.d) || 0, t: it.t });
+    }
+    refresh();
+  }
+  function entry(text) {
+    const t = normWS(text);
+    if (!t) return null;
+    const e = index.get(audioKey(t));
+    return e && normWS(e.t) === t ? e : null;
+  }
+  const has = text => !!entry(text);
+  function rate() { const r = Number(ls.get('ttsRate', 0.95)); return r >= 0.9 ? 1 : r; }
+  function stop() {
+    clearTimeout(timer); timer = null;
+    if (cur) { cur.pause(); cur.ontimeupdate = null; cur = null; }
+  }
+  function play(text, opts) {
+    const o = opts || {};
+    const e = entry(text);
+    if (!e) {
+      if (TTS.available) { stop(); TTS.speak(text); return true; }
+      if (!o.quiet) toast('这句还没有生成发音。把录音页顶部那句话发给 Claude，几分钟后就能听。', 4000);
+      return false;
+    }
+    stop();
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (_) {}
+    let a = players.get(e.a);
+    if (!a) { a = new Audio(); a.preload = 'auto'; a.src = Platform.blobs.url(e.a); players.set(e.a, a); }
+    const r = rate();
+    a.defaultPlaybackRate = r; a.playbackRate = r;
+    try { a.preservesPitch = true; } catch (_) {}
+    cur = a;
+    const end = e.s + e.d + 0.05;
+    a.ontimeupdate = () => { if (a.currentTime >= end) stop(); };
+    try { a.currentTime = e.s; } catch (_) {}
+    a.addEventListener('playing', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { if (cur === a) stop(); }, Math.max(0, (end - a.currentTime) / r) * 1000 + 60);
+    }, { once: true });
+    const p = a.play();
+    if (p && p.catch) p.catch(() => { if (cur === a) { cur = null; toast('播放失败，再点一次试试'); } });
+    return true;
+  }
+  function refresh() {
+    document.querySelectorAll('.say-btn[data-say]').forEach(b => b.classList.toggle('real', has(b.getAttribute('data-say'))));
+  }
+  return { setDocs, has, play, stop, refresh };
+})();
+
+/* 播放按钮：实心 = 有真人感发音；空心 = 手机朗读。always：没有任何声音时也显示（点了会提示去生成） */
+function sayBtn(text, opts) {
+  const o = opts || {};
+  const get = () => (typeof text === 'function' ? text() : text);
+  const b = h('button', {
+    class: 'say-btn' + (o.always ? ' always' : ''), type: 'button', 'aria-label': '播放发音', title: '播放发音',
+    onclick: e => { e.stopPropagation(); Say.play(get()); },
   }, svgEl('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' }, svgEl('path', { d: 'M4 9h4l5-4v14l-5-4H4zM16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round' })));
+  if (typeof text !== 'function') { b.setAttribute('data-say', normWS(text)); if (Say.has(text)) b.classList.add('real'); }
+  return b;
 }
 
 /* 简单事件总线：数据更新时通知各个视图 */
@@ -1453,7 +1557,7 @@ const S = {
   turns: [],          // 按时间正序
   recordings: [],     // 按时间倒序
   sessions: [],       // 按开始时间倒序
-  bank: {}, vocab: [], personas: [],
+  bank: {}, vocab: [], personas: [], audioDocs: [],
   profile: null, profileDraft: null,
   config: Object.assign({}, DEFAULT_CONFIG),
   loaded: {},
@@ -1487,6 +1591,7 @@ const Data = (() => {
     st.watchDoc('me/profile', d => { S.profile = d; loaded('profile'); }, onErr('profile'));
     st.watchDoc('config/app', d => { S.config = Object.assign({}, DEFAULT_CONFIG, d || {}); loaded('config'); }, onErr('config'));
     st.watchDoc('config/profileDraft', d => { S.profileDraft = d; loaded('profileDraft'); }, onErr('profileDraft'));
+    st.watch('audio', { limit: 500 }, docs => { S.audioDocs = docs; Say.setDocs(docs); loaded('audio'); }, onErr('audio'));
   }
 
   /* ---------- 派生数据 ---------- */
@@ -1517,7 +1622,18 @@ const Data = (() => {
 
   const sessionTurns = id => S.turns.filter(t => t.sessionId === id);
 
-  return { start, sortNodes, profileFacts, turnsOfNode, answerUnits, tallyErrors, sessionTurns };
+  /* 学习者要模仿的句子里，还没有真人感发音的（tools/speak.py 生成的是它的超集） */
+  function audioMissing() {
+    if (!S.loaded.audio) return 0;
+    const want = new Set();
+    for (const t of S.turns) { [t.natural || t.corrected, t.ask_back_en].forEach(x => { if (x) want.add(normWS(x)); }); }
+    for (const b of Object.values(S.bank)) { if (b.best_en) want.add(normWS(b.best_en)); arr(b.chunks).forEach(c => c && c.en && want.add(normWS(c.en))); }
+    let n = 0;
+    want.forEach(x => { if (!Say.has(x)) n++; });
+    return n;
+  }
+
+  return { start, sortNodes, profileFacts, turnsOfNode, answerUnits, tallyErrors, sessionTurns, audioMissing };
 })();
 
 /* =====================================================================
@@ -1624,6 +1740,9 @@ function cleanFeedback(x) {
     asked_back: x.asked_back === true,
     vocab: arr(x.vocab).map(v => (v && typeof v === 'object' ? { zh: str(v.zh), en: str(v.en), example: str(v.example) } : null)).filter(v => v && v.zh && v.en).slice(0, 8),
     followup: str(x.followup),
+    understood: str(x.understood) || null,
+    tip_zh: str(x.tip_zh) || null,
+    ask_back_en: str(x.ask_back_en) || null,
   };
 }
 const sortErrors = errs => arr(errs).slice().sort((a, b) => (a.sev === 'high' ? 0 : 1) - (b.sev === 'high' ? 0 : 1));
@@ -1658,28 +1777,41 @@ function errorsBlock(errors) {
   return h('div', { class: 'fb-row' }, lbl, box, h('span'));
 }
 function fbRow(label, text, cls) {
-  return h('div', { class: 'fb-row ' + (cls || '') }, h('span', { class: 'lbl' }, label), h('p', { class: 'en' }, text), sayBtn(text));
+  return h('div', { class: 'fb-row ' + (cls || '') }, h('span', { class: 'lbl' }, label), h('p', { class: 'en' }, text), sayBtn(text, { always: cls === 'natural' || cls === 'corrected' }));
 }
 function bubbleThem(text, who) {
   return h('div', { class: 'bubble them' }, who ? h('span', { class: 'who' }, who) : null, h('div', { class: 'q-line' }, h('p', { class: 'en' }, text), sayBtn(text)));
 }
 function bubbleMe(text) { return h('div', { class: 'bubble me' }, h('p', { class: 'en' }, text)); }
 
+/* 对方是谁：社交节点是一位旅伴（角色），办事节点是工作人员 */
+function partnerLabel(node, partnerId) {
+  if (node && node.track === 'service') return '工作人员';
+  const p = partnerId && S.personas.find(x => x.id === partnerId);
+  return p ? p.name + ' · 旅伴' : '旅伴';
+}
+
 function turnCard(t) {
   const node = S.nodeMap[t.nodeId];
-  const who = node && node.track === 'service' ? '工作人员' : '旅伴';
-  const askBack = node && node.track === 'social' && t.mode === 'drill' && !t.asked_back
-    ? h('p', { class: 'askback' }, '没有反问。结尾加一句，比如 ', h('span', { class: 'en-s' }, 'What about you?'))
+  const who = partnerLabel(node, t.partner || t.persona);
+  const heard = t.understood && normText(t.understood) !== normText(t.raw)
+    ? h('div', { class: 'fb-row heard' }, h('span', { class: 'lbl' }, '理解为'), h('p', { class: 'en-s' }, t.understood), h('span'))
+    : null;
+  const coach = t.tip_zh || t.ask_back_en
+    ? h('div', { class: 'coach' },
+        t.tip_zh ? h('p', null, t.tip_zh) : null,
+        t.ask_back_en ? h('div', { class: 'q-line' }, h('span', { class: 'small muted' }, '可以反问'), h('p', { class: 'en-s', style: 'flex:1' }, t.ask_back_en), sayBtn(t.ask_back_en, { always: true })) : null)
     : null;
   const vocab = arr(t.vocab).length ? h('p', { class: 'fb-extra' }, '词汇缺口：', t.vocab.map(v => v.zh + ' → ' + v.en).join('；')) : null;
   return h('article', { class: 'turn' },
     t.q ? bubbleThem(t.q, who) : null,
     bubbleMe(t.raw),
     h('div', { class: 'card fb' },
+      heard,
       fbRow('改后', t.corrected, 'corrected'),
       errorsBlock(t.errors),
-      t.natural ? fbRow('更自然', t.natural) : null,
-      askBack, vocab));
+      t.natural ? fbRow('更自然', t.natural, 'natural') : null,
+      coach, vocab));
 }
 
 function llmNotice() {
@@ -1752,7 +1884,11 @@ const Practice = (() => {
     });
     Bus.on('turns', () => { if (cur) refreshHead(); else renderList(); });
     Platform.llm.onBlocked(() => { if (cur) openNode(cur.id, true); });
-    Bus.on('personas', () => { if (cur && !cur.convo && !cur.busy) renderConvo(); });
+    Bus.on('personas', () => {
+      if (!cur) return;
+      if (cur.els.qWho) cur.els.qWho.textContent = partnerLabel(cur.node, partnerId(cur.node));
+      if (!cur.convo && !cur.busy) renderConvo();
+    });
   }
 
   function autoOpen() {
@@ -1902,11 +2038,22 @@ const Practice = (() => {
     els.reveal = h('button', { class: 'link-btn', type: 'button', onclick: () => { els.qText.classList.remove('hidden-text'); els.reveal.hidden = true; } }, '显示文字');
     const variants = [node.main_q, ...arr(node.variants)].filter(Boolean);
     const lf = h('input', { type: 'checkbox', id: 'listen-first', checked: !!ls.get('listenFirst', false), onchange: e => ls.set('listenFirst', e.target.checked) });
+    els.qWho = h('span', { class: 'who' }, partnerLabel(node, partnerId(node)));
+    const swap = node.track === 'social' ? h('button', { class: 'link-btn', type: 'button', onclick: () => {
+      if (cur.busy) return;
+      const pool = DRILL_PARTNERS.filter(x => S.personas.some(p => p.id === x) && x !== ls.get('partner:' + node.id));
+      if (!pool.length) return;
+      ls.set('partner:' + node.id, pool[Math.floor(Math.random() * pool.length)]);
+      els.qWho.textContent = partnerLabel(node, partnerId(node));
+      setQ(node.main_q, true);
+      toast('换了一位旅伴：' + partnerLabel(node, partnerId(node)).split(' · ')[0]);
+    } }, '换个旅伴') : null;
     els.qBubble = h('div', { class: 'bubble them' },
-      h('span', { class: 'who' }, node.track === 'service' ? '工作人员' : '旅伴'),
-      h('div', { class: 'q-line' }, els.qText, sayBtn(() => cur.q)),
+      els.qWho,
+      h('div', { class: 'q-line' }, els.qText, els.qSay = sayBtn(() => cur.q)),
       h('div', { class: 'q-actions' }, els.reveal,
         variants.length > 1 ? h('button', { class: 'link-btn', type: 'button', onclick: () => { cur.qIdx = (cur.qIdx + 1) % variants.length; setQ(variants[cur.qIdx], true); } }, '换个问法') : null,
+        swap,
         h('label', { class: 'check tts-only', for: 'listen-first' }, lf, '先听后看')));
 
     const pane2 = [els.thread, els.qBubble];
@@ -1934,10 +2081,12 @@ const Practice = (() => {
     cur.q = q || cur.node.main_q || '';
     const els = cur.els;
     els.qText.textContent = cur.q;
-    const hide = fresh && ls.get('listenFirst', false) && TTS.available;
+    els.qSay.setAttribute('data-say', normWS(cur.q));
+    els.qSay.classList.toggle('real', Say.has(cur.q));
+    const hide = fresh && ls.get('listenFirst', false) && (TTS.available || Say.has(cur.q));
     els.qText.classList.toggle('hidden-text', !!hide);
     els.reveal.hidden = !hide;
-    if (hide) TTS.speak(cur.q);
+    if (hide) Say.play(cur.q, { quiet: true });
   }
 
   function setBusy(b, msg) {
@@ -1961,16 +2110,36 @@ const Practice = (() => {
     }
   }
 
-  function drillPrompt(node, q, raw, sid) {
+  /* 社交节点的旅伴：每个节点记住一位，点"换人"再换 */
+  function partnerId(node) {
+    if (node.track !== 'social') return null;
+    let id = ls.get('partner:' + node.id);
+    const pool = DRILL_PARTNERS.filter(x => S.personas.some(p => p.id === x));
+    if (!id || (pool.length && !pool.includes(id))) {
+      id = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+      if (id) ls.set('partner:' + node.id, id);
+    }
+    return id;
+  }
+  function partnerDesc(node, pid) {
+    if (node.track === 'service') return DRILL_STAFF;
+    const p = pid && S.personas.find(x => x.id === pid);
+    if (!p) return 'a friendly fellow pilgrim on the Camino';
+    return p.name + ', ' + p.bio + '. You meet the learner on the Camino.' + (p.native ? '' : ' ' + NON_NATIVE_STYLE);
+  }
+  function drillPrompt(node, q, raw, sid, pid) {
     const facts = Data.profileFacts();
-    const hist = sid ? Data.sessionTurns(sid).filter(t => t.nodeId === node.id && t.mode === 'drill').slice(-6) : [];
+    const done = sid ? Data.sessionTurns(sid).filter(t => t.nodeId === node.id && t.mode === 'drill') : [];
+    const hist = done.slice(-10);
+    const tips = done.map(t => t.tip_zh).filter(Boolean);
     return fill(PROMPTS.drill, {
       title_zh: node.title_zh, main_q: node.main_q || '',
+      partner: partnerDesc(node, pid),
       profile_facts: facts.length ? facts.map(f => '- ' + f).join('\n') : '(none yet)',
-      history: hist.length ? hist.map(t => 'Q: ' + t.q + '\nA: ' + t.raw).join('\n') : '(none)',
+      history: hist.length ? hist.map(t => 'P: ' + t.q + '\nL: ' + (t.understood || t.raw)).join('\n') : '(none yet)',
       q, raw, rules: RULES_1_TO_3,
-      role: DRILL_ROLE[node.track] || DRILL_ROLE.social,
       followups: arr(node.followups).length ? node.followups.join(' / ') : '(none)',
+      tips_given: tips.length ? tips.map(x => '"' + x + '"').join('; ') : '(none)',
     });
   }
 
@@ -1988,12 +2157,14 @@ const Practice = (() => {
     let fb;
     try {
       const sid = await Sessions.ensure();
-      const res = await Platform.llm.json(drillPrompt(node, c.q, raw, sid), { tier: 'default', cache: false, signal: ctl.signal });
+      const pid = partnerId(node);
+      const res = await Platform.llm.json(drillPrompt(node, c.q, raw, sid, pid), { tier: 'default', cache: false, signal: ctl.signal });
       fb = cleanFeedback(res);
       const turn = {
         nodeId: node.id, sessionId: sid, mode: 'drill', q: c.q, raw,
         corrected: fb.corrected, natural: fb.natural, errors: fb.errors, asked_back: fb.asked_back,
         n_words: countWords(raw), vocab: fb.vocab, followup: fb.followup || null, persona: null, createdAt: nowIso(),
+        understood: fb.understood, tip_zh: fb.tip_zh, ask_back_en: fb.ask_back_en, partner: pid,
       };
       const id = uid('t');
       if (cur !== c) return;
@@ -2339,7 +2510,7 @@ const Record = (() => {
   function init(el) {
     root = el;
     Bus.on('recordings', () => { if (visible) { renderList(); renderBanner(); } });
-    Bus.on('config', () => { if (visible) renderBanner(); });
+    ['config', 'audio', 'turns', 'bank'].forEach(k => Bus.on(k, () => { if (visible) renderBanner(); }));
     Bus.on('nodeOpened', () => { if (built) renderPrompt(); });
   }
   function show() {
@@ -2362,7 +2533,7 @@ const Record = (() => {
 
   function build() {
     built = true;
-    els.banner = h('div', { class: 'notice info banner' });
+    els.banner = h('div');
     els.seg = h('div', { class: 'seg', role: 'group', 'aria-label': '题目' });
     els.promptText = h('p', { class: 'en' });
     els.promptLabel = h('p', { class: 'small muted' });
@@ -2602,16 +2773,22 @@ const Record = (() => {
   }
 
   /* ---------------- 提示横幅 ---------------- */
-  function renderBanner() {
-    if (!built) return;
+  /* 需要 Claude 会话做的事：分析录音、生成真人感发音。发一句话就都做。 */
+  function taskBanner() {
     const pend = S.recordings.filter(r => r.status === 'pending').length;
     const analyzing = S.recordings.filter(r => r.status === 'analyzing').length;
+    const missing = Data.audioMissing();
     const url = S.config.artifactUrl;
-    const text = '请分析口语特训的新录音：' + (url || '（这个页面的地址）');
+    const text = '请处理口语特训的新内容（分析录音、生成发音）：' + (url || '（这个页面的地址）');
     const code = h('code', null, text);
-    put(clear(els.banner), 
-      h('p', null, pend ? h('b', null, '有 ' + pend + ' 段待分析。') : null, analyzing ? ' ' + analyzing + ' 段正在分析。' : null, ' 录好几段后，把下面这句话发给 Claude：'),
+    const todo = [pend ? pend + ' 段录音待分析' : null, analyzing ? analyzing + ' 段正在分析' : null, missing ? missing + ' 句还没有真人发音' : null].filter(Boolean);
+    return h('div', { class: 'notice info banner' },
+      h('p', null, todo.length ? h('b', null, '有 ' + todo.join('，') + '。') : null, ' 把下面这句话发给 Claude，分析结果和发音会自动出现在页面里：'),
       h('div', { class: 'copy-line' }, code, h('button', { class: 'btn small', type: 'button', onclick: () => copyText(text, code) }, '复制')));
+  }
+  function renderBanner() {
+    if (!built) return;
+    put(clear(els.banner), taskBanner());
   }
 
   /* ---------------- 列表 ---------------- */
@@ -2749,7 +2926,7 @@ const Record = (() => {
     return box;
   }
 
-  return { init, show, hide, saveRecording };
+  return { init, show, hide, saveRecording, taskBanner };
 })();
 
 /* ---- dash.js ---- */
@@ -2945,7 +3122,7 @@ const Pocket = (() => {
 
   function init(el) {
     root = el;
-    ['bank', 'vocab', 'nodes', 'turns', 'sessions', 'recordings'].forEach(k => Bus.on(k, () => { if (visible && !editing) render(); }));
+    ['bank', 'vocab', 'nodes', 'turns', 'sessions', 'recordings', 'audio'].forEach(k => Bus.on(k, () => { if (visible && !editing) render(); }));
   }
   function show() { visible = true; render(); }
   function hide() { visible = false; }
@@ -2969,6 +3146,7 @@ const Pocket = (() => {
         h('h2', { class: 'section-title' }, '口袋本'),
         Platform.blobs.canSave ? h('button', { class: 'btn', type: 'button', onclick: exportPocket }, '导出离线版') : h('span', { class: 'small muted' }, '这个视图不能导出文件')),
       h('p', { class: 'small muted' }, '导出的是一个 HTML 文件，存在手机里，没网也能打开。出发前（10/16）记得导出一次最新的。'),
+      Data.audioMissing() ? Record.taskBanner() : null,
 
       h('section', { class: 'card stack' },
         h('h3', { class: 'section-title' }, '我的前三类错误'),
@@ -3182,9 +3360,10 @@ const Settings = (() => {
       h('label', { class: 'check', for: 'pref-listen-first' },
         h('input', { type: 'checkbox', id: 'pref-listen-first', checked: !!ls.get('listenFirst', false), onchange: e => ls.set('listenFirst', e.target.checked) }),
         '先听后看：新问题先朗读，点一下才显示文字'),
-      voices.length ? field('朗读语音', select('pref-voice', TTS.voice ? TTS.voice.voiceURI : '', voices.map(v => [v.voiceURI, v.name + '（' + v.lang + '）']), v => TTS.setVoice(v))) :
+      voices.length ? field('手机朗读语音', select('pref-voice', TTS.voice ? TTS.voice.voiceURI : '', voices.map(v => [v.voiceURI, v.name + '（' + v.lang + '）']), v => TTS.setVoice(v))) :
         h('p', { class: 'small muted' }, '这台设备没有英文朗读语音，朗读按钮已隐藏。'),
-      voices.length ? field('朗读语速', select('pref-rate', String(ls.get('ttsRate', 0.95)), [['0.95', '正常'], ['0.8', '慢一点'], ['0.65', '很慢']], v => ls.set('ttsRate', Number(v)))) : null,
+      field('发音语速', select('pref-rate', String(ls.get('ttsRate', 0.95)), [['0.95', '正常'], ['0.8', '慢一点'], ['0.65', '很慢']], v => ls.set('ttsRate', Number(v))),
+        '实心的播放按钮是 Claude 生成的真人感发音（Kokoro），空心的是手机自带朗读。放慢时音调不变。'),
       field('说一次就够（页面内语音识别）', select('pref-voice-mode', Voice.mode(), [['auto', '自动：诊断第 7 项通过才显示'], ['on', '总是显示麦克风按钮'], ['off', '关闭']], v => { ls.set('voiceMode', v); ls.del('voiceBlocked'); }),
         !hasSR ? '这个浏览器没有语音识别 API（比如平板没有谷歌服务），会自动隐藏。' : '诊断结果：第 7 项 ' + (pf.asr ? (pf.asr === 'pass' ? '通过' : '失败') : '未测') + '，第 8 项 ' + (pf.asrWithRec ? (pf.asrWithRec === 'pass' ? '通过' : '失败') : '未测') + '。改动后重新打开节点生效。'),
       field('录音方式', select('pref-rec-route', ls.get('recRoute') || 'auto', [['auto', '自动'], ['page', '页面里录'], ['file', '系统录音机或选文件']], v => { if (v === 'auto') ls.del('recRoute'); else ls.set('recRoute', v); ls.del('micBlocked'); })));

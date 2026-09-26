@@ -42,62 +42,91 @@ const FIXED_PROMPTS = {
 /* 实战对话里非母语角色固定用这句 style；母语者留空 */
 const NON_NATIVE_STYLE = 'Use simple words and short sentences, like a non-native speaker, but keep your grammar correct.';
 
-/* drill 模板第 6 条里 Claude 扮演的角色：社交节点是路上的旅伴，办事节点是工作人员 */
-const DRILL_ROLE = {
-  social: 'a friendly fellow traveler',
-  service: 'the staff member in this scenario (stay in that role)',
-};
+/* 逐句反馈里"对方"是谁：社交节点是一位旅伴（从角色里挑），办事节点是工作人员 */
+const DRILL_STAFF = 'the staff member in this scenario (albergue warden, waiter, ticket clerk, receptionist — whichever fits)';
+const DRILL_PARTNERS = ['linda', 'jonas', 'siobhan', 'jiwoo'];
+
+/* 输入法语音输入常把英文听错。页面内 Claude 先还原本意，听错不算学习者的错。 */
+const ASR_NOTE = `The learner speaks into a Chinese phone keyboard's voice input, which often mishears
+English: similar-sounding words (walking → "working"), split or merged words, stray Chinese
+characters, broken-off fragments, and trip words it doesn't know. Trip words it often mangles:
+Camino (heard as "communal", "commune", "come in", "terminal"), Santiago, Sarria, Portomarín,
+albergue, pilgrim, credencial, Buen Camino, Finisterre, Galicia. Work out what the learner most
+likely said before judging. A mishearing is never the learner's error.`;
 
 /* §8.1 任务 1–3，drill 和 debrief 共用 */
-const RULES_1_TO_3 = `1. corrected: the minimal-edit correct version. Keep the learner's own words and meaning;
-   fix only real errors. Ignore capitalization and punctuation.
-2. errors: every error, each {type, orig, fix, sev, asr_suspect, note_zh}.
+const RULES_1_TO_3 = `1. corrected: the minimal-edit correct version of what the learner said (mishearings repaired).
+   Keep the learner's own words and meaning; fix only real errors. Ignore capitalization and punctuation.
+2. errors: every error the learner actually made, each {type, orig, fix, sev, asr_suspect, note_zh}.
    type is one of: T-PAST, T-PERF, T-FUT, T-OTHER, BE-V, AGR, PLUR, ART, PREP, QWO, PRON,
    YESNO, WORD, STRUCT. sev is "high" if it could cause a misunderstanding, else "low".
    asr_suspect is true only for a missing or extra -s/-ed ending that speech-to-text could
    have produced. note_zh is one short Chinese sentence stating the rule.
-   Casual spoken forms (gonna, yeah, dropped subjects in replies) are not errors.
+   Casual spoken forms (gonna, yeah, dropped subjects in replies) and fillers (um, hmm,
+   repeated words) are not errors. Voice-input mishearings are not errors.
 3. natural: a more natural spoken version ONLY if clearly better than corrected; else null.
    Simple, friendly, everyday spoken English. Not fancy.`;
 
 const PROMPTS = {
-  /* §8.1 逐句反馈 */
-  drill: `You are an English speaking coach for a Chinese native speaker preparing for a trip
+  /* §8.1 逐句反馈（改版：还原语音识别、对方会回答反问、提示按需给） */
+  drill: `You play two roles for a Chinese native speaker practicing travel English for a trip
 (Camino de Santiago from Sarria, then Barcelona, Milan, Venice, Florence, Rome, Naples;
-Oct 17 – Nov 20). The learner answered by phone speech-to-text; the text is raw.
+Oct 17 – Nov 20): P, the person they are talking to, and a quiet speaking coach.
+P is {{partner}}.
 
-Scenario: {{title_zh}} — main question: "{{main_q}}"
-Facts the learner has confirmed about themself (keep follow-ups consistent with them):
+${ASR_NOTE}
+
+Scenario: {{title_zh}} — opening line: "{{main_q}}"
+Facts the learner (L) has confirmed about themself:
 {{profile_facts}}
-Conversation so far in this scenario (oldest first, at most 6 exchanges):
+Conversation so far (oldest first):
 {{history}}
 
-Question asked: "{{q}}"
-Learner's raw answer: "{{raw}}"
+P just said: "{{q}}"
+L's raw voice-input text: "{{raw}}"
 
 Tasks:
+0. understood: what L most likely said, with voice-input mishearings repaired but L's own
+   grammar and word choices kept exactly as spoken. Judge tasks 1–5 against this.
 {{rules}}
-4. asked_back: true if the answer ends by asking the other person something.
-5. vocab: Chinese words the learner used because they lacked the English,
-   each {zh, en, example}.
-6. followup: your next line as {{role}}. React briefly to what they
-   said, then ask ONE natural follow-up question (max 20 words). Draw on these if they
-   fit: {{followups}}
+4. asked_back: true if L asked P anything, anywhere in the answer.
+5. vocab: Chinese words L used because they lacked the English, each {zh, en, example}.
+6. followup: P's next line. 1–3 short spoken sentences (max 35 words) of everyday English,
+   the way a real person talks, not an interviewer:
+   - If L asked P something, answer it first with a concrete detail about yourself, consistent
+     with what P said earlier.
+   - React to the specific thing L said, not with a generic "That's great!". Sometimes share
+     a small experience or opinion of your own.
+   - Then either ask ONE question or say something L can respond to. Do not ask a question
+     every turn. Never repeat a question P already asked above. Use these only if they fit
+     and were not asked yet: {{followups}}
+   - If L said "pardon", "sorry?" or seemed lost, say your last line again more simply.
+7. tip_zh: usually null. One short Chinese coaching tip ONLY when there is something specific
+   and new to say about how L handled the conversation (a one-word answer, a missed chance to
+   ask back, answering a different question, or something done well worth repeating).
+   Never repeat an earlier tip: {{tips_given}}
+8. ask_back_en: if asking P something would have been natural here and L didn't, one short
+   question L could have asked that fits this exact moment; otherwise null. Avoid
+   "What about you?" unless it really is the best fit.
 
 Reply with only JSON:
-{"corrected":"…","errors":[],"natural":null,"asked_back":false,"vocab":[],"followup":"…"}`,
+{"understood":"…","corrected":"…","errors":[],"natural":null,"asked_back":false,"vocab":[],"followup":"…","tip_zh":null,"ask_back_en":null}`,
 
-  /* §8.2 实战对话（第一条 user 消息） */
+  /* §8.2 实战对话（第一条 user 消息；改版：像真人聊天，不是一味追问） */
   convo: `Role-play for speaking practice. You are {{name}}: {{bio}}. Setting: {{setting}}.
 Talk the way this person would in real life: 1–3 short spoken sentences per turn,
 everyday English. {{style}}
-React to what the learner says and keep the conversation going; ask a question most turns.
-Never correct the learner and never mention that this is practice. If you can't understand
-them, ask for clarification like a real person would.
+Be a real conversation partner, not an interviewer: react to what the learner actually said,
+answer their questions with concrete details about yourself, share small stories or opinions,
+and ask a question only some of the time. Never repeat a question you already asked.
+The learner's messages come from phone voice input that mishears words (e.g. "communal" for
+"Camino", "working" for "walking"); guess what they meant, and ask for clarification only if
+you really can't. Never correct the learner and never mention that this is practice.
 Start with a natural opening line.`,
 
   /* §8.3 对话讲评 */
   debrief: `Below is a role-play transcript between a learner (L) and {{name}} (P).
+${ASR_NOTE}
 For EACH learner turn i, return {i, corrected, errors, natural} using these rules:
 {{rules}}
 Then a summary: {top:[{type,count,example_orig,example_fix}], strengths_zh, rule_zh,

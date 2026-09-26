@@ -168,11 +168,82 @@ const TTS = (() => {
   };
 })();
 
-function sayBtn(text) {
-  return h('button', {
-    class: 'say-btn', type: 'button', 'aria-label': '朗读', title: '朗读',
-    onclick: e => { e.stopPropagation(); TTS.speak(typeof text === 'function' ? text() : text); },
+/* ---------- 真人感发音：Claude 会话用 Kokoro 生成、存在 audio/<sprite> 里的音频；没有就退回手机朗读 ---------- */
+const normWS = t => String(t == null ? '' : t).replace(/\s+/g, ' ').trim();
+/* FNV-1a 32 位，和 tools/speak.py 的 audio_key() 一致 */
+function audioKey(text) {
+  const bytes = new TextEncoder().encode(normWS(text));
+  let x = 0x811c9dc5;
+  for (let i = 0; i < bytes.length; i++) { x ^= bytes[i]; x = Math.imul(x, 0x01000193) >>> 0; }
+  return 'a' + x.toString(16).padStart(8, '0');
+}
+
+const Say = (() => {
+  const index = new Map();     // key -> {a: assetId, s, d, t}
+  const players = new Map();   // assetId -> HTMLAudioElement
+  let cur = null, timer = null;
+  function setDocs(docs) {
+    index.clear();
+    for (const doc of docs) for (const it of arr(doc.items)) {
+      if (it && it.k && doc.assetId) index.set(it.k, { a: doc.assetId, s: Number(it.s) || 0, d: Number(it.d) || 0, t: it.t });
+    }
+    refresh();
+  }
+  function entry(text) {
+    const t = normWS(text);
+    if (!t) return null;
+    const e = index.get(audioKey(t));
+    return e && normWS(e.t) === t ? e : null;
+  }
+  const has = text => !!entry(text);
+  function rate() { const r = Number(ls.get('ttsRate', 0.95)); return r >= 0.9 ? 1 : r; }
+  function stop() {
+    clearTimeout(timer); timer = null;
+    if (cur) { cur.pause(); cur.ontimeupdate = null; cur = null; }
+  }
+  function play(text, opts) {
+    const o = opts || {};
+    const e = entry(text);
+    if (!e) {
+      if (TTS.available) { stop(); TTS.speak(text); return true; }
+      if (!o.quiet) toast('这句还没有生成发音。把录音页顶部那句话发给 Claude，几分钟后就能听。', 4000);
+      return false;
+    }
+    stop();
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (_) {}
+    let a = players.get(e.a);
+    if (!a) { a = new Audio(); a.preload = 'auto'; a.src = Platform.blobs.url(e.a); players.set(e.a, a); }
+    const r = rate();
+    a.defaultPlaybackRate = r; a.playbackRate = r;
+    try { a.preservesPitch = true; } catch (_) {}
+    cur = a;
+    const end = e.s + e.d + 0.05;
+    a.ontimeupdate = () => { if (a.currentTime >= end) stop(); };
+    try { a.currentTime = e.s; } catch (_) {}
+    a.addEventListener('playing', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { if (cur === a) stop(); }, Math.max(0, (end - a.currentTime) / r) * 1000 + 60);
+    }, { once: true });
+    const p = a.play();
+    if (p && p.catch) p.catch(() => { if (cur === a) { cur = null; toast('播放失败，再点一次试试'); } });
+    return true;
+  }
+  function refresh() {
+    document.querySelectorAll('.say-btn[data-say]').forEach(b => b.classList.toggle('real', has(b.getAttribute('data-say'))));
+  }
+  return { setDocs, has, play, stop, refresh };
+})();
+
+/* 播放按钮：实心 = 有真人感发音；空心 = 手机朗读。always：没有任何声音时也显示（点了会提示去生成） */
+function sayBtn(text, opts) {
+  const o = opts || {};
+  const get = () => (typeof text === 'function' ? text() : text);
+  const b = h('button', {
+    class: 'say-btn' + (o.always ? ' always' : ''), type: 'button', 'aria-label': '播放发音', title: '播放发音',
+    onclick: e => { e.stopPropagation(); Say.play(get()); },
   }, svgEl('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' }, svgEl('path', { d: 'M4 9h4l5-4v14l-5-4H4zM16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round' })));
+  if (typeof text !== 'function') { b.setAttribute('data-say', normWS(text)); if (Say.has(text)) b.classList.add('real'); }
+  return b;
 }
 
 /* 简单事件总线：数据更新时通知各个视图 */

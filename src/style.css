@@ -183,7 +183,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   background: var(--surface); color: var(--accent); display: inline-grid; place-items: center; cursor: pointer; vertical-align: middle;
 }
 .say-btn svg { width: 17px; height: 17px; }
-.no-tts .say-btn, .no-tts .tts-only { display: none !important; }
+.say-btn.real { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.no-tts .say-btn:not(.real):not(.always), .no-tts .tts-only { display: none !important; }
 
 .chip {
   display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px;
@@ -293,6 +294,9 @@ details > summary::-webkit-details-marker { display: none; }
 .fb-row .lbl { font-size: 12px; font-weight: 700; color: var(--ink-3); padding-top: 4px; }
 .fb-row.corrected .en { color: var(--ink); }
 .fb-extra { font-size: 14px; color: var(--ink-2); }
+.fb-row.heard .en-s { color: var(--ink-2); font-size: 15px; }
+.coach { display: flex; flex-direction: column; gap: 6px; font-size: 14px; background: var(--accent-2); border-radius: 8px; padding: 8px 10px; }
+.coach .q-line { display: flex; align-items: center; gap: 8px; }
 .askback { font-size: 14px; color: var(--warn); background: var(--warn-bg); border-radius: 8px; padding: 6px 10px; }
 .askback .en-s { font-size: 15px; }
 

@@ -29,7 +29,7 @@ const Record = (() => {
   function init(el) {
     root = el;
     Bus.on('recordings', () => { if (visible) { renderList(); renderBanner(); } });
-    Bus.on('config', () => { if (visible) renderBanner(); });
+    ['config', 'audio', 'turns', 'bank'].forEach(k => Bus.on(k, () => { if (visible) renderBanner(); }));
     Bus.on('nodeOpened', () => { if (built) renderPrompt(); });
   }
   function show() {
@@ -52,7 +52,7 @@ const Record = (() => {
 
   function build() {
     built = true;
-    els.banner = h('div', { class: 'notice info banner' });
+    els.banner = h('div');
     els.seg = h('div', { class: 'seg', role: 'group', 'aria-label': '题目' });
     els.promptText = h('p', { class: 'en' });
     els.promptLabel = h('p', { class: 'small muted' });
@@ -292,16 +292,22 @@ const Record = (() => {
   }
 
   /* ---------------- 提示横幅 ---------------- */
-  function renderBanner() {
-    if (!built) return;
+  /* 需要 Claude 会话做的事：分析录音、生成真人感发音。发一句话就都做。 */
+  function taskBanner() {
     const pend = S.recordings.filter(r => r.status === 'pending').length;
     const analyzing = S.recordings.filter(r => r.status === 'analyzing').length;
+    const missing = Data.audioMissing();
     const url = S.config.artifactUrl;
-    const text = '请分析口语特训的新录音：' + (url || '（这个页面的地址）');
+    const text = '请处理口语特训的新内容（分析录音、生成发音）：' + (url || '（这个页面的地址）');
     const code = h('code', null, text);
-    put(clear(els.banner), 
-      h('p', null, pend ? h('b', null, '有 ' + pend + ' 段待分析。') : null, analyzing ? ' ' + analyzing + ' 段正在分析。' : null, ' 录好几段后，把下面这句话发给 Claude：'),
+    const todo = [pend ? pend + ' 段录音待分析' : null, analyzing ? analyzing + ' 段正在分析' : null, missing ? missing + ' 句还没有真人发音' : null].filter(Boolean);
+    return h('div', { class: 'notice info banner' },
+      h('p', null, todo.length ? h('b', null, '有 ' + todo.join('，') + '。') : null, ' 把下面这句话发给 Claude，分析结果和发音会自动出现在页面里：'),
       h('div', { class: 'copy-line' }, code, h('button', { class: 'btn small', type: 'button', onclick: () => copyText(text, code) }, '复制')));
+  }
+  function renderBanner() {
+    if (!built) return;
+    put(clear(els.banner), taskBanner());
   }
 
   /* ---------------- 列表 ---------------- */
@@ -439,5 +445,5 @@ const Record = (() => {
     return box;
   }
 
-  return { init, show, hide, saveRecording };
+  return { init, show, hide, saveRecording, taskBanner };
 })();
